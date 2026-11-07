@@ -17,7 +17,7 @@
 ## Roadmap Phases
 
 ### Phase 0: Master Hub & Architecture Setup
-- [ ] Create Master Liquid Hub (`index.html`) connecting all 17 projects with live status & liquid animation.
+- [x] Create Master Liquid Hub (`index.html`) connecting all 17 projects with live status & liquid animation.
 
 ### Phase 1: Section A - Web Tools
 - [ ] **Project 01: PDF Studio** (29 Tools: Organise, Edit, Stamp, Convert, Finish)
