@@ -254,7 +254,7 @@
   <header class="hub-header">
     <div>
       <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem;">
-        <span class="oneui-chip" style="background:var(--accent-primary-soft); color:var(--accent-primary);">⚡ Obsidian x One UI Architecture</span>
+        <span class="oneui-chip" style="background:var(--accent-primary-soft); color:var(--accent-primary);">⚡ Modern Studio Architecture</span>
         <span class="oneui-chip" style="background:var(--bg-elevated); color:var(--text-muted); border:1px solid var(--border-color);">100% Offline Vault</span>
       </div>
       <h1 class="hub-title">Everyday Digital Toolkit</h1>
@@ -263,19 +263,14 @@
       </p>
     </div>
 
-    <!-- One UI & Obsidian Ergonomic Toolbar -->
+    <!-- Quick Actions Toolbar -->
     <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
-      <div class="filter-tabs" style="background:var(--bg-elevated); padding:0.25rem; border-radius:999px; border:1px solid var(--border-color);">
-        <button class="oneui-pill-tab active" id="btn-view-cards" onclick="switchHubView('cards')">⊞ One UI Cards</button>
-        <button class="oneui-pill-tab" id="btn-view-graph" onclick="switchHubView('graph')">🕸️ Obsidian Graph</button>
-      </div>
-
       <button class="oneui-pill-tab" onclick="window.openCommandPalette && window.openCommandPalette()" title="Press Ctrl+K anytime">
-        <span>⌘ Ctrl+K</span>
+        <span>⚡ Quick Search (Ctrl+K)</span>
       </button>
 
-      <!-- Quick Palette Picker -->
-      <div class="palette-dots" style="padding:0.3rem 0.6rem;">
+      <!-- Theme Palette Picker -->
+      <div class="palette-dots" style="padding:0.3rem 0.6rem;" title="Switch Color Theme">
         <span class="palette-dot" data-p="obsidian" style="background:#8B5CF6;" title="Obsidian Dark" onclick="window.StudioSecurity && window.StudioSecurity.applyPalette('obsidian')"></span>
         <span class="palette-dot active" data-p="terracotta" style="background:#C2410C;" title="Terracotta" onclick="window.StudioSecurity && window.StudioSecurity.applyPalette('terracotta')"></span>
         <span class="palette-dot" data-p="emerald" style="background:#047857;" title="Emerald" onclick="window.StudioSecurity && window.StudioSecurity.applyPalette('emerald')"></span>
@@ -304,20 +299,6 @@
       <button class="filter-tab" onclick="setSectionFilter('sec-d', this)">Media, Viva & Design (3)</button>
     </div>
   </section>
-
-  <!-- Interactive Obsidian Knowledge Graph View (Toggled via header) -->
-  <div id="obsidian-graph-wrapper" class="obsidian-graph-wrapper" style="display:none; max-width:1280px; margin: 1.25rem auto 2rem;">
-    <div class="obsidian-graph-header">
-      <div class="graph-badge">
-        <span>🕸️ Obsidian Interactive Graph View</span>
-        <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">Drag nodes · Click to open tool</span>
-      </div>
-      <div style="display:flex; gap:0.5rem;">
-        <button class="oneui-pill-tab" style="font-size:0.75rem; padding:0.3rem 0.8rem;" onclick="resetGraphPhysics()">↺ Reset Graph</button>
-      </div>
-    </div>
-    <canvas id="obsidian-graph-canvas"></canvas>
-  </div>
 
   <main class="projects-grid" id="tools-grid">
 
@@ -684,9 +665,8 @@
     <p>Everyday Digital Toolkit · 17 Self-Contained Offline Tools · Protected with Local PIN Lock & Input Sanitization</p>
   </footer>
 
-  <script>
+    <script>
     let currentSection = 'all';
-    let activeHubView = 'cards';
 
     function setSectionFilter(sec, btn) {
       currentSection = sec;
@@ -704,317 +684,6 @@
         const matchText = !q || card.innerText.toLowerCase().includes(q);
         card.style.display = (matchSec && matchText) ? 'flex' : 'none';
       });
-    }
-
-    function switchHubView(mode) {
-      activeHubView = mode;
-      document.getElementById('btn-view-cards').classList.toggle('active', mode === 'cards');
-      document.getElementById('btn-view-graph').classList.toggle('active', mode === 'graph');
-      const cardsGrid = document.getElementById('tools-grid');
-      const controlsBar = document.querySelector('.controls-bar');
-      const graphWrap = document.getElementById('obsidian-graph-wrapper');
-
-      if (mode === 'cards') {
-        cardsGrid.style.display = 'grid';
-        controlsBar.style.display = 'flex';
-        graphWrap.style.display = 'none';
-      } else {
-        cardsGrid.style.display = 'none';
-        controlsBar.style.display = 'none';
-        graphWrap.style.display = 'block';
-        initObsidianGraph();
-      }
-      if (window.AudioHaptics) window.AudioHaptics.play('pop');
-    }
-
-    // ==========================================================================
-    // OBSIDIAN INTERACTIVE KNOWLEDGE GRAPH ENGINE (PHYSICS CANVAS)
-    // ==========================================================================
-    let graphInitialized = false;
-    let graphAnimId = null;
-    let graphNodes = [];
-    let graphEdges = [];
-    let draggedNode = null;
-    let hoveredNode = null;
-    let mousePos = { x: 0, y: 0 };
-    let dragStartPos = { x: 0, y: 0 };
-    let hasDragged = false;
-
-    function resetGraphPhysics() {
-      graphInitialized = false;
-      initObsidianGraph();
-      if (window.AudioHaptics) window.AudioHaptics.play('pop');
-    }
-
-    function initObsidianGraph() {
-      const canvas = document.getElementById('obsidian-graph-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      const width = rect.width || 1200;
-      const height = 520;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.scale(dpr, dpr);
-
-      const centerX = width / 2;
-      const centerY = height / 2;
-
-      // 5 Cluster Hubs
-      const clusters = [
-        { id: 'c1', label: 'Documents & Forms', color: '#C2410C', r: 24, isCluster: true },
-        { id: 'c2', label: 'Study & Exams', color: '#D97706', r: 24, isCluster: true },
-        { id: 'c3', label: 'Mobile & Utilities', color: '#059669', r: 24, isCluster: true },
-        { id: 'c4', label: 'Browser Extensions', color: '#BE185D', r: 24, isCluster: true },
-        { id: 'c5', label: 'Media & Redesign', color: '#7E22CE', r: 24, isCluster: true }
-      ];
-
-      // 17 Tool Nodes
-      const tools = [
-        { num: '01', name: 'PDF Studio', href: 'project-01-pdf-studio/index.html', c: 'c1', color: '#C2410C' },
-        { num: '02', name: 'Form Photo Fixer', href: 'project-02-form-photo-fixer/index.html', c: 'c1', color: '#C2410C' },
-        { num: '03', name: 'Resume Builder', href: 'project-03-resume-builder/index.html', c: 'c1', color: '#C2410C' },
-        { num: '04', name: 'CBT Mock Test', href: 'project-04-cbt-mock-test/index.html', c: 'c2', color: '#D97706' },
-        { num: '05', name: 'Scribbly Notes', href: 'project-05-scribbly-notes/index.html', c: 'c2', color: '#D97706' },
-        { num: '06', name: 'Reel Monster', href: 'project-06-reel-monster/index.html', c: 'c3', color: '#059669' },
-        { num: '07', name: 'Bill Book', href: 'project-07-bill-book/index.html', c: 'c3', color: '#059669' },
-        { num: '08', name: 'Auto Rally', href: 'project-08-auto-rally/index.html', c: 'c3', color: '#059669' },
-        { num: '09', name: 'YouTube Focus', href: 'project-09-youtube-focus-board/index.html', c: 'c4', color: '#BE185D' },
-        { num: '10', name: 'Job Clipper', href: 'project-10-job-clipper/index.html', c: 'c4', color: '#BE185D' },
-        { num: '11', name: 'Circle to Fix', href: 'project-11-circle-to-fix/index.html', c: 'c4', color: '#BE185D' },
-        { num: '12', name: 'Chat Saver', href: 'project-12-chat-saver/index.html', c: 'c4', color: '#BE185D' },
-        { num: '13', name: 'Style Spy', href: 'project-13-style-spy/index.html', c: 'c4', color: '#BE185D' },
-        { num: '14', name: 'Tab Goblin', href: 'project-14-tab-goblin/index.html', c: 'c4', color: '#BE185D' },
-        { num: '15', name: 'Reel Cut 60s', href: 'project-15-one-minute-reel-cut/index.html', c: 'c5', color: '#7E22CE' },
-        { num: '16', name: 'Viva Examiner', href: 'project-16-your-own-skill/index.html', c: 'c2', color: '#D97706' },
-        { num: '17', name: 'Page Redesign', href: 'project-17-same-page-new-design/index.html', c: 'c5', color: '#7E22CE' }
-      ];
-
-      graphNodes = [];
-      graphEdges = [];
-
-      // Place clusters in an ergonomic pentagon ring
-      clusters.forEach((c, idx) => {
-        const angle = (idx / clusters.length) * Math.PI * 2;
-        const dist = 160;
-        graphNodes.push({
-          id: c.id,
-          label: c.label,
-          color: c.color,
-          r: c.r,
-          isCluster: true,
-          x: centerX + Math.cos(angle) * dist,
-          y: centerY + Math.sin(angle) * dist,
-          vx: 0,
-          vy: 0
-        });
-      });
-
-      // Place tools orbiting around their respective cluster
-      tools.forEach((t, idx) => {
-        const clusterNode = graphNodes.find(n => n.id === t.c);
-        const subAngle = (idx * 1.3) % (Math.PI * 2);
-        const subDist = 80 + (idx % 3) * 20;
-        const node = {
-          id: 'tool-' + t.num,
-          num: t.num,
-          label: `Tool ${t.num}`,
-          name: t.name,
-          href: t.href,
-          color: t.color,
-          r: 13,
-          isCluster: false,
-          x: (clusterNode ? clusterNode.x : centerX) + Math.cos(subAngle) * subDist,
-          y: (clusterNode ? clusterNode.y : centerY) + Math.sin(subAngle) * subDist,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5
-        };
-        graphNodes.push(node);
-        graphEdges.push({ from: node.id, to: t.c });
-      });
-
-      // Cross-cluster interconnected graph links
-      graphEdges.push({ from: 'tool-04', to: 'tool-16' });
-      graphEdges.push({ from: 'tool-12', to: 'tool-01' });
-      graphEdges.push({ from: 'tool-06', to: 'tool-15' });
-      graphEdges.push({ from: 'tool-13', to: 'tool-17' });
-      graphEdges.push({ from: 'c1', to: 'c2' });
-      graphEdges.push({ from: 'c2', to: 'c3' });
-      graphEdges.push({ from: 'c3', to: 'c4' });
-      graphEdges.push({ from: 'c4', to: 'c5' });
-      graphEdges.push({ from: 'c5', to: 'c1' });
-
-      // Mouse & Drag event listeners
-      if (!graphInitialized) {
-        canvas.addEventListener('mousedown', (e) => {
-          const r = canvas.getBoundingClientRect();
-          const mx = e.clientX - r.left;
-          const my = e.clientY - r.top;
-          dragStartPos = { x: mx, y: my };
-          hasDragged = false;
-          draggedNode = graphNodes.find(n => Math.hypot(n.x - mx, n.y - my) <= n.r + 6);
-        });
-
-        window.addEventListener('mousemove', (e) => {
-          const r = canvas.getBoundingClientRect();
-          const mx = e.clientX - r.left;
-          const my = e.clientY - r.top;
-          mousePos = { x: mx, y: my };
-
-          if (draggedNode) {
-            if (Math.hypot(mx - dragStartPos.x, my - dragStartPos.y) > 4) {
-              hasDragged = true;
-            }
-            draggedNode.x = mx;
-            draggedNode.y = my;
-            draggedNode.vx = 0;
-            draggedNode.vy = 0;
-          } else {
-            hoveredNode = graphNodes.find(n => Math.hypot(n.x - mx, n.y - my) <= n.r + 6);
-            canvas.style.cursor = hoveredNode ? (hoveredNode.href ? 'pointer' : 'grab') : 'default';
-          }
-        });
-
-        window.addEventListener('mouseup', () => {
-          if (draggedNode && !hasDragged && draggedNode.href) {
-            if (window.AudioHaptics) window.AudioHaptics.play('click');
-            window.location.href = draggedNode.href;
-          }
-          draggedNode = null;
-        });
-
-        graphInitialized = true;
-      }
-
-      function stepPhysics() {
-        // Damped Spring & Repulsion Simulation
-        const kRepel = 2400;
-        const kAttract = 0.0035;
-        const kCenter = 0.0008;
-
-        for (let i = 0; i < graphNodes.length; i++) {
-          const n1 = graphNodes[i];
-          // Center gravity
-          n1.vx += (centerX - n1.x) * kCenter;
-          n1.vy += (centerY - n1.y) * kCenter;
-
-          for (let j = i + 1; j < graphNodes.length; j++) {
-            const n2 = graphNodes[j];
-            const dx = n2.x - n1.x;
-            const dy = n2.y - n1.y;
-            const dist = Math.max(Math.hypot(dx, dy), 12);
-            const force = kRepel / (dist * dist);
-            const fx = (dx / dist) * force;
-            const fy = (dy / dist) * force;
-            if (n1 !== draggedNode) { n1.vx -= fx; n1.vy -= fy; }
-            if (n2 !== draggedNode) { n2.vx += fx; n2.vy += fy; }
-          }
-        }
-
-        // Spring attraction along edges
-        graphEdges.forEach(e => {
-          const n1 = graphNodes.find(n => n.id === e.from);
-          const n2 = graphNodes.find(n => n.id === e.to);
-          if (!n1 || !n2) return;
-          const dx = n2.x - n1.x;
-          const dy = n2.y - n1.y;
-          const dist = Math.hypot(dx, dy);
-          const targetDist = (n1.isCluster && n2.isCluster) ? 170 : 85;
-          const force = (dist - targetDist) * kAttract;
-          const fx = (dx / dist) * force;
-          const fy = (dy / dist) * force;
-          if (n1 !== draggedNode) { n1.vx += fx; n1.vy += fy; }
-          if (n2 !== draggedNode) { n2.vx -= fx; n2.vy -= fy; }
-        });
-
-        // Update positions & velocity damping
-        graphNodes.forEach(n => {
-          if (n !== draggedNode) {
-            n.vx *= 0.88;
-            n.vy *= 0.88;
-            n.x += n.vx;
-            n.y += n.vy;
-            // Bound inside canvas
-            n.x = Math.max(30, Math.min(width - 30, n.x));
-            n.y = Math.max(30, Math.min(height - 30, n.y));
-          }
-        });
-      }
-
-      function drawGraph() {
-        ctx.clearRect(0, 0, width, height);
-
-        // Draw connecting edges
-        graphEdges.forEach(e => {
-          const n1 = graphNodes.find(n => n.id === e.from);
-          const n2 = graphNodes.find(n => n.id === e.to);
-          if (!n1 || !n2) return;
-          const isHighlighted = hoveredNode && (hoveredNode.id === n1.id || hoveredNode.id === n2.id);
-          ctx.beginPath();
-          ctx.moveTo(n1.x, n1.y);
-          ctx.lineTo(n2.x, n2.y);
-          ctx.lineWidth = isHighlighted ? 2.5 : 1;
-          ctx.strokeStyle = isHighlighted ? 'rgba(139, 92, 246, 0.75)' : 'rgba(148, 163, 184, 0.22)';
-          ctx.stroke();
-        });
-
-        // Draw nodes
-        graphNodes.forEach(n => {
-          const isHover = hoveredNode === n || draggedNode === n;
-          const r = isHover ? n.r + 4 : n.r;
-
-          // Glowing aura
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, r + (n.isCluster ? 6 : 4), 0, Math.PI * 2);
-          ctx.fillStyle = isHover ? 'rgba(139, 92, 246, 0.35)' : 'rgba(0, 0, 0, 0.08)';
-          ctx.fill();
-
-          // Main circle
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = n.color || '#8B5CF6';
-          ctx.fill();
-          ctx.lineWidth = isHover ? 3 : 2;
-          ctx.strokeStyle = '#FFFFFF';
-          ctx.stroke();
-
-          // Text label
-          ctx.font = n.isCluster ? 'bold 11px sans-serif' : '600 10px monospace';
-          ctx.fillStyle = 'var(--text-main, #333)';
-          ctx.textAlign = 'center';
-          ctx.fillText(n.isCluster ? n.label : n.num, n.x, n.y + r + 13);
-        });
-
-        // Hover tooltip
-        if (hoveredNode && hoveredNode.name) {
-          const tipText = `Tool ${hoveredNode.num}: ${hoveredNode.name}  → Open`;
-          ctx.font = 'bold 12px sans-serif';
-          const tw = ctx.measureText(tipText).width;
-          const bx = Math.max(10, Math.min(width - tw - 30, hoveredNode.x - tw / 2));
-          const by = hoveredNode.y - 38;
-
-          ctx.fillStyle = 'rgba(15, 18, 25, 0.9)';
-          ctx.strokeStyle = '#8B5CF6';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.roundRect(bx - 10, by - 16, tw + 20, 26, 8);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.fillStyle = '#FFFFFF';
-          ctx.textAlign = 'left';
-          ctx.fillText(tipText, bx, by + 2);
-        }
-
-        stepPhysics();
-        if (activeHubView === 'graph') {
-          graphAnimId = requestAnimationFrame(drawGraph);
-        }
-      }
-
-      if (graphAnimId) cancelAnimationFrame(graphAnimId);
-      drawGraph();
     }
   </script>
 </body>
