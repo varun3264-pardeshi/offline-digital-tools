@@ -1,0 +1,44 @@
+{
+  "examTitle": "GenAI & Computational Systems Certification Exam",
+  "totalDurationMinutes": 30,
+  "positiveMarks": 4,
+  "negativeMarks": 1,
+  "subjects": ["AI Fundamentals", "Data Structures"],
+  "questions": [
+    {
+      "id": 1,
+      "subject": "AI Fundamentals",
+      "question": "What does the 'T' in GPT stand for?",
+      "options": ["Translator", "Transformer", "Tensor", "Tokenizer"],
+      "correctIndex": 1
+    },
+    {
+      "id": 2,
+      "subject": "AI Fundamentals",
+      "question": "Which mechanism allows LLMs to focus on relevant tokens across long sequences?",
+      "options": ["Convolution", "Backpropagation", "Self-Attention", "Dropout"],
+      "correctIndex": 2
+    },
+    {
+      "id": 3,
+      "subject": "AI Fundamentals",
+      "question": "What is the primary objective of temperature parameter in LLM decoding?",
+      "options": ["Controls GPU heat", "Adjusts probability distribution randomness", "Sets context window length", "Increases parameter count"],
+      "correctIndex": 1
+    },
+    {
+      "id": 4,
+      "subject": "Data Structures",
+      "question": "What is the worst-case lookup time complexity in a balanced Binary Search Tree (AVL)?",
+      "options": ["O(1)", "O(log N)", "O(N)", "O(N log N)"],
+      "correctIndex": 1
+    },
+    {
+      "id": 5,
+      "subject": "Data Structures",
+      "question": "Which data structure follows the Last-In-First-Out (LIFO) order?",
+      "options": ["Queue", "Stack", "Binary Heap", "Linked List"],
+      "correctIndex": 1
+    }
+  ]
+}
