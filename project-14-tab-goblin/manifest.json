@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Goblin",
+  "version": "1.0.0",
+  "description": "An animated goblin that eats idle tabs, putting them to sleep with memory discard, saving RAM while protecting half-filled forms.",
+  "permissions": ["tabs", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tab Goblin - Sleep Idle Tabs"
+  }
+}

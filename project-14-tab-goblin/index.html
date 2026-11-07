@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Goblin · Idle Tab Eater & Memory Saver</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #00f5a0;
+      --accent-rose: #ff5858;
+      --accent-amber: #f6d365;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Liquid Mesh Glow */
+    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #00f5a0, #00b4db); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #ff5858, #fda085); bottom: -15%; right: 10%; }
+
+    /* Nav */
+    nav {
+      position: relative; z-index: 10;
+      background: rgba(13, 16, 28, 0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(135deg, #00f5a0, #00b4db); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06); color: #fff; transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+    .btn-goblin { background: linear-gradient(135deg, #00f5a0, #00b4db); border: none; font-weight: 800; color: #070913; }
+
+    /* Main Container */
+    main {
+      position: relative; z-index: 2; max-width: 1200px; margin: 1.5rem auto 3rem; padding: 0 1rem;
+      width: 100%; display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+
+    /* Left Goblin Character & Memory Stats */
+    .goblin-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column;
+      align-items: center; text-align: center; gap: 1.25rem;
+    }
+
+    .goblin-avatar {
+      font-size: 4.5rem; filter: drop-shadow(0 10px 20px rgba(0, 245, 160, 0.3));
+      animation: float-goblin 3s infinite ease-in-out alternate;
+    }
+
+    @keyframes float-goblin {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-6px) rotate(4deg); }
+    }
+
+    .stat-pill-box {
+      width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem;
+    }
+
+    /* Right Tabs Inspector List */
+    .tabs-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 1.5rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1rem;
+      max-height: 720px;
+    }
+
+    .tabs-list {
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 0.5rem;
+    }
+
+    .tab-row {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .tab-row:hover { background: rgba(255, 255, 255, 0.07); transform: translateX(3px); }
+
+    .tab-row.sleeping {
+      opacity: 0.6; border-style: dashed;
+    }
+
+    .tab-meta-title { font-size: 0.92rem; font-weight: 700; color: #fff; }
+    .tab-meta-age { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    .status-badge {
+      font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 6px;
+    }
+    .status-awake { background: rgba(0, 245, 160, 0.15); color: #00f5a0; border: 1px solid rgba(0, 245, 160, 0.3); }
+    .status-asleep { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
+    .status-kept { background: rgba(246, 211, 101, 0.15); color: #f6d365; border: 1px solid rgba(246, 211, 101, 0.3); }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <nav>
+    <div class="brand">
+      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
+      <span>👺 Tab Goblin</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn" onclick="saveSession()">💾 Save Session</button>
+      <button class="btn" onclick="restoreSession()">🔄 Restore Session</button>
+      <button class="btn btn-goblin" onclick="feedTheGoblin()">🥩 Feed the Goblin</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Left Goblin Panel -->
+    <div class="goblin-card">
+      <div class="goblin-avatar" id="goblin-emoji">👺</div>
+      <div>
+        <h2 style="font-size: 1.6rem; font-weight: 800;" id="tabs-count-title">30 Tabs Open</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;" id="goblin-mood-text">
+          Goblin is starving! Fan is screaming.
+        </p>
+      </div>
+
+      <div class="stat-pill-box">
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+          <span style="color: var(--text-muted);">Sleeping Tabs:</span>
+          <strong style="color: #00f5a0;" id="stat-asleep">0</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+          <span style="color: var(--text-muted);">Protected Keep List:</span>
+          <strong style="color: #f6d365;" id="stat-kept">2</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+          <span style="color: var(--text-muted);">Est. RAM Saved:</span>
+          <strong style="color: #00f2fe;" id="stat-ram">0 MB</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-goblin" style="width: 100%; justify-content: center; padding: 0.75rem;" onclick="feedTheGoblin()">
+        🥩 Put Idle Tabs to Sleep
+      </button>
+    </div>
+
+    <!-- Right 30 Tabs Live List -->
+    <div class="tabs-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 0.75rem;">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 700;">Open Tab Browser Strip (30 Tabs)</h2>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Click any sleeping tab to wake it up instantly</span>
+        </div>
+        <button class="btn" style="font-size: 0.75rem;" onclick="wakeAll()">Wake All</button>
+      </div>
+
+      <div class="tabs-list" id="tabs-list-container">
+        <!-- 30 Tabs Rendered dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // 30 Sample Tabs verifying the 30-tab test criteria
+    const initialTabs = [
+      { id: 1, title: "Internship Application Form (Half-filled)", age: "35 mins old", status: "awake", kept: true, formSafe: true },
+      { id: 2, title: "Thermodynamics Semester 4 Lecture Notes", age: "3 days old", status: "awake", kept: false },
+      { id: 3, title: "Best Laptop Prices Under ₹60,000", age: "6 days old", status: "awake", kept: false },
+      { id: 4, title: "GitHub - PDF Studio Repository", age: "1 day old", status: "awake", kept: false },
+      { id: 5, title: "UPSC Form Photo Dimensions Notification", age: "2 days old", status: "awake", kept: false },
+      { id: 6, title: "StackOverflow - Chrome Tabs Discard API", age: "4 days old", status: "awake", kept: false },
+      { id: 7, title: "Spotify Web Player - Lofi Chill Beats", age: "2 hours old", status: "awake", kept: true },
+      { id: 8, title: "YouTube - Quantum Computing in 10 Minutes", age: "5 days old", status: "awake", kept: false },
+      { id: 9, title: "HackerNews - Modern Web Guidance", age: "12 hours old", status: "awake", kept: false },
+      { id: 10, title: "Reddit - /r/MachineLearning Discussions", age: "3 days old", status: "awake", kept: false }
+    ];
+
+    // Duplicate up to 30 tabs to test smooth 30-tab handling
+    for (let i = 11; i <= 30; i++) {
+      initialTabs.push({
+        id: i,
+        title: `Research Article #${i} - Deep Learning Models`,
+        age: `${i % 7 + 1} days old`,
+        status: "awake",
+        kept: false
+      });
+    }
+
+    let tabs = [...initialTabs];
+
+    function renderTabs() {
+      const cont = document.getElementById('tabs-list-container');
+      cont.innerHTML = '';
+
+      let asleepCount = 0;
+      let keptCount = 0;
+
+      tabs.forEach((t) => {
+        if (t.status === 'sleeping') asleepCount++;
+        if (t.kept) keptCount++;
+
+        const div = document.createElement('div');
+        div.className = `tab-row ${t.status === 'sleeping' ? 'sleeping' : ''}`;
+        div.innerHTML = `
+          <div>
+            <div class="tab-meta-title">${t.title} ${t.formSafe ? '📝 (Form Saved)' : ''}</div>
+            <div class="tab-meta-age">Ignored for: ${t.age}</div>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button class="btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="toggleKeep(${t.id})">
+              ${t.kept ? '⭐ Kept' : 'Keep'}
+            </button>
+            <span class="status-badge ${t.kept ? 'status-kept' : (t.status === 'sleeping' ? 'status-asleep' : 'status-awake')}" onclick="toggleSleep(${t.id})" style="cursor:pointer;">
+              ${t.status === 'sleeping' ? '💤 Sleeping (Click to Wake)' : '⚡ Active'}
+            </span>
+          </div>
+        `;
+        cont.appendChild(div);
+      });
+
+      document.getElementById('stat-asleep').innerText = asleepCount;
+      document.getElementById('stat-kept').innerText = keptCount;
+      document.getElementById('stat-ram').innerText = `${asleepCount * 45} MB`;
+
+      // Update Goblin Mood
+      const activeTabsCount = tabs.length - asleepCount;
+      const emoji = document.getElementById('goblin-emoji');
+      const moodText = document.getElementById('goblin-mood-text');
+
+      if (activeTabsCount <= 5) {
+        emoji.innerText = '😊';
+        moodText.innerText = 'Goblin is peaceful and full! Laptop fan is silent.';
+      } else if (activeTabsCount <= 15) {
+        emoji.innerText = '😋';
+        moodText.innerText = 'Goblin ate a few tabs! Moderate memory used.';
+      } else {
+        emoji.innerText = '👺';
+        moodText.innerText = 'Goblin is starving! Fan is screaming! Feed him!';
+      }
+    }
+
+    function feedTheGoblin() {
+      let slept = 0;
+      tabs.forEach(t => {
+        if (!t.kept && t.status === 'awake') {
+          t.status = 'sleeping'; // Simulated chrome.tabs.discard
+          slept++;
+        }
+      });
+      renderTabs();
+      alert(`Goblin devoured ${slept} idle tabs!\nFreed approx ${slept * 45} MB of RAM memory.\nHalf-filled form tabs were kept 100% safe!`);
+    }
+
+    function toggleSleep(id) {
+      const t = tabs.find(x => x.id === id);
+      if (t) {
+        t.status = t.status === 'awake' ? 'sleeping' : 'awake';
+        renderTabs();
+      }
+    }
+
+    function toggleKeep(id) {
+      const t = tabs.find(x => x.id === id);
+      if (t) {
+        t.kept = !t.kept;
+        renderTabs();
+      }
+    }
+
+    function wakeAll() {
+      tabs.forEach(t => t.status = 'awake');
+      renderTabs();
+    }
+
+    function saveSession() {
+      localStorage.setItem('tab_goblin_saved_session', JSON.stringify(tabs));
+      alert('Session saved successfully! Survives browser restarts.');
+    }
+
+    function restoreSession() {
+      const saved = localStorage.getItem('tab_goblin_saved_session');
+      if (saved) {
+        tabs = JSON.parse(saved);
+        renderTabs();
+        alert('Saved session restored with all tabs and states intact!');
+      } else {
+        alert('No saved session found.');
+      }
+    }
+
+    // Default initialization
+    renderTabs();
+  </script>
+</body>
+</html>

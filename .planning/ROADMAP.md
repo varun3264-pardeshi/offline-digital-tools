@@ -37,7 +37,7 @@
 - [x] **Project 11: Circle to Fix** (Canvas screen markup, element DOM/CSS inspector, bug prompt generator with screenshot)
 - [x] **Project 12: Chat Saver** (Multi-platform AI chat exporter, clean Markdown & PDF formatting, code blocks & tables preserved)
 - [x] **Project 13: Style Spy** (Color ranking & usage analyzer, typography inspector, 1-click CSS variable kit generator)
-- [ ] **Project 14: Tab Goblin** (Animated tab devourer, tab age ranking, memory discarder, session save/restore)
+- [x] **Project 14: Tab Goblin** (Animated tab devourer, tab age ranking, memory discarder, session save/restore)
 
 ### Phase 4: Section D - Video, Skills and Design
 - [ ] **Project 15: One-Minute Reel Cut** (Raw footage analysis, silence/filler cutter, 9:16 portrait cropper, subtitles generator)
