@@ -1,6 +1,4 @@
 # Prompts Log - Project 07: Bill Book
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 7 (Section B: Phone Apps and Games) - Bill Book (Medium)
 
 ---

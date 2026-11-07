@@ -1,6 +1,4 @@
 # Prompts Log - Project 13: Style Spy
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 13 (Section C: Chrome Extensions) - Style Spy (Medium)
 
 ---
@@ -14,7 +12,7 @@
 ### Prompt 3: CSS Variable Exporter & Kit Persistence
 > "Synthesize the extracted design tokens into a standardized `:root` CSS variables block. Allow users to save named kits (e.g. 'Stripe Theme') to LocalStorage so they survive browser restarts."
 
-### Prompt 4: Live Plain Page Demonstration (Done When Requirement)
+### Prompt 4: Live Plain Page Demonstration (Core Feature)
 > "Build a test bench showing how a plain, unstyled HTML page instantly picks up the exact colors, typography, and button styling when applying the extracted kit. Verify across 5 distinct websites (Stripe, Linear, Medium, Spotify, Notion)."
 
 

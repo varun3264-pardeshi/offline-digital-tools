@@ -13,7 +13,7 @@ Design system and typography inspector that computes element styles across any w
 ## Instant Live Simulator
 Open `index.html` directly in your browser to inspect 5 verified site presets (Stripe, Linear, Medium, Spotify, Notion), copy CSS variables, and test the live plain page transformation.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Verified by hand across 5 websites**: Presets configured from Stripe, Linear, Medium, Spotify, and Notion.
 - [x] **Saved Kits Survive Chrome Restart**: Named style kits are stored in LocalStorage.
 - [x] **Paste Kit into Plain Page**: Live demo demonstrates a plain page picking up the exact style and typography.

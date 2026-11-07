@@ -13,7 +13,7 @@ Screen markup tool enabling developers to circle visual bugs directly in the bro
 ## Instant Live Simulator
 Open `index.html` directly in your browser to interactively test drawing circles, boxes, and arrows over 5 sample web UI components, inspect computed styles, copy ready-to-run prompts, and inspect the real Before vs After bug fix.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Works on 5 different websites/widgets**: Verified across Pricing Cards, Navbar links, Form inputs, Rating stars, and Article headers.
 - [x] **Prompt includes element's code & developer note**: Extracts HTML tags, classes, and computed properties (`width`, `height`, `overflow`).
 - [x] **Real Bug Fix Showcase (Before and After)**: Resolved text overflow bug in `.btn-buy-broken` with complete side-by-side verification.

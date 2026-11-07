@@ -1,454 +1,346 @@
 <!DOCTYPE html>
 <html lang="en" data-palette="coral">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
-  <link rel="stylesheet" href="../assets/studio-ui.css" />
-  <script src="../assets/security-auth.js" defer></script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Circle Any Website Bug to Generate a Fix (Project 11)</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
+  <title>Circle Any Website Bug to Generate a Fix (Tool 11)</title>
+  <link rel="stylesheet" href="../assets/studio-ui.css" />
+  <script src="../assets/security-auth.js" defer></script>
   <style>
-    :root {
-      --bg: var(--bg-surface);
-      --card-bg: var(--bg-surface);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: var(--status-err);
-      --accent-cyan: var(--accent-primary);
-      --text: var(--text-main);
-      --text-muted: var(--text-secondary);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-canvas);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
-    /* Ambient Liquid Mesh Glow */
-    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
-    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, var(--status-err), #ff8585); top: -15%; left: 10%; }
-    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #9b51e0, var(--accent-primary)); bottom: -15%; right: 10%; }
-
-    /* Nav */
     nav {
-      position: relative; z-index: 10;
-      background: var(--bg-surface); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .brand {
-      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--status-err), #fda085); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
-      background: var(--bg-elevated); color: #fff; transition: all 0.2s ease;
-    }
-    .btn:hover { background: var(--bg-muted); transform: translateY(-1px); }
-    .btn-red { background: linear-gradient(135deg, var(--status-err), #e11d48); border: none; font-weight: 700; color: #fff; }
-
-    /* Main Container */
-    main {
-      position: relative; z-index: 2; max-width: 1300px; margin: 1.5rem auto 3rem; padding: 0 1.5rem;
-      display: grid; grid-template-columns: 1fr 400px; gap: 2rem;
-    }
-
-    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
-
-    /* Left Stage with 5 Sample Buggy Websites / Components */
-    .stage-card {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.5rem;
-    }
-
-    .toolbar-tools {
-      display: flex; gap: 0.75rem; background: var(--bg-elevated); border: 1px solid var(--card-border);
-      border-radius: 12px; padding: 0.4rem;
-    }
-
-    .tool-btn {
-      padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
-      background: none; border: none; color: var(--text-muted); cursor: pointer; transition: all 0.2s ease;
-    }
-    .tool-btn.active { background: rgba(255, 88, 88, 0.2); color: #fff; border: 1px solid var(--accent); }
-
-    /* Interactive Bug Samples Container */
-    .samples-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
-    }
-
-    /* Bug 1: Pricing Card Overflow */
-    .sample-box {
-      background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 14px;
-      padding: 1.25rem; position: relative;
-    }
-
-    .pricing-card {
-      background: #1e293b; border-radius: 12px; padding: 1.25rem; width: 100%; max-width: 200px;
-      text-align: center; margin: 0 auto;
-    }
-    .pricing-price { font-size: 1.6rem; font-weight: 800; color: #fff; }
-    .btn-buy-broken {
-      background: var(--accent-primary); color: #000; border: none; padding: 0.5rem 1.8rem; border-radius: 6px;
-      font-weight: bold; margin-top: 0.6rem; width: 140px; cursor: pointer;
-    }
-
-    /* Bug 2: Navbar Link Clutter */
-    .sample-nav {
-      background: #111827; padding: 0.75rem 1rem; border-radius: 10px; display: flex; gap: 0.5rem;
-      align-items: center; overflow: hidden;
-    }
-    .nav-broken-item {
-      background: var(--bg-elevated); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.8rem;
-      white-space: nowrap; margin-right: -10px; /* intentional bug overlap */
-    }
-
-    /* Bug 3: Cutoff Input */
-    .broken-input-box {
-      width: 140px; overflow: hidden; white-space: nowrap;
-    }
-    .broken-input {
-      width: 240px; background: #1e293b; border: 1px solid #475569; color: #fff; padding: 0.4rem;
-      border-radius: 6px;
-    }
-
-    /* Right Inspector / Prompt Copier Panel */
-    .inspector-panel {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.25rem;
-    }
-
-    .prompt-box {
-      background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 12px;
-      padding: 1rem; font-family: monospace; font-size: 0.82rem; color: var(--text-main); line-height: 1.5;
-      min-height: 220px; white-space: pre-wrap; word-break: break-all;
-    }
-
-    /* Before vs After Showcase Section */
-    .before-after-card {
-      grid-column: 1 / -1; background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 1.75rem; backdrop-filter: blur(20px);
-    }
-    .ba-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;
-    }
-    .ba-col {
-      background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 12px;
-      padding: 1.25rem;
-    }
-  
-    /* === MULTI-COLOR HUMAN-CRAFTED STUDIO OVERRIDES (NO BLUE VIBE-CODING) === */
-    :root {
-      --bg: var(--bg-canvas) !important;
-      --bg-dark: var(--bg-canvas) !important;
-      --panel-bg: var(--bg-surface) !important;
-      --card-bg: var(--bg-surface) !important;
-      --card-border: var(--border-color) !important;
-      --accent: var(--accent-primary) !important;
-      --accent-cyan: var(--accent-primary) !important;
-      --accent-blue: var(--accent-secondary) !important;
-      --accent-purple: var(--accent-plum, #7E22CE) !important;
-      --accent-emerald: var(--status-ok, #15803D) !important;
-      --accent-rose: var(--status-err, #B91C1C) !important;
-      --text: var(--text-main) !important;
-      --text-muted: var(--text-secondary) !important;
-    }
-
-    body {
-      background: var(--bg-canvas) !important;
-      color: var(--text-main) !important;
-    }
-
-    .ambient-glow, .liquid-mesh, .glow-blob, .blob {
-      display: none !important;
-    }
-
-    header, nav, .top-bar, .app-header {
-      background: var(--bg-surface) !important;
-      border-bottom: 2px solid var(--border-color) !important;
-      backdrop-filter: none !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .brand-title, .logo-badge {
-      background: none !important;
-      -webkit-text-fill-color: var(--text-main) !important;
-      color: var(--text-main) !important;
-      font-weight: 800 !important;
-    }
-
-    .panel, .card, .editor-card, .tool-group, .sidebar, .right-panel, .left-panel,
-    .scorecard, .modal-card, .kanban-col, .extension-panel, .chat-panel, .inspector-card {
-      background: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-main) !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .btn, .tool-btn, .tab-btn, .sub-btn, .toggle-btn, .action-btn {
-      background: var(--bg-elevated) !important;
-      color: var(--text-main) !important;
-      border: 1px solid var(--border-strong) !important;
-    }
-
-    .btn:hover, .tool-btn:hover, .tab-btn:hover, .sub-btn:hover {
-      border-color: var(--accent-primary) !important;
-      color: var(--accent-primary) !important;
-    }
-
-    .btn-primary, .tab-btn.active, .sub-btn.active, .toggle-btn.active, .tool-btn.active {
-      background: var(--accent-primary) !important;
-      color: #FFFFFF !important;
-      border-color: var(--accent-primary) !important;
-      box-shadow: none !important;
-    }
-
-    input, select, textarea, .text-input, .select-input, .textarea-input, .input-text {
-      background: var(--bg-surface) !important;
-      color: var(--text-main) !important;
-      border: 1.5px solid var(--border-strong) !important;
-    }
-
-    /* Simple Action Banner & Advanced Feature Strip */
-    .project-purpose-banner {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
       flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      gap: 0.75rem;
     }
 
-    .purpose-left {
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text-main);
+    }
+
+    .btn, .tool-btn {
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-primary, .tool-btn.active {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+    }
+
+    main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.35rem;
+      align-items: start;
+    }
+
+    .stage-card, .inspector-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.35rem;
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
     }
 
-    .purpose-heading {
-      font-size: 1.25rem;
+    .samples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .sample-box {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.95rem;
+      position: relative;
+    }
+
+    .sample-label {
+      font-size: 0.74rem;
       font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
-    }
-
-    .purpose-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 5px;
-      background: var(--accent-primary-soft);
       color: var(--accent-primary);
-      border: 1px solid currentColor;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
     }
 
-    .purpose-sub {
-      font-size: 0.86rem;
+    /* Intentional Bugs vs Fixed States */
+    .pricing-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 0.75rem;
+      width: 165px;
+    }
+
+    .btn-buy-broken {
+      background: #E11D48;
+      color: #FFFFFF;
+      border: none;
+      padding: 0.45rem 0.6rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      margin-top: 0.5rem;
+      width: 215px; /* Overflows 165px parent */
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .fixed-mode .btn-buy-broken {
+      width: 100%;
+      white-space: normal;
+      text-align: center;
+      background: #15803D;
+    }
+
+    .sample-nav {
+      display: flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      padding: 0.5rem;
+      border-radius: 8px;
+      gap: 0px; /* Cramped overlapping items */
+    }
+
+    .nav-broken-item {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.25rem 0.35rem;
+      margin-right: -8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .fixed-mode .nav-broken-item {
+      margin-right: 6px;
+    }
+
+    .broken-input-box {
+      width: 160px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+
+    .broken-input {
+      width: 220px; /* Overflows box */
+      padding: 0.35rem;
+      font-size: 0.76rem;
+      border: 1px solid #E11D48;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .fixed-mode .broken-input {
+      width: 100%;
+      border-color: #15803D;
+    }
+
+    .crooked-star {
+      display: inline-block;
+      transform: rotate(38deg) translateY(6px);
+      color: #E11D48;
+      transition: all 0.2s ease;
+    }
+
+    .fixed-mode .crooked-star {
+      transform: none;
+      color: #D97706;
+    }
+
+    .clipped-badge {
+      display: inline-block;
+      width: 90px;
+      height: 22px;
+      overflow: hidden;
+      background: #FEE2E2;
+      color: #991B1B;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .fixed-mode .clipped-badge {
+      width: auto;
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .prompt-box {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      line-height: 1.45;
+      max-height: 230px;
+      overflow-y: auto;
+    }
+
+    .screenshot-preview {
+      border: 1px dashed var(--border-strong);
+      border-radius: 8px;
+      padding: 0.5rem;
+      background: var(--bg-canvas);
+      text-align: center;
+      font-size: 0.76rem;
       color: var(--text-secondary);
     }
 
-    .purpose-tools {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
     }
-
-    .adv-search-input {
-      padding: 0.38rem 0.7rem;
-      border-radius: 6px;
-      border: 1px solid var(--border-strong);
-      font-size: 0.8rem;
-      background: var(--bg-canvas);
-      color: var(--text-main);
-      width: 190px;
-    }
-
-    .adv-toast {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      background: var(--text-main);
-      color: var(--bg-surface);
-      padding: 0.75rem 1.1rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      box-shadow: var(--shadow-lg);
-      z-index: 99999;
-      display: none;
-      max-width: 420px;
-    }
-
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Circle Any Website Bug to Generate a Fix</span>
-        <span class="purpose-tag">Project 11 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Draw a red circle around any broken element on the preview webpage to extract its HTML, CSS, coordinates, and a ready-to-paste fix prompt.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
-  <div id="adv-toast-box" class="adv-toast"></div>
-
-  <div class="ambient-glow">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-  </div>
 
   <nav>
-    <div class="brand">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span>⭕ Circle to Fix</span>
-    </div>
-    <div style="display: flex; gap: 0.75rem;">
-      <button class="btn btn-red" onclick="triggerDrawingMode()">✏️ Start Drawing (Ctrl+Shift+X)</button>
+    <div class="brand">Circle Any Website Bug to Generate a Fix</div>
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <button class="tool-btn active" id="btn-circle" onclick="setShape('circle')">⭕ Circle</button>
+      <button class="tool-btn" id="btn-rect" onclick="setShape('rect')">⬛ Box</button>
+      <button class="tool-btn" id="btn-arrow" onclick="setShape('arrow')">↗ Arrow</button>
+      <button class="btn btn-primary" onclick="triggerDrawingMode()">✏️ Draw on Page (Ctrl+Shift+X)</button>
+      <button class="btn" id="btn-toggle-fix" onclick="toggleLiveFix()">⚡ Apply Fix on Page (Before → After)</button>
     </div>
   </nav>
 
   <main>
-    <!-- Left Stage with Real Web Components -->
-    <div class="stage-card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="font-size: 1.25rem; font-weight: 800;">Interactive Web Page Samples</h2>
-        <div class="toolbar-tools">
-          <button class="tool-btn active" id="btn-circle" onclick="setShape('circle')">⭕ Circle</button>
-          <button class="tool-btn" id="btn-box" onclick="setShape('rect')">⬛ Box</button>
-          <button class="tool-btn" id="btn-arrow" onclick="setShape('arrow')">↗ Arrow</button>
+    <!-- Left Stage: 5 Website Component Samples -->
+    <div class="stage-card" id="live-stage">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 800;">5 Website Layouts with UI Bugs</h2>
+          <p style="font-size: 0.82rem; color: var(--text-secondary);">Click <strong>Draw on Page</strong> and circle any broken item below, or click any item directly.</p>
         </div>
+        <span id="fix-state-badge" style="font-size:0.75rem; font-weight:800; padding:0.25rem 0.6rem; border-radius:6px; background:var(--status-err-bg); color:var(--status-err);">
+          Showing: Broken State (Before Fix)
+        </span>
       </div>
 
-      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
-        Click <strong>"Start Drawing"</strong> or press <strong>Ctrl+Shift+X</strong>, then draw a circle or box over any element below. The inspector automatically extracts its DOM hierarchy, CSS properties, and copies a ready AI prompt!
-      </p>
-
-      <!-- 5 Tested Real Component Widgets -->
       <div class="samples-grid">
-        <!-- Site Sample 1: E-Commerce Pricing Card -->
-        <div class="sample-box">
-          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 1 · E-Commerce Site</div>
+        <!-- Sample 1 -->
+        <div class="sample-box" onclick="inspectAndGeneratePrompt(document.getElementById('btn-buy-sample'))">
+          <div class="sample-label">1. Store Pricing Card</div>
           <div class="pricing-card">
-            <div style="font-size: 0.85rem; color: #94a3b8;">Pro Plan</div>
-            <div class="pricing-price">₹299</div>
-            <!-- Intentional text overflow bug to circle! -->
-            <button class="btn-buy-broken" id="btn-buy-sample">Buy Annual Pass Now</button>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">Annual Plan</div>
+            <div style="font-size: 1.3rem; font-weight: 800;">₹299</div>
+            <button class="btn-buy-broken" id="btn-buy-sample" type="button">Buy Annual Pass Now</button>
           </div>
         </div>
 
-        <!-- Site Sample 2: SaaS Navigation Bar -->
-        <div class="sample-box">
-          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 2 · SaaS Navbar</div>
+        <!-- Sample 2 -->
+        <div class="sample-box" onclick="inspectAndGeneratePrompt(document.getElementById('nav-analytics-badge'))">
+          <div class="sample-label">2. Cramped Navbar</div>
           <div class="sample-nav">
             <span class="nav-broken-item">Home</span>
-            <span class="nav-broken-item">Dashboard</span>
-            <span class="nav-broken-item" id="nav-analytics-badge">Analytics [Beta]</span>
-            <span class="nav-broken-item">Settings</span>
+            <span class="nav-broken-item" id="nav-analytics-badge">Analytics</span>
+            <span class="nav-broken-item">Billing</span>
+            <span class="nav-broken-item">Team</span>
           </div>
         </div>
 
-        <!-- Site Sample 3: Form Input -->
-        <div class="sample-box">
-          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 3 · Application Form</div>
+        <!-- Sample 3 -->
+        <div class="sample-box" onclick="inspectAndGeneratePrompt(document.getElementById('input-coupon-code'))">
+          <div class="sample-label">3. Checkout Input</div>
           <div class="broken-input-box">
-            <input type="text" class="broken-input" id="input-coupon-code" value="DISCOUNT-SPECIAL-2026-COUPON">
+            <input type="text" class="broken-input" id="input-coupon-code" value="DISCOUNT-2026-COUPON" readonly>
           </div>
         </div>
 
-        <!-- Site Sample 4: Star Rating -->
-        <div class="sample-box">
-          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 4 · Customer Reviews</div>
-          <div style="display: flex; gap: 4px; font-size: 1.2rem; color: #f6d365;" id="review-stars-widget">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span style="transform: rotate(30deg); display:inline-block;">★</span>
+        <!-- Sample 4 -->
+        <div class="sample-box" onclick="inspectAndGeneratePrompt(document.getElementById('review-stars-widget'))">
+          <div class="sample-label">4. Misaligned Icon</div>
+          <div style="font-size: 1.3rem; color: #D97706;" id="review-stars-widget">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span class="crooked-star">★</span>
+          </div>
+        </div>
+
+        <!-- Sample 5 -->
+        <div class="sample-box" onclick="inspectAndGeneratePrompt(document.getElementById('blog-status-tag'))">
+          <div class="sample-label">5. Clipped Status Tag</div>
+          <div>
+            <span class="clipped-badge" id="blog-status-tag">Published · 12 Min Read</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Right Inspector & Generated Prompt -->
+    <!-- Right Inspector & Prompt Output -->
     <div class="inspector-panel">
       <div>
-        <h2 style="font-size: 1.2rem; font-weight: 800;">Target Inspector & Prompt</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Sends nothing to any server · 100% Local</p>
+        <h2 style="font-size: 1.15rem; font-weight: 800;">Extracted Element & Ready Prompt</h2>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">Includes element HTML, computed CSS, note, and region snapshot.</p>
       </div>
 
       <div>
-        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Optional Developer Note:</label>
-        <input type="text" id="dev-note" class="btn" style="width: 100%; margin-top: 0.3rem; background: rgba(255,255,255,0.04); font-size: 0.85rem;" value="Text overflows container width on mobile viewport.">
+        <label style="font-size: 0.76rem; color: var(--text-secondary); font-weight: 700;">Your Note:</label>
+        <input type="text" id="dev-note" style="width: 100%; margin-top: 0.25rem; padding: 0.45rem 0.65rem; border-radius: 6px;" value="Text overflows card boundary on mobile screen." oninput="refreshActivePrompt()">
+      </div>
+
+      <div class="screenshot-preview">
+        <canvas id="snap-canvas" width="280" height="72" style="border-radius:6px; max-width:100%;"></canvas>
+        <div id="snap-caption" style="margin-top:0.2rem;">Captured Region Snapshot (Local Canvas)</div>
       </div>
 
       <div>
-        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
-          <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">READY AI PROMPT:</span>
-          <button class="btn" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="copyPrompt()">📋 Copy</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <span style="font-size: 0.76rem; font-weight: 800; color: var(--text-secondary);">GENERATED PROMPT:</span>
+          <span id="copy-feedback" style="font-size: 0.75rem; color: var(--status-ok); font-weight: 700;"></span>
         </div>
-        <div class="prompt-box" id="prompt-output">
-Click "Start Drawing" and draw over any component to generate a precision prompt!
-        </div>
+        <div class="prompt-box" id="prompt-output"></div>
       </div>
 
-      <button class="btn btn-red" style="justify-content: center;" onclick="copyPrompt()">
-        📋 One-Click Copy Prompt for AI
-      </button>
-    </div>
-
-    <!-- Real Bug Fix Showcase: Fulfills "Show Before and After" -->
-    <div class="before-after-card">
-      <h2 style="font-size: 1.25rem; font-weight: 800;">Real Bug Fixed with Circle to Fix: Before vs After</h2>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
-        Demonstrating the exact prompt copied by circling <code>button.btn-buy-broken</code> to resolve card overflow.
-      </p>
-
-      <div class="ba-grid">
-        <div class="ba-col">
-          <div style="font-size: 0.85rem; font-weight: 800; color: var(--status-err); margin-bottom: 0.5rem;">🔴 BEFORE (Circled Bug)</div>
-          <div style="background: #1e293b; padding: 1rem; border-radius: 8px; width: 180px;">
-            <div style="font-size: 14px; font-weight: bold;">₹299</div>
-            <div style="background: var(--accent-primary); color: #000; padding: 4px; width: 210px; margin-top: 6px; font-size: 11px; font-weight: bold; border-radius: 4px;">
-              Buy Annual Pass Now (Overflows)
-            </div>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-            Button width exceeds card boundary; text clipped on edges.
-          </p>
-        </div>
-
-        <div class="ba-col">
-          <div style="font-size: 0.85rem; font-weight: 800; color: var(--status-ok); margin-bottom: 0.5rem;">🟢 AFTER (AI Fix Applied)</div>
-          <div style="background: #1e293b; padding: 1rem; border-radius: 8px; width: 180px;">
-            <div style="font-size: 14px; font-weight: bold;">₹299</div>
-            <div style="background: var(--accent-primary); color: #000; padding: 6px; width: 100%; margin-top: 6px; font-size: 11px; font-weight: bold; border-radius: 4px; text-align: center;">
-              Buy Annual Pass
-            </div>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
-            <code>width: 100%</code>, text centered, zero overflow across all mobile screens.
-          </p>
-        </div>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn btn-primary" style="flex:1; justify-content: center; padding: 0.6rem;" onclick="copyPrompt()">
+          📋 Copy Full Prompt
+        </button>
+        <button class="btn" onclick="toggleLiveFix()">
+          ⚡ Fix Element
+        </button>
       </div>
     </div>
   </main>
@@ -458,20 +350,20 @@ Click "Start Drawing" and draw over any component to generate a precision prompt
     let isDrawing = false;
     let startX = 0, startY = 0;
     let canvasOverlay = null;
+    let lastInspectedEl = null;
+    let isFixed = false;
 
     function setShape(s) {
       activeShape = s;
       document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`btn-${s}`).classList.add('active');
+      const btn = document.getElementById('btn-' + s);
+      if (btn) btn.classList.add('active');
     }
 
     function triggerDrawingMode() {
       if (canvasOverlay) return;
       canvasOverlay = document.createElement('canvas');
-      canvasOverlay.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        z-index: 99999; cursor: crosshair; background: rgba(0,0,0,0.2);
-      `;
+      canvasOverlay.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;z-index:99999;cursor:crosshair;background:rgba(24,24,27,0.12);';
       canvasOverlay.width = window.innerWidth;
       canvasOverlay.height = window.innerHeight;
       document.body.appendChild(canvasOverlay);
@@ -487,12 +379,10 @@ Click "Start Drawing" and draw over any component to generate a precision prompt
       canvasOverlay.onmousemove = (e) => {
         if (!isDrawing) return;
         ctx.clearRect(0, 0, canvasOverlay.width, canvasOverlay.height);
-        ctx.strokeStyle = '#ff3b30';
+        ctx.strokeStyle = '#E11D48';
         ctx.lineWidth = 3;
 
-        const curX = e.clientX;
-        const curY = e.clientY;
-
+        const curX = e.clientX, curY = e.clientY;
         if (activeShape === 'circle') {
           const rx = Math.abs(curX - startX) / 2;
           const ry = Math.abs(curY - startY) / 2;
@@ -503,7 +393,7 @@ Click "Start Drawing" and draw over any component to generate a precision prompt
           ctx.stroke();
         } else if (activeShape === 'rect') {
           ctx.strokeRect(startX, startY, curX - startX, curY - startY);
-        } else if (activeShape === 'arrow') {
+        } else {
           ctx.beginPath();
           ctx.moveTo(startX, startY);
           ctx.lineTo(curX, curY);
@@ -514,129 +404,95 @@ Click "Start Drawing" and draw over any component to generate a precision prompt
       canvasOverlay.onmouseup = (e) => {
         if (!isDrawing) return;
         isDrawing = false;
-        const endX = e.clientX;
-        const endY = e.clientY;
-        const centerX = (startX + endX) / 2;
-        const centerY = (startY + endY) / 2;
-
-        // Hide overlay to locate target DOM element
+        const centerX = (startX + e.clientX) / 2;
+        const centerY = (startY + e.clientY) / 2;
         canvasOverlay.style.display = 'none';
         const el = document.elementFromPoint(centerX, centerY);
         canvasOverlay.remove();
         canvasOverlay = null;
-
-        if (el) {
-          inspectAndGeneratePrompt(el);
-        }
+        if (el) inspectAndGeneratePrompt(el);
       };
     }
 
+    function renderSnapshot(el, selector) {
+      const c = document.getElementById('snap-canvas');
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#FAF7F2';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.strokeStyle = '#E2DDD2';
+      ctx.strokeRect(4, 4, c.width - 8, c.height - 8);
+      ctx.fillStyle = '#18181B';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.fillText(selector.slice(0, 32), 16, 28);
+      ctx.font = '11px monospace';
+      ctx.fillStyle = '#52525B';
+      ctx.fillText((el.innerText || el.value || 'UI Element').trim().slice(0, 34), 16, 48);
+      ctx.strokeStyle = '#E11D48';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(140, 36, 120, 26, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
     function inspectAndGeneratePrompt(el) {
+      lastInspectedEl = el;
       const tag = el.tagName.toLowerCase();
-      const cls = el.className ? '.' + el.className.split(' ').join('.') : '';
+      const cls = el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '';
       const id = el.id ? '#' + el.id : '';
       const selector = `${tag}${id}${cls}`;
       const note = document.getElementById('dev-note').value;
-
+      const rect = el.getBoundingClientRect();
       const compStyle = window.getComputedStyle(el);
-      const relevantCss = `width: ${compStyle.width}; height: ${compStyle.height}; font-size: ${compStyle.fontSize}; display: ${compStyle.display}; overflow: ${compStyle.overflow};`;
-      const htmlSnippet = el.outerHTML.slice(0, 250);
+      const relevantCss = `width: ${compStyle.width}; height: ${compStyle.height}; padding: ${compStyle.padding}; overflow: ${compStyle.overflow};`;
+      const htmlSnippet = el.outerHTML.slice(0, 220);
 
-      const promptText = `Fix ${selector}: ${note}\n\nElement HTML:\n${htmlSnippet}\n\nComputed CSS:\n${relevantCss}\n\nScreenshot attached of circled problem area.`;
+      renderSnapshot(el, selector);
 
+      const promptText = `Fix ${selector}: ${note}\n\nElement HTML:\n${htmlSnippet}\n\nComputed CSS (${Math.round(rect.width)}x${Math.round(rect.height)}px):\n${relevantCss}\n\n[Screenshot attached]`;
       document.getElementById('prompt-output').innerText = promptText;
+    }
+
+    function refreshActivePrompt() {
+      if (lastInspectedEl) inspectAndGeneratePrompt(lastInspectedEl);
+    }
+
+    function toggleLiveFix() {
+      isFixed = !isFixed;
+      const stage = document.getElementById('live-stage');
+      const badge = document.getElementById('fix-state-badge');
+      const btn = document.getElementById('btn-toggle-fix');
+      stage.classList.toggle('fixed-mode', isFixed);
+      if (isFixed) {
+        badge.textContent = '✓ Showing: Fixed State (After Fix)';
+        badge.style.background = 'var(--status-ok-bg)';
+        badge.style.color = 'var(--status-ok)';
+        btn.textContent = '↩ Revert to Broken State';
+      } else {
+        badge.textContent = 'Showing: Broken State (Before Fix)';
+        badge.style.background = 'var(--status-err-bg)';
+        badge.style.color = 'var(--status-err)';
+        btn.textContent = '⚡ Apply Fix on Page (Before → After)';
+      }
+      refreshActivePrompt();
     }
 
     function copyPrompt() {
       const text = document.getElementById('prompt-output').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert('Prompt copied to clipboard! Paste it directly into your coding agent.');
+        const fb = document.getElementById('copy-feedback');
+        fb.textContent = '✓ Copied to clipboard!';
+        setTimeout(() => { fb.textContent = ''; }, 2500);
       });
     }
 
-    // Global keyboard shortcut
     window.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.shiftKey && e.code === 'KeyX') {
+        e.preventDefault();
         triggerDrawingMode();
       }
     });
 
-    // Default inspection
     inspectAndGeneratePrompt(document.getElementById('btn-buy-sample'));
   </script>
-
-  <script>
-    (function() {
-      function showAdvToast(msg) {
-        const box = document.getElementById('adv-toast-box');
-        if (!box) return;
-        box.textContent = msg;
-        box.style.display = 'block';
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4000);
-      }
-
-      window.__filterProjectControls = function(query) {
-        const q = (query || '').toLowerCase().trim();
-        const els = document.querySelectorAll('button, .tool-btn, .card, .kanban-card, .cut-item, tr');
-        els.forEach(el => {
-          if (el.closest('#studio-security-ribbon') || el.closest('.project-purpose-banner') || el.closest('#studio-sec-modal')) return;
-          if (!q) {
-            el.style.outline = '';
-            el.style.opacity = '';
-          } else if (el.innerText.toLowerCase().includes(q)) {
-            el.style.outline = '2px solid var(--accent-primary)';
-            el.style.opacity = '1';
-          } else {
-            el.style.outline = '';
-          }
-        });
-      };
-
-      window.__verifyProjectHash = async function() {
-        const payload = document.title + '|' + document.body.innerText.slice(0, 500) + '|' + Object.keys(localStorage).join(',');
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'verified-sha256-offline';
-        if (window.StudioSecurity) {
-          window.StudioSecurity.logAuditEvent('SHA-256 Integrity Verified', 'Hash: ' + hash.slice(0, 16) + '...');
-        }
-        showAdvToast('✓ SHA-256 Integrity Verified: ' + hash.slice(0, 24) + '...');
-      };
-
-      window.__exportAuditReport = async function() {
-        const payload = document.body.innerText.slice(0, 1000);
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'offline-hash';
-        const report = {
-          project: "project-11-circle-to-fix",
-          whatItDoes: "Circle Any Website Bug to Generate a Fix",
-          verifiedAt: new Date().toISOString(),
-          palette: document.documentElement.getAttribute('data-palette'),
-          sha256Integrity: hash,
-          securityChecks: {
-            cspActive: true,
-            xssSanitizerActive: true,
-            pinAuthReady: true,
-            offlineCapable: true
-          }
-        };
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'project-11-circle-to-fix-security-audit.json';
-        a.click();
-        showAdvToast('✓ Exported signed security & state report JSON');
-      };
-
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key.toLowerCase() === 'h') {
-          e.preventDefault();
-          window.__verifyProjectHash();
-        } else if (e.altKey && e.key.toLowerCase() === 's' && window.StudioSecurity) {
-          e.preventDefault();
-          window.StudioSecurity.openSecurityAuditModal();
-        }
-      });
-    })();
-  </script>
-
 </body>
 </html>

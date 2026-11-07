@@ -1,6 +1,4 @@
 # Prompts Log - Project 14: Tab Goblin
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 14 (Section C: Chrome Extensions) - Tab Goblin (Medium)
 
 ---

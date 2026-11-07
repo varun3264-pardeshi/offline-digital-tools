@@ -13,7 +13,7 @@ Manifest V3 Chrome Extension that transforms YouTube into a distraction-free lea
 ## Instant Live Simulator
 You can also launch `index.html` directly in any web browser to test all functionality (Shorts blocker, comments toggle, timestamp jump, and 60m intention gate) immediately without installing the unpacked extension.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Operates across video transitions without reload**: Uses a `MutationObserver` and `yt-navigate-finish` listener to automatically re-apply filters when navigating between videos in YouTube's Single Page App.
 - [x] **Timestamp Jump Verification**: Clicking any timestamped note immediately updates video playback to that exact minute and second.
 - [x] **State Survives Chrome Restart**: Intention unlocking state and study notes persist in `chrome.storage.local`.

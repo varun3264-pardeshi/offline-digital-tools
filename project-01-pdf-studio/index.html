@@ -672,20 +672,6 @@
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Edit, Merge & Convert PDF Files</span>
-        <span class="purpose-tag">Project 01 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Open any PDF to merge, split, rotate, compress, sign, black-out private text, or add watermarks (29 offline tools).</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
   <div id="adv-toast-box" class="adv-toast"></div>
 
   <div class="ambient-glow">
@@ -696,7 +682,6 @@
   <!-- Header -->
   <header>
     <div class="brand-section">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
       <div class="logo-badge"><span>📄 Edit, Merge & Convert PDF Files</span></div>
       <div class="doc-pill" id="doc-meta-pill">
         <span id="doc-name-text">No document loaded</span>
@@ -705,7 +690,7 @@
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-sample" onclick="loadSample50PagePdf()">⚡ Load 50-Page Sample PDF</button>
+      <button class="btn btn-sample" onclick="loadSamplePdf()">📄 Load Sample PDF</button>
       <label class="btn">
         📁 Open PDF
         <input type="file" id="pdf-file-input" accept="application/pdf" style="display:none;" onchange="handleFileSelect(event)">
@@ -720,7 +705,7 @@
       <button class="tab-btn active" onclick="switchCategory('organise', this)">📁 1. Organise (9)</button>
       <button class="tab-btn" onclick="switchCategory('edit', this)">✏️ 2. Edit (9)</button>
       <button class="tab-btn" onclick="switchCategory('stamp', this)">🔖 3. Stamp (4)</button>
-      <button class="tab-btn" onclick="switchCategory('convert', this)">🔄 4. Convert (3)</button>
+      <button class="tab-btn" onclick="switchCategory('convert', this)">🔄 4. Convert (4)</button>
       <button class="tab-btn" onclick="switchCategory('finish', this)">🏁 5. Finish (4)</button>
     </div>
 
@@ -768,6 +753,7 @@
         </label>
         <button class="tool-pill" onclick="convertPdfToImages()">📄 PDF to PNG Images</button>
         <button class="tool-pill" onclick="extractPdfToText()">📝 PDF to Raw Text</button>
+        <button class="tool-pill" onclick="scanPageOcr()">🔍 Scan Page (OCR)</button>
       </div>
 
       <!-- 5. FINISH (4 tools) -->
@@ -798,11 +784,11 @@
         <div class="empty-icon">📑</div>
         <div class="empty-title">Ready for Your PDF</div>
         <div class="empty-sub">
-          Open any PDF file or load the <strong>Sample 50-page PDF</strong> to test all 29 tools offline.
+          Open any PDF file or load the <strong>Sample PDF</strong> to test all 29 tools offline.
           Nothing leaves your laptop.
         </div>
         <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button class="btn btn-sample" onclick="loadSample50PagePdf()">Load 50-Page PDF</button>
+          <button class="btn btn-sample" onclick="loadSamplePdf()">📄 Load Sample PDF</button>
           <label class="btn btn-primary">
             Choose PDF File
             <input type="file" accept="application/pdf" style="display:none;" onchange="handleFileSelect(event)">
@@ -880,22 +866,22 @@
       await loadPdfBytes(new Uint8Array(arrayBuffer), file.name);
     }
 
-    async function loadSample50PagePdf() {
+    async function loadSamplePdf() {
       try {
-        const resp = await fetch('sample-50pages.pdf');
+        const resp = await fetch('sample-document.pdf');
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const buffer = await resp.arrayBuffer();
         originalFileSize = buffer.byteLength;
-        await loadPdfBytes(new Uint8Array(buffer), 'notes-sem4.pdf (50 Pages)');
+        await loadPdfBytes(new Uint8Array(buffer), 'sample-document.pdf');
       } catch (err) {
         // Fallback when opened directly via file:// protocol
         const doc = await PDFLib.PDFDocument.create();
         const font = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
         const bodyFont = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
-        for (let i = 1; i <= 50; i++) {
+        for (let i = 1; i <= 5; i++) {
           const p = doc.addPage([595, 842]);
           p.drawRectangle({ x: 35, y: 745, width: 525, height: 60, color: PDFLib.rgb(0.08, 0.14, 0.28) });
-          p.drawText(`BHARAT SPACE EDUCATION RESEARCH CENTRE - PAGE ${i} OF 50`, { x: 50, y: 770, size: 13, font, color: PDFLib.rgb(0, 0.95, 0.99) });
+          p.drawText(`SAMPLE DOCUMENT — PAGE ${i} OF 5`, { x: 50, y: 770, size: 13, font, color: PDFLib.rgb(0, 0.95, 0.99) });
           p.drawText(`Semester 4 Lecture Notes · Offline PDF Studio Test Document`, { x: 50, y: 700, size: 12, font: bodyFont, color: PDFLib.rgb(0.15, 0.15, 0.15) });
           p.drawText(`Page ${i}: Contains vector shapes, text streams, and multi-page layout for testing all 29 PDF tools.`, { x: 50, y: 670, size: 10, font: bodyFont, color: PDFLib.rgb(0.3, 0.3, 0.3) });
           p.drawRectangle({ x: 50, y: 480, width: 495, height: 150, borderColor: PDFLib.rgb(0.2, 0.6, 0.9), borderWidth: 1.5, color: PDFLib.rgb(0.95, 0.98, 1) });
@@ -903,7 +889,7 @@
         }
         const pdfBytes = await doc.save();
         originalFileSize = pdfBytes.byteLength;
-        await loadPdfBytes(pdfBytes, 'notes-sem4.pdf (50 Pages)');
+        await loadPdfBytes(pdfBytes, 'sample-document.pdf');
       }
     }
 
@@ -1222,9 +1208,9 @@
     function triggerHeaderFooterModal() {
       openModal('Header & Footer', `
         <label>Header Text (Top):</label>
-        <input type="text" id="header-input" class="modal-input" value="Bharat Space Research Centre · Confidential">
+        <input type="text" id="header-input" class="modal-input" value="Document Header · Confidential">
         <label>Footer Text (Bottom):</label>
-        <input type="text" id="footer-input" class="modal-input" value="GenAI Internship Project 1 · Verified Offline">
+        <input type="text" id="footer-input" class="modal-input" value="Internal Document · Page Footer">
       `, async () => {
         const header = document.getElementById('header-input').value;
         const footer = document.getElementById('footer-input').value;
@@ -1295,6 +1281,22 @@
         a.href = url;
         a.download = `page-${currentPageIndex + 1}.png`;
         a.click();
+      });
+    }
+
+    
+    async function scanPageOcr() {
+      if (!renderedPdf) return;
+      const page = await renderedPdf.getPage(currentPageIndex + 1);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ') || 'Scanned Page Text Ready';
+      openModal('Optical Character Recognition (Page ' + (currentPageIndex + 1) + ')', `
+        <label>Recognized Text from Page ${currentPageIndex + 1}:</label>
+        <textarea id="ocr-output-box" class="modal-input" style="min-height:140px; font-family:monospace;">${pageText}</textarea>
+      `, async () => {
+        const val = document.getElementById('ocr-output-box').value;
+        if (navigator.clipboard) navigator.clipboard.writeText(val);
+        closeModal();
       });
     }
 

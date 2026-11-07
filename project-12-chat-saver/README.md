@@ -13,8 +13,8 @@
 ## Instant Live Simulator
 Open `index.html` directly in your browser to test scraping and exporting a pre-loaded 50-message technical conversation with complete runnable Python code blocks and Markdown tables.
 
-## Done When Verification Checklist
-- [x] **50+ Message Thread Complete Export**: Successfully saves 50 continuous back-and-forth turns without missing messages.
+## Key Features & Capabilities
+- [x] **Complete Thread Export**: Successfully saves 50 continuous back-and-forth turns without missing messages.
 - [x] **Executable Code Copy**: Code blocks copied from the saved Markdown/PDF run directly in Python without broken formatting.
 - [x] **Table Integrity Preserved**: Comparison tables maintain clean pipe structures (`| Feature | RAG | Fine-Tuning |`).
 - [x] **Automatic Chat Title Naming**: Derived clean file names (e.g. `Explain_RAG_Architectures_Deeply.md`).

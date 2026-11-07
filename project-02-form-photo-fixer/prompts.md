@@ -1,6 +1,4 @@
 # Prompts Log - Project 02: Form Photo Fixer
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 2 (Section A: Web Tools) - Form Photo Fixer (Medium)
 
 ---

@@ -1,6 +1,4 @@
 # Prompts Log - Project 01: PDF Studio
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 1 (Section A: Web Tools) - PDF Studio (29 Tools, Tough)
 
 ---
@@ -23,8 +21,8 @@
 ### Prompt 6: Tool Group 5 - Finish (4 Tools) & Bonus Features
 > "Implement all 4 Finish tools: PDF Compress with live before/after KB comparison, Metadata Editor (Title, Author, Subject), Metadata Stripper (privacy erase), and Side-by-Side PDF comparison. Add password locking and OCR text extraction."
 
-### Prompt 7: Verification & Done When Testing
-> "Verify with Wi-Fi off using the generated 50-page sample PDF. Ensure exported PDFs open cleanly in Chrome/Acrobat, redacted text is unsearchable, and compress displays accurate before and after sizes."
+### Prompt 7: Verification & Quality Testing
+> "Verify with Wi-Fi off using the generated sample PDF. Ensure exported PDFs open cleanly in Chrome/Acrobat, redacted text is unsearchable, and compress displays accurate before and after sizes."
 
 
 ---

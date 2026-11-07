@@ -1,6 +1,4 @@
 # Prompts Log - Project 16: Your Own Skill (/viva)
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 16 (Section D: Video, Skills and Design) - Your Own Skill (`/viva`) (Medium)
 
 ---

@@ -1,424 +1,272 @@
 <!DOCTYPE html>
 <html lang="en" data-palette="mulberry">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
-  <link rel="stylesheet" href="../assets/studio-ui.css" />
-  <script src="../assets/security-auth.js" defer></script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Practice Viva Questions from Your Study Notes (Project 16)</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
+  <title>Practice Viva Questions from Your Study Notes (Tool 16)</title>
+  <link rel="stylesheet" href="../assets/studio-ui.css" />
+  <script src="../assets/security-auth.js" defer></script>
   <style>
-    :root {
-      --bg: var(--bg-surface);
-      --card-bg: var(--bg-surface);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --terminal-bg: #0b0f19;
-      --accent: #9b51e0;
-      --accent-cyan: var(--accent-primary);
-      --accent-emerald: var(--status-ok);
-      --accent-amber: #f6d365;
-      --text: var(--text-main);
-      --text-muted: var(--text-secondary);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-canvas);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Ambient Liquid Mesh Glow */
-    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
-    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #9b51e0, #a855f7); top: -15%; left: 10%; }
-    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, var(--accent-primary), var(--accent-primary)); bottom: -15%; right: 10%; }
-
-    /* Nav */
     nav {
-      position: relative; z-index: 10;
-      background: var(--bg-surface); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .brand {
-      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
-      background: linear-gradient(135deg, #9b51e0, var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
-      background: var(--bg-elevated); color: #fff; transition: all 0.2s ease;
-    }
-    .btn:hover { background: var(--bg-muted); transform: translateY(-1px); }
-    .btn-purple { background: linear-gradient(135deg, #9b51e0, #6366f1); border: none; font-weight: 700; color: #fff; }
-
-    /* Main Grid */
-    main {
-      position: relative; z-index: 2; max-width: 1300px; margin: 1.5rem auto 3rem; padding: 0 1rem;
-      width: 100%; display: grid; grid-template-columns: 1fr 400px; gap: 1.5rem;
-    }
-
-    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
-
-    /* Left Interactive Terminal */
-    .terminal-window {
-      background: var(--terminal-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8); display: flex; flex-direction: column; overflow: hidden;
-      height: 640px;
-    }
-
-    .terminal-bar {
-      background: var(--bg-elevated); border-bottom: 1px solid var(--card-border);
-      padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-    .dot-r { background: #ff5f56; } .dot-y { background: #ffbd2e; } .dot-g { background: #27c93f; }
-
-    .terminal-body {
-      flex: 1; padding: 1.5rem; overflow-y: auto; font-family: monospace; font-size: 0.92rem;
-      line-height: 1.6; display: flex; flex-direction: column; gap: 0.75rem;
-    }
-
-    .t-user { color: var(--accent-cyan); font-weight: bold; }
-    .t-examiner { color: #f1f5f9; }
-    .t-score { color: var(--accent-emerald); font-weight: 800; font-size: 1.05rem; }
-    .t-revise { color: var(--accent-amber); font-weight: bold; }
-
-    .terminal-input-row {
-      display: flex; gap: 0.5rem; padding: 0.9rem 1.25rem; background: rgba(0,0,0,0.4);
-      border-top: 1px solid var(--card-border); align-items: center;
-    }
-
-    .term-input {
-      flex: 1; background: transparent; border: none; outline: none; color: #fff;
-      font-family: monospace; font-size: 0.95rem;
-    }
-
-    /* Right Specification & Comparison Panel */
-    .spec-panel {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      padding: 1.5rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.25rem;
-    }
-
-    .input-selector-btn {
-      width: 100%; text-align: left; padding: 0.7rem 1rem; border-radius: 10px;
-      background: var(--bg-elevated); border: 1px solid var(--card-border); color: var(--text-main);
-      font-size: 0.82rem; cursor: pointer; transition: all 0.2s ease;
-    }
-    .input-selector-btn:hover { background: rgba(155, 81, 224, 0.15); border-color: var(--accent); color: #fff; }
-
-    /* Before vs After Comparison Card */
-    .comparison-table {
-      width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 0.5rem;
-    }
-    .comparison-table th, .comparison-table td {
-      padding: 0.5rem; border: 1px solid var(--border-color); text-align: left;
-    }
-    .comparison-table th { background: var(--bg-elevated); color: var(--text-muted); }
-  
-    /* === MULTI-COLOR HUMAN-CRAFTED STUDIO OVERRIDES (NO BLUE VIBE-CODING) === */
-    :root {
-      --bg: var(--bg-canvas) !important;
-      --bg-dark: var(--bg-canvas) !important;
-      --panel-bg: var(--bg-surface) !important;
-      --card-bg: var(--bg-surface) !important;
-      --card-border: var(--border-color) !important;
-      --accent: var(--accent-primary) !important;
-      --accent-cyan: var(--accent-primary) !important;
-      --accent-blue: var(--accent-secondary) !important;
-      --accent-purple: var(--accent-plum, #7E22CE) !important;
-      --accent-emerald: var(--status-ok, #15803D) !important;
-      --accent-rose: var(--status-err, #B91C1C) !important;
-      --text: var(--text-main) !important;
-      --text-muted: var(--text-secondary) !important;
-    }
-
-    body {
-      background: var(--bg-canvas) !important;
-      color: var(--text-main) !important;
-    }
-
-    .ambient-glow, .liquid-mesh, .glow-blob, .blob {
-      display: none !important;
-    }
-
-    header, nav, .top-bar, .app-header {
-      background: var(--bg-surface) !important;
-      border-bottom: 2px solid var(--border-color) !important;
-      backdrop-filter: none !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .brand-title, .logo-badge {
-      background: none !important;
-      -webkit-text-fill-color: var(--text-main) !important;
-      color: var(--text-main) !important;
-      font-weight: 800 !important;
-    }
-
-    .panel, .card, .editor-card, .tool-group, .sidebar, .right-panel, .left-panel,
-    .scorecard, .modal-card, .kanban-col, .extension-panel, .chat-panel, .inspector-card {
-      background: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-main) !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .btn, .tool-btn, .tab-btn, .sub-btn, .toggle-btn, .action-btn {
-      background: var(--bg-elevated) !important;
-      color: var(--text-main) !important;
-      border: 1px solid var(--border-strong) !important;
-    }
-
-    .btn:hover, .tool-btn:hover, .tab-btn:hover, .sub-btn:hover {
-      border-color: var(--accent-primary) !important;
-      color: var(--accent-primary) !important;
-    }
-
-    .btn-primary, .tab-btn.active, .sub-btn.active, .toggle-btn.active, .tool-btn.active {
-      background: var(--accent-primary) !important;
-      color: #FFFFFF !important;
-      border-color: var(--accent-primary) !important;
-      box-shadow: none !important;
-    }
-
-    input, select, textarea, .text-input, .select-input, .textarea-input, .input-text {
-      background: var(--bg-surface) !important;
-      color: var(--text-main) !important;
-      border: 1.5px solid var(--border-strong) !important;
-    }
-
-    /* Simple Action Banner & Advanced Feature Strip */
-    .project-purpose-banner {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
       flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      gap: 0.75rem;
     }
 
-    .purpose-left {
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text-main);
+    }
+
+    .btn {
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn.active, .btn-primary {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+    }
+
+    main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.35rem;
+      align-items: start;
+    }
+
+    /* Interactive Terminal / Examiner Window */
+    .terminal-window {
+      background: #1E1B24;
+      color: #F3E8FF;
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      height: 540px;
+      box-shadow: var(--shadow-md);
     }
 
-    .purpose-heading {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text-main);
+    .terminal-bar {
+      background: #2A2433;
+      padding: 0.65rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.8rem;
+      font-family: monospace;
     }
 
-    .purpose-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 5px;
-      background: var(--accent-primary-soft);
-      color: var(--accent-primary);
-      border: 1px solid currentColor;
+    .dots { display: flex; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #F87171; }
+    .dot-y { background: #FBBF24; }
+    .dot-g { background: #34D399; }
+
+    .terminal-body {
+      flex: 1;
+      padding: 1.15rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.88rem;
+      line-height: 1.55;
     }
 
-    .purpose-sub {
-      font-size: 0.86rem;
-      color: var(--text-secondary);
-    }
+    .t-user { color: #FCD34D; font-weight: 700; }
+    .t-examiner { color: #F3E8FF; }
+    .t-question { color: #6EE7B7; font-weight: 700; background: rgba(16, 185, 129, 0.12); padding: 0.55rem 0.75rem; border-radius: 8px; border-left: 3px solid #10B981; }
+    .t-score { color: #FDE68A; font-weight: 800; background: rgba(245, 158, 11, 0.15); padding: 0.65rem 0.85rem; border-radius: 8px; border: 1px solid #F59E0B; }
 
-    .purpose-tools {
+    .terminal-input-row {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      flex-wrap: wrap;
+      padding: 0.75rem 1rem;
+      background: #2A2433;
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
 
-    .adv-search-input {
-      padding: 0.38rem 0.7rem;
+    .term-input {
+      flex: 1;
+      background: #1E1B24 !important;
+      color: #FFFFFF !important;
+      border: 1px solid #4C3D63 !important;
+      padding: 0.55rem 0.75rem;
       border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .spec-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .input-selector-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.7rem 0.9rem;
+      border-radius: 8px;
       border: 1px solid var(--border-strong);
-      font-size: 0.8rem;
       background: var(--bg-canvas);
       color: var(--text-main);
-      width: 190px;
+      cursor: pointer;
+      font-size: 0.84rem;
+      transition: all 0.15s ease;
     }
 
-    .adv-toast {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      background: var(--text-main);
-      color: var(--bg-surface);
-      padding: 0.75rem 1.1rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      box-shadow: var(--shadow-lg);
-      z-index: 99999;
-      display: none;
-      max-width: 420px;
+    .input-selector-btn:hover, .input-selector-btn.active {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary-soft);
     }
 
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Practice Viva Questions from Your Study Notes</span>
-        <span class="purpose-tag">Project 16 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Pick a subject or paste your own lecture notes, answer 5 progressively harder viva questions, and receive a 0–10 rubric grade.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
-  <div id="adv-toast-box" class="adv-toast"></div>
-
-  <div class="ambient-glow">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-  </div>
 
   <nav>
-    <div class="brand">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span>🎓 /viva Agent Skill</span>
-    </div>
-    <div style="display: flex; gap: 0.5rem;">
-      <a href="SKILL.md" class="btn" target="_blank">📄 View SKILL.md Spec</a>
-      <button class="btn btn-purple" onclick="restartViva()">🔄 Restart Session</button>
+    <div class="brand">Practice Viva Questions from Your Study Notes</div>
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <button class="btn active" id="mode-skill-btn" onclick="setMode(true)">🎓 With /viva Skill (1-by-1 Graded)</button>
+      <button class="btn" id="mode-raw-btn" onclick="setMode(false)">💬 Without Skill (Compare)</button>
+      <a href="SKILL.md" class="btn" target="_blank">📄 View SKILL.md</a>
+      <button class="btn btn-primary" onclick="restartViva()">🔄 New Session</button>
     </div>
   </nav>
 
   <main>
-    <!-- Left Interactive Terminal -->
+    <!-- Left Interactive Viva Session -->
     <div class="terminal-window">
       <div class="terminal-bar">
-        <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
-        <span style="font-family: monospace; font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">antigravity-session · /viva runner</span>
+        <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span id="session-title-bar">/viva session · 1 question at a time</span>
       </div>
 
-      <div class="terminal-body" id="term-log">
-        <!-- Rendered conversation log -->
-      </div>
+      <div class="terminal-body" id="term-log"></div>
 
       <div class="terminal-input-row">
-        <span style="color: var(--accent-cyan); font-family: monospace; font-weight: bold;">&gt;</span>
-        <input type="text" id="user-input" class="term-input" placeholder="Type your answer or command..." onkeydown="handleKey(event)">
-        <button class="btn btn-purple" style="padding: 0.3rem 0.8rem;" onclick="submitInput()">Send ↵</button>
+        <span style="color: #6EE7B7; font-family: monospace; font-weight: bold;">&gt;</span>
+        <input type="text" id="user-input" class="term-input" placeholder="Type your answer and press Enter..." onkeydown="if(event.key==='Enter') submitInput()">
+        <button class="btn btn-primary" onclick="submitInput()">Submit ↵</button>
       </div>
     </div>
 
-    <!-- Right Skill Specification & 3-Input Runner -->
+    <!-- Right Input Selector & Custom Notes -->
     <div class="spec-panel">
       <div>
-        <h2 style="font-size: 1.25rem; font-weight: 800;">Run on 3 Different Inputs</h2>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Click to trigger viva across different subjects:</p>
+        <h2 style="font-size: 1.15rem; font-weight: 800;">1. Choose Study Notes (3 Sample Topics)</h2>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem;">Select any note pack below to start a fresh 5-question viva:</p>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <button class="input-selector-btn" onclick="startSubject('thermo')">
-          🔥 <strong>Input 1: Thermodynamics</strong><br>
-          <code style="color:var(--accent-cyan); font-size:0.75rem;">/viva sample-thermo-notes.txt</code>
+        <button class="input-selector-btn active" id="btn-sub-thermo" onclick="startSubject('thermo')">
+          <strong>Input 1: Thermodynamics & Heat Engines</strong><br>
+          <code style="font-size:0.75rem; color:var(--accent-primary);">/viva sample-thermo-notes.txt</code>
         </button>
-        <button class="input-selector-btn" onclick="startSubject('ds')">
-          🌳 <strong>Input 2: Data Structures & Trees</strong><br>
-          <code style="color:var(--accent-cyan); font-size:0.75rem;">/viva sample-ds-notes.txt</code>
+        <button class="input-selector-btn" id="btn-sub-ds" onclick="startSubject('ds')">
+          <strong>Input 2: Data Structures & Balanced Trees</strong><br>
+          <code style="font-size:0.75rem; color:var(--accent-primary);">/viva sample-ds-notes.txt</code>
         </button>
-        <button class="input-selector-btn" onclick="startSubject('ml')">
-          🤖 <strong>Input 3: Machine Learning & Attention</strong><br>
-          <code style="color:var(--accent-cyan); font-size:0.75rem;">/viva sample-ml-notes.txt</code>
+        <button class="input-selector-btn" id="btn-sub-ml" onclick="startSubject('ml')">
+          <strong>Input 3: Machine Learning & Transformers</strong><br>
+          <code style="font-size:0.75rem; color:var(--accent-primary);">/viva sample-ml-notes.txt</code>
         </button>
       </div>
 
-      <!-- Before vs After Comparison (Fulfills Done When requirement) -->
-      <div>
-        <h3 style="font-size: 0.95rem; font-weight: 700; margin-top: 0.5rem;">Without Skill vs With /viva Skill:</h3>
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Evaluation Metric</th>
-              <th>Without Skill</th>
-              <th>With /viva Skill</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Pacing</strong></td>
-              <td>Dumps 10 questions at once</td>
-              <td style="color:var(--status-ok); font-weight:bold;">1 question at a time</td>
-            </tr>
-            <tr>
-              <td><strong>Critique</strong></td>
-              <td>Polite generic praise</td>
-              <td style="color:var(--status-ok); font-weight:bold;">Strict professor scrutiny</td>
-            </tr>
-            <tr>
-              <td><strong>Outcome</strong></td>
-              <td>"Keep reading"</td>
-              <td style="color:#f6d365; font-weight:bold;">"Score: 3/5. Revise page 14."</td>
-            </tr>
-          </tbody>
-        </table>
+      <div style="border-top: 1px solid var(--border-color); padding-top: 0.85rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 0.4rem;">2. Or Paste Your Own Study Notes</h3>
+        <textarea id="custom-notes-box" rows="4" style="width:100%; padding:0.55rem; border-radius:8px; font-size:0.82rem;" placeholder="Paste any paragraph from your notes here and click Start Custom Viva..."></textarea>
+        <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:0.5rem;" onclick="startCustomNotesViva()">
+          ▶ Start Viva from Custom Notes
+        </button>
       </div>
     </div>
   </main>
 
   <script>
-    // 3 Subject Question Sets
     const examBanks = {
       thermo: {
-        file: "thermo-notes.pdf",
+        file: "sample-thermo-notes.txt",
         questions: [
-          { q: "Q1. State the First Law of Thermodynamics and write its sign convention equation.", good: ["delta u = q - w", "energy conservation"], weakPage: 8 },
-          { q: "Q2. Why can no heat engine beat the Carnot efficiency between two thermal reservoirs?", good: ["irreversibility", "second law", "friction", "entropy"], feedback: "Partly. Friction lowers real engines, but what about an ideal one? Carnot limit is bounded purely by reservoir temperatures (1 - T_C / T_H).", weakPage: 14 },
-          { q: "Q3. In an isothermal expansion of an ideal gas, what is the change in internal energy Delta U?", good: ["zero", "0"], weakPage: 18 },
-          { q: "Q4. Does the entropy of an isolated system ever decrease in a spontaneous process?", good: ["no", "never", "increases"], weakPage: 18 },
-          { q: "Q5. What temperature scale must ALWAYS be used when calculating Carnot cycle efficiency?", good: ["kelvin", "absolute"], weakPage: 14 }
+          { q: "Q1. State the First Law of Thermodynamics and its energy conservation equation.", good: ["delta u", "energy", "conservation", "heat", "work"], feedback: "Good. Internal energy change ΔU = Q - W.", weakPage: 8 },
+          { q: "Q2. Why can no engine beat Carnot efficiency?", good: ["second law", "entropy", "reversible", "temperature", "friction"], feedback: "Partly. Friction lowers real engines, but even an ideal reversible engine is bounded by reservoir temperatures (1 - Tc/Th).", weakPage: 14 },
+          { q: "Q3. In an isothermal expansion of an ideal gas, what is the change in internal energy ΔU?", good: ["zero", "0", "constant"], feedback: "Correct! Since temperature T is constant, ΔU = 0.", weakPage: 18 },
+          { q: "Q4. Does the entropy of an isolated system ever decrease in a spontaneous process?", good: ["no", "never", "increases"], feedback: "Spot on. By the Second Law, ΔS_isolated >= 0.", weakPage: 18 },
+          { q: "Q5. Which temperature scale must always be used in the Carnot efficiency formula?", good: ["kelvin", "absolute"], feedback: "Correct — always use absolute Kelvin (K).", weakPage: 14 }
         ]
       },
       ds: {
         file: "sample-ds-notes.txt",
         questions: [
-          { q: "Q1. In a worst-case scenario, what is the search time complexity of an unbalanced Binary Search Tree?", good: ["o(n)", "linear", "o n"], weakPage: 11 },
-          { q: "Q2. How does an AVL tree ensure O(log N) worst-case performance during insertions?", good: ["rotations", "balance factor", "balancing"], weakPage: 16 },
-          { q: "Q3. What is the fundamental difference between Chaining and Open Addressing in hash collisions?", good: ["linked list", "probing", "pointers"], weakPage: 21 },
-          { q: "Q4. Which graph traversal algorithm guarantees the shortest path on unweighted graphs?", good: ["bfs", "breadth first"], weakPage: 24 },
-          { q: "Q5. Why do contiguous arrays offer faster iteration than linked lists on modern CPUs?", good: ["cache", "locality", "cache line"], weakPage: 5 }
+          { q: "Q1. What is the worst-case search time complexity of an unbalanced Binary Search Tree?", good: ["o(n)", "linear"], feedback: "Correct. A skewed BST degrades to a linked list with O(N) lookup.", weakPage: 11 },
+          { q: "Q2. How does an AVL tree maintain O(log N) height after insertions?", good: ["rotation", "balance", "factor"], feedback: "Right — single and double rotations restore balance factor in [-1, 1].", weakPage: 16 },
+          { q: "Q3. What is the difference between Chaining and Open Addressing in hash tables?", good: ["linked", "probe", "probing", "bucket"], feedback: "Good distinction between bucket lists and linear/quadratic probing.", weakPage: 21 },
+          { q: "Q4. Which traversal finds the shortest path in an unweighted graph?", good: ["bfs", "breadth"], feedback: "Correct! Breadth-First Search explores level by level.", weakPage: 24 },
+          { q: "Q5. Why do arrays iterate faster than linked lists on modern CPUs?", good: ["cache", "contiguous", "locality"], feedback: "Exactly — contiguous memory leverages CPU cache lines.", weakPage: 5 }
         ]
       },
       ml: {
         file: "sample-ml-notes.txt",
         questions: [
-          { q: "Q1. What causes the dying ReLU problem in deep neural network training?", good: ["negative", "zero gradient", "inactive"], weakPage: 19 },
-          { q: "Q2. Explain why dot-product attention scales by sqrt(d_k) in Transformers.", good: ["variance", "gradient", "softmax saturation", "magnitude"], weakPage: 25 },
-          { q: "Q3. Which regularization technique penalizes non-zero weights with L1 norm encouraging sparsity?", good: ["lasso", "l1"], weakPage: 6 },
-          { q: "Q4. If a dataset has 99% negative classes, why is accuracy a misleading metric?", good: ["imbalanced", "precision", "recall", "f1"], weakPage: 29 },
-          { q: "Q5. How does the Adam optimizer calculate individual learning rates for parameters?", good: ["momentum", "adaptive", "first and second moments"], weakPage: 12 }
+          { q: "Q1. What causes the dying ReLU problem during neural network training?", good: ["negative", "zero", "gradient"], feedback: "Correct — negative inputs output 0 with a 0 gradient.", weakPage: 19 },
+          { q: "Q2. Why does scaled dot-product attention divide by sqrt(d_k)?", good: ["variance", "softmax", "gradient", "scale"], feedback: "Right — prevents large dot products from pushing softmax into flat gradients.", weakPage: 25 },
+          { q: "Q3. Which regularization penalty (L1 or L2) produces sparse zero weights?", good: ["l1", "lasso"], feedback: "Correct — L1 (Lasso) drives irrelevant weights to exact zero.", weakPage: 6 },
+          { q: "Q4. Why is accuracy misleading on a 99% negative imbalanced dataset?", good: ["precision", "recall", "f1", "imbalance"], feedback: "Spot on — predicting all negatives gives 99% accuracy with 0% recall.", weakPage: 29 },
+          { q: "Q5. What two moments of gradients does the Adam optimizer track?", good: ["first", "second", "mean", "variance", "momentum"], feedback: "Correct — exponential moving averages of gradient mean and uncentered variance.", weakPage: 12 }
         ]
       }
     };
 
     let activeBankKey = 'thermo';
-    let currentStep = 0; // 0 to 4
+    let useSkillMode = true;
+    let currentStep = 0;
     let score = 0;
     let weakestPage = 14;
 
@@ -431,8 +279,41 @@
       log.scrollTop = log.scrollHeight;
     }
 
+    function setMode(withSkill) {
+      useSkillMode = withSkill;
+      document.getElementById('mode-skill-btn').classList.toggle('active', withSkill);
+      document.getElementById('mode-raw-btn').classList.toggle('active', !withSkill);
+      document.getElementById('session-title-bar').textContent = withSkill
+        ? '/viva skill active · 1 question at a time'
+        : 'Raw chat (without skill) · dumps all questions at once';
+      restartViva();
+    }
+
     function startSubject(key) {
       activeBankKey = key;
+      ['thermo', 'ds', 'ml'].forEach(k => {
+        const b = document.getElementById('btn-sub-' + k);
+        if (b) b.classList.toggle('active', k === key);
+      });
+      restartViva();
+    }
+
+    function startCustomNotesViva() {
+      const raw = document.getElementById('custom-notes-box').value.trim();
+      if (!raw) return;
+      const sentences = raw.split(/[.?!\n]+/).map(s => s.trim()).filter(Boolean);
+      const topic = sentences[0] ? sentences[0].slice(0, 45) : 'Custom Notes';
+      examBanks.custom = {
+        file: "custom-notes.txt",
+        questions: [
+          { q: `Q1. Based on your notes ("${topic}..."), state the core definition in your own words.`, good: ["is", "the", "by", "means"], feedback: "Good explanation of the primary concept.", weakPage: 1 },
+          { q: "Q2. What is the key formula, rule, or mechanism mentioned in these notes?", good: ["=", "law", "rule", "rate", "process"], feedback: "Solid grasp of the mechanism.", weakPage: 2 },
+          { q: "Q3. Give a practical real-world application or edge case where this concept fails.", good: ["real", "when", "limit", "case", "example"], feedback: "Good critical thinking on boundary conditions.", weakPage: 3 },
+          { q: "Q4. How does the first concept in your notes connect to the conclusion?", good: ["because", "leads", "therefore", "connect"], feedback: "Clear logical link.", weakPage: 4 },
+          { q: "Q5. Summarize the takeaway of your notes in one concise sentence.", good: ["in", "to", "for", "with"], feedback: "Concise summary.", weakPage: 1 }
+        ]
+      };
+      activeBankKey = 'custom';
       restartViva();
     }
 
@@ -441,145 +322,59 @@
       log.innerHTML = '';
       currentStep = 0;
       score = 0;
-
       const bank = examBanks[activeBankKey];
-      print(`&gt; /viva ${bank.file}`, 't-user');
-      print(`Reading ${bank.file}. Asking 5 questions, one at a time.`, 't-examiner');
-      askCurrentQuestion();
-    }
 
-    function askCurrentQuestion() {
-      const bank = examBanks[activeBankKey];
-      if (currentStep < 5) {
-        print(`\n<strong>${bank.questions[currentStep].q}</strong>`, 't-examiner');
-      } else {
-        // Finished
-        print(`\n========================================`, 't-examiner');
-        print(`<strong>Final Score: ${score}/5</strong>`, 't-score');
-        print(`Diagnostic Recommendation: <strong>Revise page ${weakestPage}</strong> in ${bank.file}.`, 't-revise');
-        print(`========================================\n`, 't-examiner');
-      }
-    }
-
-    function handleKey(e) {
-      if (e.key === 'Enter') submitInput();
-    }
-
-    function submitInput() {
-      const inp = document.getElementById('user-input');
-      const ans = inp.value.trim();
-      if (!ans) return;
-      inp.value = '';
-
-      // Check command
-      if (ans.startsWith('/viva')) {
-        if (ans.includes('ds')) startSubject('ds');
-        else if (ans.includes('ml')) startSubject('ml');
-        else startSubject('thermo');
+      if (!useSkillMode) {
+        print(`&gt; Ask me viva questions on ${bank.file}`, 't-user');
+        print(`Sure! Here are 5 questions all at once (Without /viva skill — no step-by-step pacing or rubric):<br>` +
+          bank.questions.map(q => `• ${q.q}`).join('<br>'), 't-examiner');
         return;
       }
 
-      print(`&gt; ${ans}`, 't-user');
-
-      const bank = examBanks[activeBankKey];
-      const q = bank.questions[currentStep];
-
-      // Evaluate answer
-      const lower = ans.toLowerCase();
-      const isGood = q.good.some(g => lower.includes(g));
-
-      if (isGood) {
-        score++;
-        print(`Examiner: Correct. Valid reasoning.`, 't-examiner');
-      } else {
-        weakestPage = q.weakPage;
-        if (q.feedback) {
-          print(`Examiner: ${q.feedback}`, 't-examiner');
-        } else {
-          print(`Examiner: Incomplete answer. Look closely at underlying thermodynamic boundaries.`, 't-examiner');
-        }
-      }
-
-      currentStep++;
-      setTimeout(askCurrentQuestion, 600);
+      print(`&gt; /viva ${bank.file}`, 't-user');
+      print(`Reading notes (${bank.file}). Asking 5 questions, one at a time.`, 't-examiner');
+      print(bank.questions[0].q, 't-question');
     }
 
-    // Default initialization
-    restartViva();
-  </script>
+    function submitInput() {
+      const input = document.getElementById('user-input');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
 
-  <script>
-    (function() {
-      function showAdvToast(msg) {
-        const box = document.getElementById('adv-toast-box');
-        if (!box) return;
-        box.textContent = msg;
-        box.style.display = 'block';
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4000);
+      print(`&gt; ${val}`, 't-user');
+
+      if (!useSkillMode) {
+        print(`Great job! Keep studying your notes! (Generic response without /viva skill rubric)`, 't-examiner');
+        return;
       }
 
-      window.__filterProjectControls = function(query) {
-        const q = (query || '').toLowerCase().trim();
-        const els = document.querySelectorAll('button, .tool-btn, .card, .kanban-card, .cut-item, tr');
-        els.forEach(el => {
-          if (el.closest('#studio-security-ribbon') || el.closest('.project-purpose-banner') || el.closest('#studio-sec-modal')) return;
-          if (!q) {
-            el.style.outline = '';
-            el.style.opacity = '';
-          } else if (el.innerText.toLowerCase().includes(q)) {
-            el.style.outline = '2px solid var(--accent-primary)';
-            el.style.opacity = '1';
-          } else {
-            el.style.outline = '';
-          }
-        });
-      };
+      const bank = examBanks[activeBankKey];
+      if (currentStep >= bank.questions.length) {
+        restartViva();
+        return;
+      }
 
-      window.__verifyProjectHash = async function() {
-        const payload = document.title + '|' + document.body.innerText.slice(0, 500) + '|' + Object.keys(localStorage).join(',');
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'verified-sha256-offline';
-        if (window.StudioSecurity) {
-          window.StudioSecurity.logAuditEvent('SHA-256 Integrity Verified', 'Hash: ' + hash.slice(0, 16) + '...');
-        }
-        showAdvToast('✓ SHA-256 Integrity Verified: ' + hash.slice(0, 24) + '...');
-      };
+      const curQ = bank.questions[currentStep];
+      const lower = val.toLowerCase();
+      const matched = curQ.good.some(kw => lower.includes(kw)) || val.length > 18;
+      if (matched) {
+        score += 1;
+      } else {
+        weakestPage = curQ.weakPage;
+      }
 
-      window.__exportAuditReport = async function() {
-        const payload = document.body.innerText.slice(0, 1000);
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'offline-hash';
-        const report = {
-          project: "project-16-your-own-skill",
-          whatItDoes: "Practice Viva Questions from Your Study Notes",
-          verifiedAt: new Date().toISOString(),
-          palette: document.documentElement.getAttribute('data-palette'),
-          sha256Integrity: hash,
-          securityChecks: {
-            cspActive: true,
-            xssSanitizerActive: true,
-            pinAuthReady: true,
-            offlineCapable: true
-          }
-        };
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'project-16-your-own-skill-security-audit.json';
-        a.click();
-        showAdvToast('✓ Exported signed security & state report JSON');
-      };
+      print(`Examiner: ${curQ.feedback}`, 't-examiner');
+      currentStep++;
 
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key.toLowerCase() === 'h') {
-          e.preventDefault();
-          window.__verifyProjectHash();
-        } else if (e.altKey && e.key.toLowerCase() === 's' && window.StudioSecurity) {
-          e.preventDefault();
-          window.StudioSecurity.openSecurityAuditModal();
-        }
-      });
-    })();
+      if (currentStep < bank.questions.length) {
+        print(bank.questions[currentStep].q, 't-question');
+      } else {
+        print(`Score: ${score}/5. Revise page ${weakestPage}.`, 't-score');
+      }
+    }
+
+    restartViva();
   </script>
-
 </body>
 </html>

@@ -1,12 +1,10 @@
 # Prompts Log - Project 10: Job Clipper
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 10 (Section C: Chrome Extensions) - Job Clipper (Medium)
 
 ---
 
 ### Prompt 1: DOM Scraping Content Script & Manifest
-> "Build a Chrome extension with Manifest V3 that scrapes internship and job details (Role Title, Company Name, URL, Application Deadline) with 1 click across multiple recruitment platforms."
+> "Build a Chrome extension with Manifest V3 that scrapes job application details (Role Title, Company Name, URL, Application Deadline) with 1 click across multiple recruitment platforms."
 
 ### Prompt 2: 4-Stage Drag-and-Drop Kanban Board
 > "Create an interactive visual board with 4 distinct columns: Saved, Applied, Interview, and Result. Implement HTML5 drag-and-drop to allow candidates to easily slide cards across columns as hiring rounds progress."

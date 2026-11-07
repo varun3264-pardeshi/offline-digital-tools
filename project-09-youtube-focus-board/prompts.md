@@ -1,6 +1,4 @@
 # Prompts Log - Project 09: YouTube Focus Board
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 9 (Section C: Chrome Extensions) - YouTube Focus Board (Medium)
 
 ---

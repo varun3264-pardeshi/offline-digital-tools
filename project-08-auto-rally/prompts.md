@@ -1,6 +1,4 @@
 # Prompts Log - Project 08: Auto Rally
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 8 (Section B: Phone Apps and Games) - Auto Rally (Tough)
 
 ---

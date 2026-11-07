@@ -13,7 +13,7 @@ Memory-saving browser extension featuring an animated Goblin character that devo
 ## Instant Live Simulator
 Open `index.html` directly in your browser to experience the Goblin managing 30 live tabs, test putting tabs to sleep, wake them up with 1 click, protect form entries, and save/restore sessions.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Smoothly Handles 30 Open Tabs**: Tested with 30 simulated browser tabs with instant rendering and filtering.
 - [x] **Half-Filled Form is Never Lost**: Forms flagged with protection or placed on the Keep list are preserved.
 - [x] **Saved Session Restores After Restart**: Full tab session state is safely serialized in LocalStorage.

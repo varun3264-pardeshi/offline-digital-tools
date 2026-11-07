@@ -3,7 +3,7 @@
 ## Overview
 Offline biometric exam portal photo & signature formatter with face guide overlay and automated step-by-step KB compression.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Meets rules of 3+ real forms with official links**:
   1. UPSC Civil Services: 350 × 450 px, 20 KB to 50 KB (Link: [upsconline.nic.in](https://upsconline.nic.in))
   2. SSC CGL / CHSL: 3.5 × 4.5 cm, 20 KB to 50 KB (Link: [ssc.gov.in](https://ssc.gov.in))

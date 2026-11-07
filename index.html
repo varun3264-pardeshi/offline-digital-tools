@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
-  <title>All 17 Practical Tools & Apps — Offline Workspace Directory</title>
+  <title>Everyday Digital Toolkit — 17 Practical Tools</title>
   <link rel="stylesheet" href="assets/studio-ui.css" />
   <script src="assets/security-auth.js" defer></script>
   <style>
@@ -18,99 +18,41 @@
       background-color: var(--bg-canvas);
       color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.55;
+      line-height: 1.5;
       min-height: 100vh;
-      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    /* Top Hero Section - Clean Editorial Layout */
     .hub-header {
-      max-width: 1320px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 1.75rem;
-      border-bottom: 2px solid var(--border-color);
-    }
-
-    .hub-header-top {
+      padding: 2.25rem 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 2rem;
+      align-items: flex-end;
+      gap: 1.5rem;
       flex-wrap: wrap;
     }
-
-    .eyebrow-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.75rem;
-    }
-
-    .eyebrow-tag {
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.28rem 0.65rem;
-      border-radius: 6px;
-    }
-
-    .tag-terracotta { background: #FFEDD5; color: #9A3412; border: 1px solid #FDBA74; }
-    .tag-emerald { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
-    .tag-amber { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
-    .tag-berry { background: #FCE7F3; color: #9D174D; border: 1px solid #F9A8D4; }
-    .tag-plum { background: #F3E8FF; color: #6B21A8; border: 1px solid #D8B4FE; }
-    .tag-olive { background: #ECFCCB; color: #3F6212; border: 1px solid #BEF264; }
 
     .hub-title {
-      font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+      font-size: clamp(1.75rem, 2.8vw, 2.4rem);
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.025em;
       line-height: 1.15;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
     }
 
     .hub-subtitle {
-      font-size: 1.05rem;
+      font-size: 1rem;
       color: var(--text-secondary);
-      max-width: 680px;
-    }
-
-    /* Summary Cards */
-    .summary-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 0.85rem;
-      margin-top: 1.75rem;
-    }
-
-    .sum-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-left: 4px solid var(--box-color, var(--accent-primary));
-      border-radius: var(--radius-sm);
-      padding: 0.9rem 1.1rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .sum-value {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .sum-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 600;
+      max-width: 640px;
     }
 
     /* Controls Bar: Search + Category Filter */
     .controls-bar {
-      max-width: 1320px;
-      margin: 1.5rem auto 1rem;
+      max-width: 1280px;
+      margin: 1.25rem auto 0.75rem;
       padding: 0 1.5rem;
       display: flex;
       justify-content: space-between;
@@ -121,21 +63,20 @@
 
     .search-box {
       flex: 1;
-      min-width: 260px;
-      max-width: 420px;
+      min-width: 250px;
+      max-width: 380px;
       position: relative;
     }
 
     .search-input {
       width: 100%;
-      padding: 0.7rem 1rem 0.7rem 2.4rem;
-      font-size: 0.92rem;
+      padding: 0.62rem 1rem 0.62rem 2.25rem;
+      font-size: 0.9rem;
       border-radius: var(--radius-sm);
       border: 1.5px solid var(--border-strong);
       background: var(--bg-surface);
       color: var(--text-main);
       outline: none;
-      transition: border-color 0.15s ease;
     }
 
     .search-input:focus {
@@ -144,27 +85,27 @@
 
     .search-icon {
       position: absolute;
-      left: 0.8rem;
+      left: 0.75rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .filter-tabs {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
     }
 
     .filter-tab {
-      padding: 0.55rem 1rem;
+      padding: 0.5rem 0.95rem;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
       background: var(--bg-surface);
       color: var(--text-secondary);
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -180,14 +121,14 @@
       border-color: var(--accent-primary);
     }
 
-    /* Projects Grid */
+    /* Tools Grid */
     .projects-grid {
-      max-width: 1320px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 1rem 1.5rem 4rem;
+      padding: 0.75rem 1.5rem 3.5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(365px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.15rem;
     }
 
     .tool-card {
@@ -199,7 +140,7 @@
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     }
 
     .tool-card:hover {
@@ -209,16 +150,16 @@
     }
 
     .card-color-bar {
-      height: 6px;
+      height: 5px;
       width: 100%;
       background: var(--card-tone, var(--accent-primary));
     }
 
     .card-body {
-      padding: 1.35rem 1.4rem 1.1rem;
+      padding: 1.25rem 1.35rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
+      gap: 0.55rem;
     }
 
     .card-meta-row {
@@ -229,11 +170,11 @@
     }
 
     .project-code {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      padding: 0.2rem 0.55rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 5px;
       background: var(--card-soft, #FFEDD5);
       color: var(--card-tone, #9A3412);
@@ -245,39 +186,21 @@
       color: var(--text-muted);
     }
 
-    /* Simple, Clear Functional Heading */
     .what-it-does-title {
-      font-size: 1.22rem;
+      font-size: 1.16rem;
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.3;
     }
 
     .what-it-does-desc {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-secondary);
       line-height: 1.5;
     }
 
-    .checklist-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.25rem;
-    }
-
-    .check-pill {
-      font-size: 0.74rem;
-      font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 5px;
-      background: var(--bg-canvas);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-color);
-    }
-
     .card-actions {
-      padding: 0.9rem 1.4rem;
+      padding: 0.8rem 1.35rem;
       background: var(--bg-canvas);
       border-top: 1px solid var(--border-color);
       display: flex;
@@ -286,22 +209,19 @@
       gap: 0.75rem;
     }
 
-    .security-tag {
-      font-size: 0.75rem;
+    .tool-feature-hint {
+      font-size: 0.76rem;
       font-weight: 600;
-      color: var(--status-ok);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      color: var(--text-muted);
     }
 
     .open-tool-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      padding: 0.5rem 1.05rem;
+      padding: 0.45rem 0.95rem;
       border-radius: var(--radius-sm);
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 700;
       text-decoration: none;
       color: #FFFFFF;
@@ -317,62 +237,24 @@
     footer {
       border-top: 1px solid var(--border-color);
       background: var(--bg-surface);
-      padding: 2rem 1.5rem;
+      padding: 1.5rem;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
   </style>
 </head>
 <body>
 
   <header class="hub-header">
-    <div class="hub-header-top">
-      <div>
-        <div class="eyebrow-row">
-          <span class="eyebrow-tag tag-terracotta">Bharat Space Education Research Centre</span>
-          <span class="eyebrow-tag tag-emerald">Works 100% Offline (Wi-Fi Off)</span>
-          <span class="eyebrow-tag tag-amber">SHA-256 PIN Auth & XSS Protected</span>
-          <span class="eyebrow-tag tag-plum">17 Individual Project Folders</span>
-        </div>
-        <h1 class="hub-title">17 Practical Everyday Tools & Apps</h1>
-        <p class="hub-subtitle">
-          Every tool below solves a real problem right inside your browser — from fixing exam form photos and editing PDFs to making shop bills, blocking YouTube distractions, and cutting 60-second video reels.
-        </p>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:flex-end;">
-        <button class="sec-btn" onclick="window.StudioSecurity.openSecurityAuditModal()" style="padding:0.6rem 1.1rem; font-size:0.86rem; background:var(--accent-primary); color:#fff; border-color:var(--accent-primary);">
-          🛡️ Run Security & Auth Diagnostics
-        </button>
-        <span style="font-size:0.76rem; color:var(--text-muted);">Click color dots at top-right to change theme</span>
-      </div>
-    </div>
-
-    <div class="summary-strip">
-      <div class="sum-box" style="--box-color: #C2410C;">
-        <div class="sum-value">5 Web Tools</div>
-        <div class="sum-label">PDFs, Exam Photos, Resume, Mock Test, Notes</div>
-      </div>
-      <div class="sum-box" style="--box-color: #047857;">
-        <div class="sum-value">3 Phone Apps</div>
-        <div class="sum-label">Reel Habit Tracker, Shop Bill QR, Auto Game</div>
-      </div>
-      <div class="sum-box" style="--box-color: #B45309;">
-        <div class="sum-value">6 Browser Tools</div>
-        <div class="sum-label">YouTube Focus, Job Tracker, Bug Fix, Chat Save</div>
-      </div>
-      <div class="sum-box" style="--box-color: #7E22CE;">
-        <div class="sum-value">3 Studio Workflows</div>
-        <div class="sum-label">60s Video Cutter, Viva Examiner, Redesign</div>
-      </div>
-      <div class="sum-box" style="--box-color: #15803D;">
-        <div class="sum-value">100% Verified</div>
-        <div class="sum-label">PIN Auth, XSS Sanitizer & Offline Tested</div>
-      </div>
+    <div>
+      <h1 class="hub-title">Everyday Digital Toolkit</h1>
+      <p class="hub-subtitle">
+        17 practical, self-contained tools for documents, exam photos, billing, study, and browser productivity.
+      </p>
     </div>
   </header>
 
-  <!-- Search and Filter Controls -->
   <section class="controls-bar">
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -380,469 +262,383 @@
         type="search"
         id="tool-search"
         class="search-input"
-        placeholder="Search by what you want to do (e.g. resize photo, merge pdf, bill, exam)..."
+        placeholder="Search tools (e.g. pdf, photo, resume, bill, youtube)..."
         oninput="filterCards()"
       />
     </div>
 
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="setSectionFilter('all', this)">All 17 Tools</button>
-      <button class="filter-tab" onclick="setSectionFilter('sec-a', this)">Section A: Web Tools (5)</button>
-      <button class="filter-tab" onclick="setSectionFilter('sec-b', this)">Section B: Phone Apps (3)</button>
-      <button class="filter-tab" onclick="setSectionFilter('sec-c', this)">Section C: Browser Extensions (6)</button>
-      <button class="filter-tab" onclick="setSectionFilter('sec-d', this)">Section D: Video, Viva & Design (3)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-a', this)">Document & Study Tools (5)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-b', this)">Mobile Apps & Games (3)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-c', this)">Browser Extensions (6)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-d', this)">Media, Viva & Design (3)</button>
     </div>
   </section>
 
-  <!-- 17 Project Cards with Distinct Multi-Color Palettes & Simple Action Headings -->
   <main class="projects-grid" id="tools-grid">
 
-    <!-- PROJECT 01 -->
+    <!-- TOOL 01 -->
     <article class="tool-card" data-section="sec-a" style="--card-tone: #C2410C; --card-soft: #FFEDD5;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 01 · PDF Studio</span>
-            <span class="project-cat-label">Section A · Web Tool</span>
+            <span class="project-code">Tool 01 · PDF Studio</span>
+            <span class="project-cat-label">Documents</span>
           </div>
           <h2 class="what-it-does-title">Edit, Merge & Convert PDF Files</h2>
           <p class="what-it-does-desc">
-            Merge multiple PDFs, split pages, rotate, reorder, compress size, draw signatures, black-out private text, add watermarks, and export — all 29 tools in one place.
+            Merge multiple PDFs, split pages, rotate, reorder, compress size, draw signatures, redact private text, and add watermarks.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">29 Working Tools</span>
-            <span class="check-pill">50-Page Sample Included</span>
-            <span class="check-pill">SHA-256 File Checksum</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Offline & XSS Safe</span>
-        <a href="project-01-pdf-studio/index.html" class="open-tool-btn">Open PDF Tool →</a>
+        <span class="tool-feature-hint">29 PDF Tools · Offline</span>
+        <a href="project-01-pdf-studio/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 02 -->
+    <!-- TOOL 02 -->
     <article class="tool-card" data-section="sec-a" style="--card-tone: #047857; --card-soft: #D1FAE5;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 02 · Form Photo Fixer</span>
-            <span class="project-cat-label">Section A · Web Tool</span>
+            <span class="project-code">Tool 02 · Form Photo Fixer</span>
+            <span class="project-cat-label">Photos & Forms</span>
           </div>
           <h2 class="what-it-does-title">Resize Photo & Signature for Exam Forms</h2>
           <p class="what-it-does-desc">
-            Fix passport photos and signatures to exact UPSC, SSC, IBPS, or NTA pixel dimensions, add Name & Date strip, and compress under the exact KB limit (20–50 KB).
+            Crop passport photos and signatures with a face guide and compress them to exact UPSC, SSC, IBPS, or custom KB limits.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">UPSC / SSC / IBPS Presets</span>
-            <span class="check-pill">Face Alignment Guide</span>
-            <span class="check-pill">Exact KB Compressor</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Zero Photo Upload</span>
-        <a href="project-02-form-photo-fixer/index.html" class="open-tool-btn">Open Photo Resizer →</a>
+        <span class="tool-feature-hint">3.5×4.5 cm · Exact KB Limit</span>
+        <a href="project-02-form-photo-fixer/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 03 -->
+    <!-- TOOL 03 -->
     <article class="tool-card" data-section="sec-a" style="--card-tone: #7E22CE; --card-soft: #F3E8FF;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 03 · Resume Builder</span>
-            <span class="project-cat-label">Section A · Web Tool</span>
+            <span class="project-code">Tool 03 · Resume Builder</span>
+            <span class="project-cat-label">Career</span>
           </div>
           <h2 class="what-it-does-title">Build & Print Your A4 Resume</h2>
           <p class="what-it-does-desc">
-            Type your education, work experience, projects, and skills on the left and watch your A4 resume update live on the right. Switch between 3 distinct layouts and export to PDF.
+            Fill your details on the left and watch a clean A4 resume update live on the right. Switch between 3 templates and export PDF.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">3 Distinct Layouts</span>
-            <span class="check-pill">Reorder Sections</span>
-            <span class="check-pill">Save / Load JSON</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Input Sanitized</span>
-        <a href="project-03-resume-builder/index.html" class="open-tool-btn">Open Resume Builder →</a>
+        <span class="tool-feature-hint">3 Layouts · Drag Sections</span>
+        <a href="project-03-resume-builder/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 04 -->
+    <!-- TOOL 04 -->
     <article class="tool-card" data-section="sec-a" style="--card-tone: #B45309; --card-soft: #FEF3C7;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 04 · CBT Mock Test</span>
-            <span class="project-cat-label">Section A · Web Tool</span>
+            <span class="project-code">Tool 04 · CBT Mock Test</span>
+            <span class="project-cat-label">Practice Exam</span>
           </div>
           <h2 class="what-it-does-title">Take Practice Mock Tests with Timer</h2>
           <p class="what-it-does-desc">
-            Practice JEE/NTA-style multiple choice exams with a color-coded question palette, countdown timer that survives page refresh, +4/-1 negative marking, and full answer key review.
+            Run full-screen computer-based mock exams with a question status palette, auto-saved timer, negative marking, and instant scorecards.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Survives Refresh</span>
-            <span class="check-pill">2 Question Banks</span>
-            <span class="check-pill">Instant Scorecard</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Anti-Tamper Timer</span>
-        <a href="project-04-cbt-mock-test/index.html" class="open-tool-btn">Start Mock Exam →</a>
+        <span class="tool-feature-hint">Timer + Question Palette</span>
+        <a href="project-04-cbt-mock-test/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 05 -->
+    <!-- TOOL 05 -->
     <article class="tool-card" data-section="sec-a" style="--card-tone: #BE185D; --card-soft: #FCE7F3;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 05 · Scribbly Notes</span>
-            <span class="project-cat-label">Section A · Web Tool</span>
+            <span class="project-code">Tool 05 · Scribbly Notes</span>
+            <span class="project-cat-label">Study Notes</span>
           </div>
           <h2 class="what-it-does-title">Convert Typed Text into Handwritten Pages</h2>
           <p class="what-it-does-desc">
-            Paste typed study notes and convert them into realistic handwritten notebook pages with 3 handwriting styles, natural word slant/spacing variation, and 4 paper backgrounds.
+            Turn plain typed notes into natural-looking handwritten notebook pages with 3 handwriting styles, ink colors, and multi-page flow.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">3 Handwriting Fonts</span>
-            <span class="check-pill">4 Paper Styles</span>
-            <span class="check-pill">Multi-Page Auto Split</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Offline Print & PNG</span>
-        <a href="project-05-scribbly-notes/index.html" class="open-tool-btn">Convert Notes →</a>
+        <span class="tool-feature-hint">3 Fonts · Lined & Grid Paper</span>
+        <a href="project-05-scribbly-notes/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 06 -->
+    <!-- TOOL 06 -->
     <article class="tool-card" data-section="sec-b" style="--card-tone: #E11D48; --card-soft: #FFE4E6;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 06 · Reel Monster</span>
-            <span class="project-cat-label">Section B · Phone App</span>
+            <span class="project-code">Tool 06 · Reel Monster</span>
+            <span class="project-cat-label">Screen Wellbeing</span>
           </div>
           <h2 class="what-it-does-title">Track & Control Daily Short-Video Watching</h2>
           <p class="what-it-does-desc">
-            A floating counter companion that tallies every Reel or Short you watch, evolves through 4 monster stages as you binge, roasts your screen time, and graphs your 7-day habit.
+            Floating companion bubble that counts every Reel or Short you watch, grows through 4 stages, and tracks your 7-day viewing history.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">4 Evolution Stages</span>
-            <span class="check-pill">Draggable Floating Pill</span>
-            <span class="check-pill">7-Day Bar Chart</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Local Habit Storage</span>
-        <a href="project-06-reel-monster/index.html" class="open-tool-btn">Open Habit Tracker →</a>
+        <span class="tool-feature-hint">Manual & Auto Modes · 7-Day Chart</span>
+        <a href="project-06-reel-monster/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 07 -->
+    <!-- TOOL 07 -->
     <article class="tool-card" data-section="sec-b" style="--card-tone: #15803D; --card-soft: #DCFCE7;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 07 · Bill Book</span>
-            <span class="project-cat-label">Section B · Phone App</span>
+            <span class="project-code">Tool 07 · Bill Book</span>
+            <span class="project-cat-label">Shop Billing</span>
           </div>
           <h2 class="what-it-does-title">Make Shop Bills & Instant UPI QR Codes</h2>
           <p class="what-it-does-desc">
-            Tap shop items to build a customer bill in seconds, calculate discounts & GST, generate a real scannable UPI QR code for the exact total, and download a receipt image for WhatsApp.
+            Create itemized shop bills with quantity, discount, and GST, generate a dynamic UPI QR code for the exact total, and share receipt images.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Live UPI QR Generator</span>
-            <span class="check-pill">WhatsApp Receipt PNG</span>
-            <span class="check-pill">Daily Sales Ledger</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Flight-Mode Ready</span>
-        <a href="project-07-bill-book/index.html" class="open-tool-btn">Open Bill Book →</a>
+        <span class="tool-feature-hint">Live UPI QR · Receipt PNG</span>
+        <a href="project-07-bill-book/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 08 -->
+    <!-- TOOL 08 -->
     <article class="tool-card" data-section="sec-b" style="--card-tone: #D97706; --card-soft: #FEF3C7;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 08 · Auto Rally</span>
-            <span class="project-cat-label">Section B · Arcade Game</span>
+            <span class="project-code">Tool 08 · Auto Rally</span>
+            <span class="project-cat-label">Arcade Game</span>
           </div>
           <h2 class="what-it-does-title">Drive an Auto-Rickshaw Through City Traffic</h2>
           <p class="what-it-does-desc">
-            Steer a yellow-green Indian auto-rickshaw across 3 laps of busy city roads, dodge potholes and barricades, grab hot chai turbo boosts, collect coins, and set a new lap record.
+            Steer an auto-rickshaw across 3 laps with keyboard or touch controls, dodge obstacles, grab chai turbo boosts, and beat your best time.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">60fps Canvas Racer</span>
-            <span class="check-pill">Touch & Keyboard Controls</span>
-            <span class="check-pill">Horn & Engine Audio</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Offline High-Score</span>
-        <a href="project-08-auto-rally/index.html" class="open-tool-btn">Play Auto Rally →</a>
+        <span class="tool-feature-hint">3 Laps · Sound & Lap Records</span>
+        <a href="project-08-auto-rally/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 09 -->
+    <!-- TOOL 09 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #9A3412; --card-soft: #FFEDD5;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 09 · YouTube Focus Board</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 09 · YouTube Focus Board</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Watch YouTube Lectures Without Distractions</h2>
           <p class="what-it-does-desc">
-            Blocks YouTube Shorts, home-feed clickbait, and comments. Requires you to type what you came to study before unlocking a 60-minute timer, with timestamped note-taking on the side.
+            Hide YouTube Shorts, recommendations, and comments, unlock 60-minute study sessions with an intention gate, and save timestamped notes.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Shorts & Feed Blocker</span>
-            <span class="check-pill">60-Min Study Gate</span>
-            <span class="check-pill">Timestamped Notes</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Manifest V3 Verified</span>
-        <a href="project-09-youtube-focus-board/index.html" class="open-tool-btn">Open Focus Board →</a>
+        <span class="tool-feature-hint">Shorts Blocker · Timestamp Notes</span>
+        <a href="project-09-youtube-focus-board/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 10 -->
+    <!-- TOOL 10 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #3F6212; --card-soft: #ECFCCB;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 10 · Job Clipper</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 10 · Job Clipper</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Save & Track Your Job Applications</h2>
           <p class="what-it-does-desc">
-            Clip job listings from LinkedIn, Internshala, Naukri, Wellfound, or Unstop in 1 click. Organize applications across a 4-column board (Saved, Applied, Interview, Offer) and export CSV.
+            Clip job roles, companies, links, and deadlines in 1 click, drag cards across Saved, Applied, Interview, and Result, and export CSV.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">5 Job Portals Tested</span>
-            <span class="check-pill">Drag & Drop Board</span>
-            <span class="check-pill">Deadline Alerts & CSV</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Sanitized Clipper</span>
-        <a href="project-10-job-clipper/index.html" class="open-tool-btn">Open Job Tracker →</a>
+        <span class="tool-feature-hint">4-Stage Board · CSV Export</span>
+        <a href="project-10-job-clipper/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 11 -->
+    <!-- TOOL 11 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #BE123C; --card-soft: #FFE4E6;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 11 · Circle to Fix</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 11 · Circle to Fix</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Circle Any Website Bug to Generate a Fix</h2>
           <p class="what-it-does-desc">
-            Draw a red circle around any broken button, overlapping text, or misaligned card on a webpage. Automatically grabs the element's HTML, CSS, bounding box, and a ready-to-paste fix prompt.
+            Draw a circle, box, or arrow over any broken webpage element to extract its HTML/CSS code and copy a ready-to-use fix prompt.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Freehand Canvas Lasso</span>
-            <span class="check-pill">DOM & CSS Inspector</span>
-            <span class="check-pill">1-Click Prompt Copy</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Local DOM Inspector</span>
-        <a href="project-11-circle-to-fix/index.html" class="open-tool-btn">Open Bug Circler →</a>
+        <span class="tool-feature-hint">Screen Draw · Live Bug Fixer</span>
+        <a href="project-11-circle-to-fix/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 12 -->
+    <!-- TOOL 12 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #065F46; --card-soft: #D1FAE5;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 12 · Chat Saver</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 12 · Chat Saver</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Save AI Chats as Clean PDF or Markdown</h2>
           <p class="what-it-does-desc">
-            Pick specific replies from ChatGPT, Claude, or Gemini conversations and export them as a clean Markdown file or formatted PDF — keeping code blocks and tables intact without UI clutter.
+            Export full or selected messages from AI chat threads into clean Markdown or PDF files while keeping code blocks and tables intact.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">ChatGPT / Claude / Gemini</span>
-            <span class="check-pill">Select Specific Turns</span>
-            <span class="check-pill">Code & Table Preserved</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Zero Cloud Sync</span>
-        <a href="project-12-chat-saver/index.html" class="open-tool-btn">Open Chat Exporter →</a>
+        <span class="tool-feature-hint">Markdown & PDF · Code Intact</span>
+        <a href="project-12-chat-saver/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 13 -->
+    <!-- TOOL 13 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #6B21A8; --card-soft: #F3E8FF;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 13 · Style Spy</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 13 · Style Spy</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Inspect Colors & Fonts on Any Webpage</h2>
           <p class="what-it-does-desc">
-            Scan any webpage to rank its most-used background, text, and accent colors by area coverage, inspect heading/body font families and weights, and copy a ready-to-use `:root` CSS kit.
+            See any webpage's colors ranked by usage, inspect its fonts and sizes, save named style kits, and export ready-to-paste CSS variables.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Color Coverage Rank</span>
-            <span class="check-pill">Hover Element Inspector</span>
-            <span class="check-pill">Copy CSS Variables</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Read-Only Scanner</span>
-        <a href="project-13-style-spy/index.html" class="open-tool-btn">Open Style Inspector →</a>
+        <span class="tool-feature-hint">Color Rank · CSS Kit Export</span>
+        <a href="project-13-style-spy/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 14 -->
+    <!-- TOOL 14 -->
     <article class="tool-card" data-section="sec-c" style="--card-tone: #92400E; --card-soft: #FEF3C7;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 14 · Tab Goblin</span>
-            <span class="project-cat-label">Section C · Browser Extension</span>
+            <span class="project-code">Tool 14 · Tab Goblin</span>
+            <span class="project-cat-label">Browser Extension</span>
           </div>
           <h2 class="what-it-does-title">Put Unused Browser Tabs to Sleep</h2>
           <p class="what-it-does-desc">
-            See how much RAM your open browser tabs are using, protect important tabs on your Keep List, put idle tabs to sleep using native tab discard, and save whole tab sessions for later.
+            Rank open tabs by idle time, protect important tabs on your Keep List, put inactive tabs to sleep to free RAM, and save tab sessions.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">RAM Saver Dashboard</span>
-            <span class="check-pill">Protected Keep List</span>
-            <span class="check-pill">1-Click Session Stash</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Safe Tab Discard</span>
-        <a href="project-14-tab-goblin/index.html" class="open-tool-btn">Open Tab Manager →</a>
+        <span class="tool-feature-hint">RAM Saver · Session Restore</span>
+        <a href="project-14-tab-goblin/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 15 -->
+    <!-- TOOL 15 -->
     <article class="tool-card" data-section="sec-d" style="--card-tone: #C2410C; --card-soft: #FFEDD5;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 15 · One-Minute Reel Cut</span>
-            <span class="project-cat-label">Section D · Video Workflow</span>
+            <span class="project-code">Tool 15 · One-Minute Reel Cut</span>
+            <span class="project-cat-label">Video Editor</span>
           </div>
           <h2 class="what-it-does-title">Cut Long Videos into 60-Second Vertical Reels</h2>
           <p class="what-it-does-desc">
-            Drop a raw talking-head video or transcript to automatically strip silent pauses and filler words ("umm, uhh"), crop to 9:16 portrait around the speaker, and burn in highlighted captions.
+            Strip silences and filler words from raw talking videos, crop to 9:16 portrait around the speaker, and burn in highlighted captions.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">Silence & Filler Cutter</span>
-            <span class="check-pill">9:16 Portrait Cropper</span>
-            <span class="check-pill">20-Line Verified Transcript</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Local FFmpeg Script</span>
-        <a href="project-15-one-minute-reel-cut/index.html" class="open-tool-btn">Open Video Cutter →</a>
+        <span class="tool-feature-hint">9:16 Portrait · Auto Captions</span>
+        <a href="project-15-one-minute-reel-cut/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 16 -->
+    <!-- TOOL 16 -->
     <article class="tool-card" data-section="sec-d" style="--card-tone: #7E22CE; --card-soft: #F3E8FF;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 16 · Your Own Skill (/viva)</span>
-            <span class="project-cat-label">Section D · Agent Skill</span>
+            <span class="project-code">Tool 16 · /viva Examiner Skill</span>
+            <span class="project-cat-label">Study Examiner</span>
           </div>
           <h2 class="what-it-does-title">Practice Viva Questions from Your Study Notes</h2>
           <p class="what-it-does-desc">
-            Paste your lecture notes or pick from 3 subjects (Thermodynamics, Data Structures, Machine Learning). Answer 5 progressively harder viva questions and get a 0–10 rubric scorecard.
+            Load your study notes or pick a topic to practice 5 one-by-one viva questions with instant feedback, scoring, and page revision pointers.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">SKILL.md Included</span>
-            <span class="check-pill">3 Subject Note Packs</span>
-            <span class="check-pill">Rubric Grader & Revision Plan</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Verified Skill Spec</span>
-        <a href="project-16-your-own-skill/index.html" class="open-tool-btn">Start Viva Practice →</a>
+        <span class="tool-feature-hint">5-Question Viva · Custom Notes</span>
+        <a href="project-16-your-own-skill/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
-    <!-- PROJECT 17 -->
+    <!-- TOOL 17 -->
     <article class="tool-card" data-section="sec-d" style="--card-tone: #3F6212; --card-soft: #ECFCCB;">
       <div>
         <div class="card-color-bar"></div>
         <div class="card-body">
           <div class="card-meta-row">
-            <span class="project-code">Project 17 · Same Page, New Design</span>
-            <span class="project-cat-label">Section D · UI/UX Redesign</span>
+            <span class="project-code">Tool 17 · Page Redesign Studio</span>
+            <span class="project-cat-label">UI/UX Comparison</span>
           </div>
           <h2 class="what-it-does-title">Compare Old vs Redesigned Webpage Side-by-Side</h2>
           <p class="what-it-does-desc">
-            Drag the comparison slider to inspect `before.html` (cluttered 2009 portal) vs `after.html` (clean editorial redesign) built with the exact same text copy, links, and form fields.
+            Compare `before.html` and `after.html` built with the exact same words across desktop and mobile viewports.
           </p>
-          <div class="checklist-pills">
-            <span class="check-pill">100% Identical Text Copy</span>
-            <span class="check-pill">Interactive Split Slider</span>
-            <span class="check-pill">Typography & Contrast Audit</span>
-          </div>
         </div>
       </div>
       <div class="card-actions">
-        <span class="security-tag">✓ Word-for-Word Match</span>
-        <a href="project-17-same-page-new-design/index.html" class="open-tool-btn">Compare Designs →</a>
+        <span class="tool-feature-hint">Before vs After · Mobile Check</span>
+        <a href="project-17-same-page-new-design/index.html" class="open-tool-btn">Open Tool →</a>
       </div>
     </article>
 
   </main>
 
   <footer>
-    <p><strong>Bharat Space Education Research Centre · GenAI Internship Week 2</strong> · All 17 Individual Project Folders Verified Offline, Protected with SHA-256 PIN Auth & XSS Sanitization.</p>
+    <p>Everyday Digital Toolkit · 17 Self-Contained Offline Tools · Protected with Local PIN Lock & Input Sanitization</p>
   </footer>
 
   <script>

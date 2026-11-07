@@ -3,7 +3,7 @@
 ## Overview
 Authentic offline NTA/JEE computer-based test platform featuring LocalStorage mid-test state persistence, dynamic question loader, subject sections, positive/negative scoring engine, and audit breakdown.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Zero Data Loss on Mid-Test Refresh**: Every answer selection, timer countdown second, marked-for-review status, and question index persists in LocalStorage. Refreshing the browser mid-test loses nothing.
 - [x] **Hand Calculation Verification for 15 Questions**:
   - Positive Marks: +4 per correct answer

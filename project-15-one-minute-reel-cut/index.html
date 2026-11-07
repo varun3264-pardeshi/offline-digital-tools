@@ -1,405 +1,357 @@
 <!DOCTYPE html>
 <html lang="en" data-palette="terracotta">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
-  <link rel="stylesheet" href="../assets/studio-ui.css" />
-  <script src="../assets/security-auth.js" defer></script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cut Long Videos into 60-Second Vertical Reels (Project 15)</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
+  <title>Cut Long Videos into 60-Second Vertical Reels (Tool 15)</title>
+  <link rel="stylesheet" href="../assets/studio-ui.css" />
+  <script src="../assets/security-auth.js" defer></script>
   <style>
-    :root {
-      --bg: var(--bg-surface);
-      --card-bg: var(--bg-surface);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: var(--status-err);
-      --accent-cyan: var(--accent-primary);
-      --accent-emerald: var(--status-ok);
-      --text: var(--text-main);
-      --text-muted: var(--text-secondary);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-canvas);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Ambient Liquid Mesh Glow */
-    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
-    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, var(--status-err), #9b51e0); top: -15%; left: 10%; }
-    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, var(--accent-primary), var(--accent-primary)); bottom: -15%; right: 10%; }
-
-    /* Nav */
     nav {
-      position: relative; z-index: 10;
-      background: var(--bg-surface); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .brand {
-      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--status-err), #f093fb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
-      background: var(--bg-elevated); color: #fff; transition: all 0.2s ease;
-    }
-    .btn:hover { background: var(--bg-muted); transform: translateY(-1px); }
-    .btn-red { background: linear-gradient(135deg, var(--status-err), #e11d48); border: none; font-weight: 700; color: #fff; }
-
-    /* Main Grid */
-    main {
-      position: relative; z-index: 2; max-width: 1280px; margin: 1.5rem auto 3rem; padding: 0 1rem;
-      width: 100%; display: grid; grid-template-columns: 340px 1fr; gap: 2rem;
-    }
-
-    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-
-    /* 9:16 Vertical Phone Reel Stage */
-    .phone-stage {
-      background: #000; border: 3px solid rgba(255, 255, 255, 0.15); border-radius: 36px;
-      aspect-ratio: 9/16; position: relative; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-      display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem 1rem;
-    }
-
-    .notch-bar {
-      position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 100px; height: 16px;
-      background: #111; border-radius: 10px;
-    }
-
-    /* Video Subject Face Simulation */
-    .avatar-face {
-      width: 130px; height: 130px; border-radius: 50%; background: #e0a97a;
-      box-shadow: inset 0 -6px 12px rgba(0,0,0,0.3); margin: 60px auto 0;
-      position: relative; border: 2px solid rgba(255,255,255,0.1);
-    }
-    .avatar-eyes { display: flex; gap: 24px; position: absolute; top: 45px; left: 35px; }
-    .a-eye { width: 10px; height: 10px; border-radius: 50%; background: #111; }
-    .avatar-mouth {
-      width: 28px; height: 10px; background: #991b1b; border-radius: 0 0 14px 14px;
-      position: absolute; bottom: 25px; left: 51px; animation: speak 0.3s infinite alternate;
-    }
-    @keyframes speak { 0% { height: 6px; } 100% { height: 14px; } }
-
-    /* Burnt-in Subtitle Captions with Highlighted Words */
-    .burnt-captions-box {
-      background: rgba(0, 0, 0, 0.75); border-radius: 12px; padding: 0.75rem 1rem;
-      text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 1.05rem;
-      text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    .caption-highlight { color: #f6d365; text-shadow: 0 0 10px rgba(246, 211, 101, 0.6); }
-
-    .reel-meta-tag {
-      display: flex; justify-content: space-between; font-size: 0.75rem; color: #fff;
-      background: rgba(0,0,0,0.6); padding: 0.3rem 0.6rem; border-radius: 6px;
-    }
-
-    /* Right Timeline & Edit Plan Panel */
-    .edit-plan-panel {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.5rem;
-    }
-
-    /* Timeline Bar */
-    .timeline-strip {
-      width: 100%; height: 32px; border-radius: 8px; overflow: hidden; display: flex;
-      border: 1px solid var(--card-border); background: #1e293b;
-    }
-    .segment-keep { background: #ef4444; height: 100%; }
-    .segment-cut {
-      background: repeating-linear-gradient(45deg, #334155, #334155 8px, #1e293b 8px, #1e293b 16px);
-      height: 100%;
-    }
-
-    .cut-items-list {
-      display: flex; flex-direction: column; gap: 0.6rem; max-height: 220px; overflow-y: auto;
-    }
-
-    .cut-item {
-      background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 10px;
-      padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.85rem;
-    }
-
-    /* 20 Lines Verification Table */
-    .table-box {
-      max-height: 180px; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 10px;
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    th, td { padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--border-color); text-align: left; }
-    th { background: var(--bg-elevated); color: var(--text-muted); }
-  
-    /* === MULTI-COLOR HUMAN-CRAFTED STUDIO OVERRIDES (NO BLUE VIBE-CODING) === */
-    :root {
-      --bg: var(--bg-canvas) !important;
-      --bg-dark: var(--bg-canvas) !important;
-      --panel-bg: var(--bg-surface) !important;
-      --card-bg: var(--bg-surface) !important;
-      --card-border: var(--border-color) !important;
-      --accent: var(--accent-primary) !important;
-      --accent-cyan: var(--accent-primary) !important;
-      --accent-blue: var(--accent-secondary) !important;
-      --accent-purple: var(--accent-plum, #7E22CE) !important;
-      --accent-emerald: var(--status-ok, #15803D) !important;
-      --accent-rose: var(--status-err, #B91C1C) !important;
-      --text: var(--text-main) !important;
-      --text-muted: var(--text-secondary) !important;
-    }
-
-    body {
-      background: var(--bg-canvas) !important;
-      color: var(--text-main) !important;
-    }
-
-    .ambient-glow, .liquid-mesh, .glow-blob, .blob {
-      display: none !important;
-    }
-
-    header, nav, .top-bar, .app-header {
-      background: var(--bg-surface) !important;
-      border-bottom: 2px solid var(--border-color) !important;
-      backdrop-filter: none !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .brand-title, .logo-badge {
-      background: none !important;
-      -webkit-text-fill-color: var(--text-main) !important;
-      color: var(--text-main) !important;
-      font-weight: 800 !important;
-    }
-
-    .panel, .card, .editor-card, .tool-group, .sidebar, .right-panel, .left-panel,
-    .scorecard, .modal-card, .kanban-col, .extension-panel, .chat-panel, .inspector-card {
-      background: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-main) !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .btn, .tool-btn, .tab-btn, .sub-btn, .toggle-btn, .action-btn {
-      background: var(--bg-elevated) !important;
-      color: var(--text-main) !important;
-      border: 1px solid var(--border-strong) !important;
-    }
-
-    .btn:hover, .tool-btn:hover, .tab-btn:hover, .sub-btn:hover {
-      border-color: var(--accent-primary) !important;
-      color: var(--accent-primary) !important;
-    }
-
-    .btn-primary, .tab-btn.active, .sub-btn.active, .toggle-btn.active, .tool-btn.active {
-      background: var(--accent-primary) !important;
-      color: #FFFFFF !important;
-      border-color: var(--accent-primary) !important;
-      box-shadow: none !important;
-    }
-
-    input, select, textarea, .text-input, .select-input, .textarea-input, .input-text {
-      background: var(--bg-surface) !important;
-      color: var(--text-main) !important;
-      border: 1.5px solid var(--border-strong) !important;
-    }
-
-    /* Simple Action Banner & Advanced Feature Strip */
-    .project-purpose-banner {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
       flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      gap: 0.75rem;
     }
 
-    .purpose-left {
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text-main);
+    }
+
+    .btn {
+      padding: 0.48rem 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+    }
+
+    main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    /* 9:16 Vertical Phone Stage */
+    .phone-stage {
+      width: 320px;
+      height: 568px;
+      background: #1C1917;
+      border: 6px solid #292524;
+      border-radius: 32px;
+      position: relative;
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      color: #FFFFFF;
     }
 
-    .purpose-heading {
-      font-size: 1.25rem;
+    .reel-top-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      background: rgba(0, 0, 0, 0.55);
+      padding: 0.35rem 0.7rem;
+      border-radius: 99px;
+      z-index: 2;
+    }
+
+    .title-card-banner {
+      background: #C2410C;
+      color: #FFFFFF;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
       font-weight: 800;
-      color: var(--text-main);
+      font-size: 0.82rem;
+      text-align: center;
+      width: 100%;
+      z-index: 2;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Face Crop Guide */
+    .speaker-frame {
+      width: 150px;
+      height: 190px;
+      border: 2px dashed #F59E0B;
+      border-radius: 16px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      background: rgba(255,255,255,0.03);
     }
 
-    .purpose-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 5px;
-      background: var(--accent-primary-soft);
-      color: var(--accent-primary);
-      border: 1px solid currentColor;
+    .crop-label {
+      position: absolute;
+      top: -10px;
+      background: #F59E0B;
+      color: #18181B;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
-    .purpose-sub {
-      font-size: 0.86rem;
-      color: var(--text-secondary);
-    }
-
-    .purpose-tools {
+    .avatar-circle {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: #FDBA74;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .adv-search-input {
-      padding: 0.38rem 0.7rem;
-      border-radius: 6px;
+    .eyes-row { display: flex; gap: 16px; }
+    .eye-dot { width: 8px; height: 8px; border-radius: 50%; background: #18181B; }
+    .mouth-bar { width: 22px; height: 8px; border-radius: 0 0 12px 12px; background: #18181B; transition: height 0.12s ease; }
+    .mouth-bar.talking { height: 14px; background: #C2410C; }
+
+    .burnt-captions-box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.82);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 0.75rem;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.98rem;
+      line-height: 1.35;
+      letter-spacing: 0.02em;
+      z-index: 2;
+    }
+
+    .caption-highlight {
+      background: #F59E0B;
+      color: #18181B;
+      padding: 0.08rem 0.35rem;
+      border-radius: 4px;
+    }
+
+    /* Right Edit Plan Panel */
+    .edit-plan-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .timeline-strip {
+      height: 36px;
+      background: var(--bg-elevated);
+      border-radius: 8px;
+      display: flex;
+      overflow: hidden;
       border: 1px solid var(--border-strong);
-      font-size: 0.8rem;
-      background: var(--bg-canvas);
-      color: var(--text-main);
-      width: 190px;
     }
 
-    .adv-toast {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      background: var(--text-main);
-      color: var(--bg-surface);
-      padding: 0.75rem 1.1rem;
+    .segment-keep {
+      background: #C2410C;
+      height: 100%;
+      border-right: 1px solid rgba(255,255,255,0.3);
+      transition: width 0.2s ease;
+    }
+
+    .segment-cut {
+      background: repeating-linear-gradient(45deg, #E2DDD2, #E2DDD2 6px, #C8C1B2 6px, #C8C1B2 12px);
+      height: 100%;
+      border-right: 1px solid rgba(0,0,0,0.1);
+      transition: width 0.2s ease;
+    }
+
+    .options-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 600;
-      box-shadow: var(--shadow-lg);
-      z-index: 99999;
-      display: none;
-      max-width: 420px;
     }
 
+    .table-box {
+      max-height: 330px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      position: sticky;
+      top: 0;
+      font-weight: 700;
+    }
+
+    tr.clickable-row {
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    tr.clickable-row:hover {
+      background: var(--bg-elevated);
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.74rem;
+    }
+
+    .pill-keep { background: var(--status-ok-bg); color: var(--status-ok); }
+    .pill-cut { background: var(--status-err-bg); color: var(--status-err); }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; justify-items: center; }
+    }
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Cut Long Videos into 60-Second Vertical Reels</span>
-        <span class="purpose-tag">Project 15 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Automatically remove silent pauses and filler words, crop to 9:16 vertical around the speaker, and burn in highlighted captions.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
-  <div id="adv-toast-box" class="adv-toast"></div>
-
-  <div class="ambient-glow">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-  </div>
 
   <nav>
-    <div class="brand">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span>🎬 One-Minute Reel Cut</span>
-    </div>
-    <div style="display: flex; gap: 0.75rem;">
-      <button class="btn btn-red" onclick="renderReel()">🚀 Render Reel (0:58)</button>
+    <div class="brand">Cut Long Videos into 60-Second Vertical Reels</div>
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <label class="btn">
+        📁 Load Raw Video
+        <input type="file" accept="video/*" style="display:none;" onchange="handleVideoUpload(event)">
+      </label>
+      <button class="btn" id="btn-play-preview" onclick="togglePlayPreview()">▶ Play 60s Preview</button>
+      <button class="btn btn-primary" onclick="renderReel()">🎬 Render 9:16 Reel</button>
     </div>
   </nav>
 
   <main>
-    <!-- Left 9:16 Vertical Phone Reel Stage -->
+    <!-- Left 9:16 Vertical Phone Stage -->
     <div class="phone-stage">
-      <div class="notch-bar"></div>
-      <div class="reel-meta-tag">
-        <span>9:16 Vertical</span>
-        <span style="color: var(--status-ok); font-weight: bold;" id="timer-badge">0:58 / 1:00 OK!</span>
+      <div class="reel-top-row">
+        <span>9:16 Portrait</span>
+        <span style="color: #34D399; font-weight: 800;" id="timer-badge">0:58 / 1:00</span>
       </div>
 
-      <!-- Centered Face in Frame -->
-      <div class="avatar-face">
-        <div class="avatar-eyes"><div class="a-eye"></div><div class="a-eye"></div></div>
-        <div class="avatar-mouth"></div>
+      <div class="title-card-banner" id="title-card-el">
+        HOW TO CUT 60s REELS AUTOMATICALLY
       </div>
 
-      <!-- Burnt-in Captions with Active Highlight Word -->
+      <div class="speaker-frame">
+        <span class="crop-label">FACE IN FRAME (9:16)</span>
+        <div class="avatar-circle">
+          <div class="eyes-row"><div class="eye-dot"></div><div class="eye-dot"></div></div>
+          <div class="mouth-bar" id="speaker-mouth"></div>
+        </div>
+      </div>
+
       <div class="burnt-captions-box" id="captions-display">
-        AGENTS DO THE <span class="caption-highlight">WORK</span> WHILE YOU DIRECT!
+        STOP SPENDING <span class="caption-highlight">FOUR HOURS</span> EDITING A REEL!
       </div>
     </div>
 
-    <!-- Right Edit Plan & Transcript Inspector -->
+    <!-- Right Edit Plan & Interactive 20-Line Transcript -->
     <div class="edit-plan-panel">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;">
         <div>
-          <h2 style="font-size: 1.3rem; font-weight: 800;">Visual Edit Plan</h2>
-          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Raw Footage: raw-video.mp4 (5:12) → Output: 0:58</p>
+          <h2 style="font-size: 1.2rem; font-weight: 800;" id="video-source-label">Edit Plan: raw-video.mp4 (5:12) → <span id="out-dur-text">0:58</span></h2>
+          <p style="font-size: 0.82rem; color: var(--text-secondary);">Solid terracotta blocks stay. Striped blocks (silences, "umm"s, retakes) get cut.</p>
         </div>
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--status-ok);">
-          ✂️ 4m 14s Removed
-        </div>
-      </div>
-
-      <!-- Visual Striped Timeline (Red stays, Hatched gets cut) -->
-      <div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">
-          <span>0:00</span>
-          <span>Red stays. Hatched gets cut.</span>
-          <span>5:12</span>
-        </div>
-        <div class="timeline-strip">
-          <div class="segment-keep" style="width: 15%;"></div>
-          <div class="segment-cut" style="width: 10%;"></div>
-          <div class="segment-keep" style="width: 20%;"></div>
-          <div class="segment-cut" style="width: 25%;"></div>
-          <div class="segment-keep" style="width: 18%;"></div>
-          <div class="segment-cut" style="width: 12%;"></div>
+        <div style="font-size: 0.84rem; font-weight: 800; color: var(--status-ok);" id="saved-time-label">
+          ✂️ 6 Segments Cut · No Sentence Cut Off
         </div>
       </div>
 
-      <!-- List of Cuts -->
+      <!-- Visual Striped Timeline -->
       <div>
-        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">Automated Trims & Cuts:</div>
-        <div class="cut-items-list">
-          <div class="cut-item">
-            <span>⏱ 0:08 · "Umm, so basically, wait..."</span>
-            <span style="color: var(--status-err); font-weight: bold;">Cut 6s (Filler)</span>
-          </div>
-          <div class="cut-item">
-            <span>⏱ 0:17 · 8s Silence looking at notes</span>
-            <span style="color: var(--status-err); font-weight: bold;">Cut 8s (Silence)</span>
-          </div>
-          <div class="cut-item">
-            <span>⏱ 0:32 · "Uhh, like, you know"</span>
-            <span style="color: var(--status-err); font-weight: bold;">Cut 3s (Filler)</span>
-          </div>
-          <div class="cut-item">
-            <span>⏱ 0:58 · Repeated sentence and retake</span>
-            <span style="color: var(--status-err); font-weight: bold;">Cut 17s (Retake)</span>
-          </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+          <span>0:00 (Fade In 0.5s)</span>
+          <span>Click any transcript line below to change Keep / Cut</span>
+          <span>0:58 (Fade Out 0.5s)</span>
         </div>
+        <div class="timeline-strip" id="timeline-bar"></div>
       </div>
 
-      <!-- Hand Check 20 Lines Verification Table -->
+      <!-- Reel Settings -->
+      <div class="options-row">
+        <label style="display:flex; align-items:center; gap:0.35rem; cursor:pointer;">
+          <input type="checkbox" checked onchange="document.getElementById('title-card-el').style.visibility = this.checked ? 'visible' : 'hidden'">
+          Opening Title Card
+        </label>
+        <label style="display:flex; align-items:center; gap:0.35rem; cursor:pointer;">
+          <input type="checkbox" checked>
+          0.5s Audio Fade In/Out
+        </label>
+        <label style="display:flex; align-items:center; gap:0.35rem; cursor:pointer;">
+          <input type="checkbox" checked>
+          Auto-Center Face Crop (9:16)
+        </label>
+      </div>
+
+      <!-- 20-Line Transcript Table -->
       <div>
-        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">
-          Hand Check of 20 Lines (Done When Verification):
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.45rem;">
+          <span style="font-size: 0.84rem; font-weight: 800;">Transcript & Captions (20 Lines — Click any row to toggle Keep / Cut):</span>
+          <button class="btn" style="padding:0.2rem 0.6rem; font-size:0.75rem;" onclick="resetDefaultPlan()">Reset Default Cuts</button>
         </div>
         <div class="table-box">
           <table>
@@ -407,13 +359,11 @@
               <tr>
                 <th>#</th>
                 <th>Time</th>
-                <th>Transcript Text</th>
-                <th>Status</th>
+                <th>Spoken Line / Detected Pause</th>
+                <th>Action</th>
               </tr>
             </thead>
-            <tbody id="transcript-tbody">
-              <!-- Populated from sample-transcript.json -->
-            </tbody>
+            <tbody id="transcript-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -421,120 +371,136 @@
   </main>
 
   <script>
-    async function init() {
-      let lines = [];
-      try {
-        const resp = await fetch('sample-transcript.json');
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const data = await resp.json();
-        lines = data.verifiedLines;
-      } catch(e) {
-        lines = [
-          { line: 1, start: "0:00", end: "0:04", text: "Stop wasting 4 hours editing a single 60-second reel!", status: "Keep" },
-          { line: 2, start: "0:04", end: "0:08", text: "Here is how AI agents automate the entire cut.", status: "Keep" },
-          { line: 3, start: "0:08", end: "0:14", text: "[Umm, so basically... wait let me check notes]", status: "Cut (Filler)" },
-          { line: 4, start: "0:14", end: "0:17", text: "First, feed your raw MP4 into the silence detector.", status: "Keep" },
-          { line: 5, start: "0:17", end: "0:25", text: "[8 seconds dead air looking at screen]", status: "Cut (Silence)" },
-          { line: 6, start: "0:25", end: "0:32", text: "It strips every pause longer than 400 milliseconds.", status: "Keep" },
-          { line: 7, start: "0:32", end: "0:35", text: "[Uhh, like, you know]", status: "Cut (Filler)" },
-          { line: 8, start: "0:35", end: "0:42", text: "Second, lock the 9:16 portrait crop onto the speaker.", status: "Keep" },
-          { line: 9, start: "0:42", end: "0:50", text: "Third, burn in bold high-contrast word-by-word captions.", status: "Keep" },
-          { line: 10, start: "0:50", end: "0:58", text: "Agents do the work while you direct! Try it offline today.", status: "Keep" }
-        ];
-      }
+    const DEFAULT_LINES = [
+      { line: 1, start: "0:00", end: "0:03", dur: 3, text: "Stop spending four hours editing a single vertical reel!", status: "Keep" },
+      { line: 2, start: "0:03", end: "0:07", dur: 4, text: "Here is how automated timeline cutting works.", status: "Keep" },
+      { line: 3, start: "0:07", end: "0:13", dur: 6, text: "[Umm, so basically... wait let me check my notes]", status: "Cut (Filler)" },
+      { line: 4, start: "0:13", end: "0:17", dur: 4, text: "Step one: drop your raw MP4 into the silence detector.", status: "Keep" },
+      { line: 5, start: "0:17", end: "0:25", dur: 8, text: "[8 seconds dead air looking at camera]", status: "Cut (Silence)" },
+      { line: 6, start: "0:25", end: "0:30", dur: 5, text: "Every pause longer than 400 milliseconds gets marked.", status: "Keep" },
+      { line: 7, start: "0:30", end: "0:33", dur: 3, text: "[Uhh, like, you know what I mean]", status: "Cut (Filler)" },
+      { line: 8, start: "0:33", end: "0:38", dur: 5, text: "Step two: review the striped edit plan before cutting.", status: "Keep" },
+      { line: 9, start: "0:38", end: "0:43", dur: 5, text: "Red blocks stay in the reel and hatched blocks get cut.", status: "Keep" },
+      { line: 10, start: "0:43", end: "1:00", dur: 17, text: "[Repeated take: let me start that sentence over again]", status: "Cut (Retake)" },
+      { line: 11, start: "1:00", end: "1:05", dur: 5, text: "Step three: lock the 9:16 portrait crop onto your face.", status: "Keep" },
+      { line: 12, start: "1:05", end: "1:10", dur: 5, text: "Even if you move slightly, the speaker stays centered.", status: "Keep" },
+      { line: 13, start: "1:10", end: "1:15", dur: 5, text: "[5 seconds coughing and adjusting microphone]", status: "Cut (Silence)" },
+      { line: 14, start: "1:15", end: "1:20", dur: 5, text: "Step four: burn in bold captions with active word highlight.", status: "Keep" },
+      { line: 15, start: "1:20", end: "1:25", dur: 5, text: "Viewers watching on mute can follow every single word.", status: "Keep" },
+      { line: 16, start: "1:25", end: "1:29", dur: 4, text: "[Umm, wait, one more thing]", status: "Cut (Filler)" },
+      { line: 17, start: "1:29", end: "1:33", dur: 4, text: "Step five: add a 2-second opening title card.", status: "Keep" },
+      { line: 18, start: "1:33", end: "1:37", dur: 4, text: "Smooth audio fades prevent harsh clicks between cuts.", status: "Keep" },
+      { line: 19, start: "1:37", end: "1:41", dur: 4, text: "No sentence is ever cut off in the middle.", status: "Keep" },
+      { line: 20, start: "1:41", end: "1:45", dur: 4, text: "Click render reel and your 58-second vertical clip is ready!", status: "Keep" }
+    ];
+
+    let lines = JSON.parse(JSON.stringify(DEFAULT_LINES));
+    let playInterval = null;
+
+    function renderPlan() {
       const tbody = document.getElementById('transcript-tbody');
+      const timeline = document.getElementById('timeline-bar');
       tbody.innerHTML = '';
-      lines.forEach(l => {
+      timeline.innerHTML = '';
+
+      let keptSeconds = 0;
+      let cutCount = 0;
+      const totalDur = lines.reduce((acc, l) => acc + l.dur, 0);
+
+      lines.forEach((l, idx) => {
+        const isKeep = l.status === 'Keep';
+        if (isKeep) keptSeconds += l.dur;
+        else cutCount++;
+
+        const seg = document.createElement('div');
+        seg.className = isKeep ? 'segment-keep' : 'segment-cut';
+        seg.style.width = ((l.dur / totalDur) * 100).toFixed(2) + '%';
+        seg.title = `Line ${l.line} (${l.start}-${l.end}): ${l.status}`;
+        timeline.appendChild(seg);
+
         const tr = document.createElement('tr');
+        tr.className = 'clickable-row';
+        tr.onclick = () => {
+          l.status = isKeep ? 'Cut (Manual)' : 'Keep';
+          showCaptionOnPhone(l.text);
+          renderPlan();
+        };
         tr.innerHTML = `
           <td>${l.line}</td>
-          <td>${l.start}-${l.end}</td>
+          <td style="font-family:monospace;">${l.start}–${l.end}</td>
           <td>${l.text}</td>
-          <td><strong style="color:${l.status === 'Keep' ? 'var(--status-ok)' : 'var(--status-err)'}">${l.status}</strong></td>
+          <td><span class="status-pill ${isKeep ? 'pill-keep' : 'pill-cut'}">${l.status}</span></td>
         `;
         tbody.appendChild(tr);
       });
+
+      const fmt = `0:${keptSeconds < 10 ? '0' + keptSeconds : keptSeconds}`;
+      document.getElementById('timer-badge').textContent = `${fmt} / 1:00 ${keptSeconds <= 60 ? '✓' : '⚠️ Over 60s'}`;
+      document.getElementById('out-dur-text').textContent = fmt;
+      document.getElementById('saved-time-label').textContent = `✂️ ${cutCount} Segments Cut · Final Length: ${keptSeconds}s`;
+    }
+
+    function showCaptionOnPhone(text) {
+      const words = text.replace(/[\[\]]/g, '').toUpperCase().split(' ');
+      if (words.length > 2) {
+        const hi = Math.floor(words.length / 2);
+        words[hi] = `<span class="caption-highlight">${words[hi]}</span>`;
+      }
+      document.getElementById('captions-display').innerHTML = words.join(' ');
+    }
+
+    function togglePlayPreview() {
+      const btn = document.getElementById('btn-play-preview');
+      const mouth = document.getElementById('speaker-mouth');
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+        mouth.classList.remove('talking');
+        btn.textContent = '▶ Play 60s Preview';
+        return;
+      }
+      const kept = lines.filter(l => l.status === 'Keep');
+      let i = 0;
+      btn.textContent = '⏹ Stop Preview';
+      showCaptionOnPhone(kept[0].text);
+      mouth.classList.toggle('talking');
+      playInterval = setInterval(() => {
+        i = (i + 1) % kept.length;
+        showCaptionOnPhone(kept[i].text);
+        mouth.classList.toggle('talking');
+      }, 900);
+    }
+
+    function resetDefaultPlan() {
+      lines = JSON.parse(JSON.stringify(DEFAULT_LINES));
+      renderPlan();
+    }
+
+    function handleVideoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('video-source-label').innerHTML = `Edit Plan: ${file.name} → <span id="out-dur-text">0:58</span>`;
+      renderPlan();
     }
 
     function renderReel() {
-      alert("Render Completed!\n\nOutput: output-reel-60s.mp4\nDuration: 0:58 (Strictly under 60 seconds)\nAspect Ratio: 9:16 Portrait\nCaptions: Burnt-in with active word highlight\nFades: 0.5s audio and video fade-in/fade-out applied.");
+      const keptSeconds = lines.filter(l => l.status === 'Keep').reduce((a, b) => a + b.dur, 0);
+      const report = {
+        outputFile: "output-reel-vertical.mp4",
+        aspectRatio: "9:16 (1080x1920)",
+        durationSeconds: keptSeconds,
+        under60Seconds: keptSeconds <= 60,
+        audioFades: "0.5s in / 0.5s out",
+        keptLines: lines.filter(l => l.status === 'Keep').map(l => l.text)
+      };
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'reel-render-plan.json';
+      a.click();
     }
 
-    init();
+    renderPlan();
   </script>
-
-  <script>
-    (function() {
-      function showAdvToast(msg) {
-        const box = document.getElementById('adv-toast-box');
-        if (!box) return;
-        box.textContent = msg;
-        box.style.display = 'block';
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4000);
-      }
-
-      window.__filterProjectControls = function(query) {
-        const q = (query || '').toLowerCase().trim();
-        const els = document.querySelectorAll('button, .tool-btn, .card, .kanban-card, .cut-item, tr');
-        els.forEach(el => {
-          if (el.closest('#studio-security-ribbon') || el.closest('.project-purpose-banner') || el.closest('#studio-sec-modal')) return;
-          if (!q) {
-            el.style.outline = '';
-            el.style.opacity = '';
-          } else if (el.innerText.toLowerCase().includes(q)) {
-            el.style.outline = '2px solid var(--accent-primary)';
-            el.style.opacity = '1';
-          } else {
-            el.style.outline = '';
-          }
-        });
-      };
-
-      window.__verifyProjectHash = async function() {
-        const payload = document.title + '|' + document.body.innerText.slice(0, 500) + '|' + Object.keys(localStorage).join(',');
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'verified-sha256-offline';
-        if (window.StudioSecurity) {
-          window.StudioSecurity.logAuditEvent('SHA-256 Integrity Verified', 'Hash: ' + hash.slice(0, 16) + '...');
-        }
-        showAdvToast('✓ SHA-256 Integrity Verified: ' + hash.slice(0, 24) + '...');
-      };
-
-      window.__exportAuditReport = async function() {
-        const payload = document.body.innerText.slice(0, 1000);
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'offline-hash';
-        const report = {
-          project: "project-15-one-minute-reel-cut",
-          whatItDoes: "Cut Long Videos into 60-Second Vertical Reels",
-          verifiedAt: new Date().toISOString(),
-          palette: document.documentElement.getAttribute('data-palette'),
-          sha256Integrity: hash,
-          securityChecks: {
-            cspActive: true,
-            xssSanitizerActive: true,
-            pinAuthReady: true,
-            offlineCapable: true
-          }
-        };
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'project-15-one-minute-reel-cut-security-audit.json';
-        a.click();
-        showAdvToast('✓ Exported signed security & state report JSON');
-      };
-
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key.toLowerCase() === 'h') {
-          e.preventDefault();
-          window.__verifyProjectHash();
-        } else if (e.altKey && e.key.toLowerCase() === 's' && window.StudioSecurity) {
-          e.preventDefault();
-          window.StudioSecurity.openSecurityAuditModal();
-        }
-      });
-    })();
-  </script>
-
 </body>
 </html>

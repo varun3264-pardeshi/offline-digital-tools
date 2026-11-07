@@ -1,55 +1,48 @@
-# GenAI Internship Week 2 - Master Project Roadmap
-**Institution:** Bharat Space Education Research Centre  
-**Instructor:** Karan Bagul  
-**Mandate:** Build projects with offline-first capabilities, strict prompt tracking (`prompts.md`), and premium liquid design animations.
+# Everyday Digital Toolkit — 17-Tool Master Roadmap
+**Goal:** Build 17 self-contained, offline-capable tools across documents, exam photos, billing, browser productivity, video editing, and web design.
 
 ---
 
-## Strict Rules Checklist (Enforced on EVERY Project)
+## Core Quality Standards (Enforced on Every Tool)
 - [x] **Strict Offline Execution**: 100% works with Wi-Fi disconnected. No external CDN dependencies that fail offline; all core scripts/styles inlined or local.
-- [x] **Prompt Logging**: Every project MUST contain a chronological `prompts.md` documenting agent prompts.
-- [x] **Sample/Harmless Data**: Every project comes with ready-to-test sample data or mock files.
-- [x] **UI & Animation Standards**: Liquid glassmorphism, dynamic fluid mesh glows, smooth spring transitions, clear readable labels.
-- [x] **Done When Verification**: Every item in the official PDF "Done when" list must be tested and verified before marking complete.
+- [x] **Prompt Logging**: Every tool folder contains a chronological `prompts.md` documenting prompts.
+- [x] **Sample/Harmless Data**: Every tool comes with ready-to-use sample data or mock files.
+- [x] **Multi-Color Studio UI**: Warm ivory/sand/terracotta/emerald/coral/amber/mulberry/espresso palettes with simple, readable functional headings.
+- [x] **Feature Completeness**: Every feature in the 19-page specification is built and verified.
 
 ---
 
 ## Roadmap Phases
 
-### Phase 0: Master Hub & Architecture Setup
-- [x] Create Master Liquid Hub (`index.html`) connecting all 17 projects with live status & liquid animation.
+### Phase 0: Master Toolkit Hub & Architecture Setup
+- [x] Create Master Hub (`index.html`) connecting all 17 tools (`Tool 01` – `Tool 17`).
 
 ### Phase 1: Section A - Web Tools
-- [x] **Project 01: PDF Studio** (29 Tools: Organise, Edit, Stamp, Convert, Finish)
-- [x] **Project 02: Form Photo Fixer** (Photo/Sign resize, 3 form presets, face guide, KB compression)
-- [x] **Project 03: Resume Builder** (Live A4 preview, 3 distinct themes, drag-drop sections, PDF export, JSON save/load)
-- [x] **Project 04: CBT Mock Test Engine** (NTA/JEE style, timer persistence across refresh, question palette, negative marking, results)
-- [x] **Project 05: Scribbly Notes** (Typed to handwriting, 3 font styles, line natural variation, multi-page split)
+- [x] **Tool 01: PDF Studio** (Organise, Edit, Stamp, Convert + OCR, Finish)
+- [x] **Tool 02: Form Photo Fixer** (Photo/Sign resize, UPSC/SSC/IBPS/NTA presets, face guide, KB compression)
+- [x] **Tool 03: Resume Builder** (Live A4 preview, 3 distinct themes, reorderable sections, PDF export, JSON save/load)
+- [x] **Tool 04: CBT Mock Test Engine** (Timer persistence across refresh, question palette, negative marking, results)
+- [x] **Tool 05: Scribbly Notes** (Typed to handwriting, 3 font styles, natural line variation, multi-page split)
 
 ### Phase 2: Section B - Phone Apps and Games
-- [x] **Project 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline web/app PWA)
-- [x] **Project 07: Bill Book** (Shop ledger, item catalog, dynamic UPI QR generator, WhatsApp image receipt, flight mode ready)
-- [x] **Project 08: Auto Rally** (60FPS Canvas Auto-rickshaw racer, 3 laps, obstacles, coins, best time persistence, audio synth)
+- [x] **Tool 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline PWA)
+- [x] **Tool 07: Bill Book** (Shop ledger, item catalog, dynamic UPI QR generator, WhatsApp image receipt, flight mode ready)
+- [x] **Tool 08: Auto Rally** (60FPS Canvas Auto-rickshaw racer, 3 laps, obstacles, coins, best time persistence, audio synth)
 
 ### Phase 3: Section C - Chrome Extensions
-- [x] **Project 09: YouTube Focus Board** (Shorts/comments blocker, study queue, timestamped notes, 60-min focus gate)
-- [x] **Project 10: Job Clipper** (1-click job scraper, editable fields, 4-stage Kanban board, deadline alerts, CSV export)
-- [x] **Project 11: Circle to Fix** (Canvas screen markup, element DOM/CSS inspector, bug prompt generator with screenshot)
-- [x] **Project 12: Chat Saver** (Multi-platform AI chat exporter, clean Markdown & PDF formatting, code blocks & tables preserved)
-- [x] **Project 13: Style Spy** (Color ranking & usage analyzer, typography inspector, 1-click CSS variable kit generator)
-- [x] **Project 14: Tab Goblin** (Animated tab devourer, tab age ranking, memory discarder, session save/restore)
+- [x] **Tool 09: YouTube Focus Board** (Shorts/comments blocker, study queue, timestamped notes, 60-min focus gate)
+- [x] **Tool 10: Job Clipper** (1-click job scraper, editable fields, 4-stage Kanban board, deadline alerts, CSV export)
+- [x] **Tool 11: Circle to Fix** (Canvas screen markup, element DOM/CSS inspector, live Before/After page fix toggle, bug prompt generator)
+- [x] **Tool 12: Chat Saver** (Multi-platform AI chat exporter for ChatGPT/Claude/Gemini, clean Markdown & PDF formatting, code blocks & tables preserved)
+- [x] **Tool 13: Style Spy** (Color ranking & usage analyzer, typography inspector, 1-click CSS variable kit generator)
+- [x] **Tool 14: Tab Goblin** (Animated tab devourer, tab age ranking, memory discarder, session save/restore)
 
 ### Phase 4: Section D - Video, Skills and Design
-- [x] **Project 15: One-Minute Reel Cut** (Raw footage analysis, silence/filler cutter, 9:16 portrait cropper, subtitles generator)
-- [x] **Project 16: Your Own Skill (`/viva`)** (Interactive AI viva examiner skill, scoring engine, syllabus reference recommender)
-- [x] **Project 17: Same Page, New Design** (Before vs After side-by-side showcase, identical copy, high-fidelity makeover)
+- [x] **Tool 15: One-Minute Reel Cut** (Interactive 20-line transcript editor, live 60s preview player, silence/filler cutter, 9:16 portrait cropper, subtitles generator)
+- [x] **Tool 16: Your Own Skill (`/viva`)** (Interactive AI viva examiner skill, custom notes input, With vs Without Skill mode toggle, scoring engine)
+- [x] **Tool 17: Same Page, New Design** (Before vs After side-by-side showcase, Desktop vs 375px Mobile toggle, identical word-for-word copy)
 
-### Phase 5: Complete Multi-Color UI/UX Overhaul, Simple Headings, Advanced Features & Security/Auth Assurance
-- [x] **Master Hub (`index.html`)**: Redesign with warm editorial ivory/sand/terracotta/emerald/coral/amber multi-color palette (zero generic dark-blue vibe-coding look), simple action-oriented headings showing what each project does, global Security & Authentication center (SHA-256 PIN lock, user role switcher, session audit log), and live search/palette switcher.
-- [x] **Shared Security & Auth Engine (`assets/security-auth.js` + `assets/studio-ui.css`)**: Offline-first authentication lock (PIN/Passcode hash via Web Crypto SHA-256, Role-based access, Session lock/unlock, XSS sanitizer, File SHA-256 integrity hash, Activity Audit Log, and Multi-Palette Theme Engine with 6 non-blue curated palettes: Terracotta Studio, Emerald Paper, Sunset Coral, Amber Gold, Plum Editorial, and Crisp Charcoal).
-- [x] **Upgrade All 17 Projects**:
-  - Replace dark-blue/cyan "vibe-coding" look with bespoke, colorful, human-crafted product UIs (unique color palette per project + live palette switcher).
-  - Change every project heading & subtitle to simple, direct language explaining **what the project actually does**.
-  - Add advanced interactive features (keyboard shortcuts, live search, undo/redo, batch actions, real file checksums, security & auth toolbar widget) to all 17 projects.
-  - Update `prompts.md` in each project folder with Phase 5 UI/Security upgrade prompts.
-- [x] **Automated Security, Auth & Functional Verification (`verify_suite.py`)**: Run comprehensive automated checks on all 17 projects (zero dark-blue clichés, CSP headers, XSS sanitization, Auth integration, functional "Done when" checks).
+### Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth
+- [x] **Master Hub (`index.html`)**: Clean professional heading (`Everyday Digital Toolkit`), `Tool 01`–`Tool 17` labels, multi-color palette switcher, and Security & Authentication center.
+- [x] **Shared Security & Auth Engine (`assets/security-auth.js` + `assets/studio-ui.css`)**: SHA-256 PIN lock, Role-based access, XSS sanitizer, Signed Audit JSON export, and 6 non-blue color palettes.
+- [x] **Clean Polish & Zero Institution Branding**: Removed all institution/course names, removed redundant theory banners, replaced test-harness button labels with clean user-friendly sample loaders, and verified 100% via `verify_suite.py`.

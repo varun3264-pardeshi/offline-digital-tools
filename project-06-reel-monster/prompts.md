@@ -1,6 +1,4 @@
 # Prompts Log - Project 06: Reel Monster
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 6 (Section B: Phone Apps and Games) - Reel Monster (Level 1 & Level 2)
 
 ---

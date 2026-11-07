@@ -1,459 +1,485 @@
 <!DOCTYPE html>
-<html lang="en" data-palette="emerald">
+<html lang="en" data-palette="mulberry" data-theme-mode="light">
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
-  <link rel="stylesheet" href="../assets/studio-ui.css" />
-  <script src="../assets/security-auth.js" defer></script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Save AI Chats as Clean PDF or Markdown (Project 12)</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self' data: blob:;">
+  <title>Save AI Chats as Clean PDF or Markdown — Chat Saver</title>
+  <link rel="stylesheet" href="../assets/studio-ui.css">
+  <script src="../assets/security-auth.js" defer></script>
   <style>
-    :root {
-      --bg: var(--bg-surface);
-      --card-bg: var(--bg-surface);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: var(--accent-primary);
-      --accent-emerald: var(--status-ok);
-      --text: var(--text-main);
-      --text-muted: var(--text-secondary);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-canvas);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Ambient Liquid Mesh Glow */
-    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
-    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
-    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, var(--accent-primary), var(--accent-primary)); top: -15%; left: 10%; }
-    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #9b51e0, #e056fd); bottom: -15%; right: 10%; }
-
-    /* Top Nav */
     nav {
-      position: relative; z-index: 10;
-      background: var(--bg-surface); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.75rem;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
     .brand {
-      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
     .btn {
-      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
-      background: var(--bg-elevated); color: #fff; transition: all 0.2s ease;
+      padding: 0.48rem 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
     }
-    .btn:hover { background: var(--bg-muted); transform: translateY(-1px); }
-    .btn-primary { background: linear-gradient(135deg, var(--accent-primary), #0088ff); border: none; font-weight: 700; color: var(--bg-surface); }
 
-    /* Main Container */
+    .btn:hover, .btn.active {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary-soft);
+      color: var(--accent-primary);
+    }
+
+    .btn-primary {
+      background: var(--accent-primary) !important;
+      color: #ffffff !important;
+      border-color: var(--accent-primary) !important;
+    }
+
     main {
-      position: relative; z-index: 2; flex: 1; max-width: 1200px; margin: 1.5rem auto 3rem; padding: 0 1rem;
-      width: 100%; display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem;
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 370px;
+      gap: 1.5rem;
     }
 
-    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) {
+      main { grid-template-columns: 1fr; }
+    }
 
-    /* Simulated AI Chat Stage */
     .chat-stage {
-      background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 20px;
-      overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-      max-height: 800px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
     .chat-header {
-      background: var(--bg-surface); padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--card-border);
-      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.25rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
 
     .chat-messages-container {
-      flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-height: 640px;
+      overflow-y: auto;
     }
 
     .msg-bubble {
-      display: flex; gap: 1rem; padding: 1rem; border-radius: 12px;
-      background: var(--bg-elevated); border: 1px solid var(--card-border);
-      position: relative;
+      padding: 1rem 1.15rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      background: var(--bg-surface);
+      transition: border-color 0.15s ease;
     }
 
-    .msg-bubble.user { background: var(--accent-primary-soft); border-color: var(--accent-primary-soft); }
-    .msg-bubble.assistant { background: var(--bg-elevated); }
+    .msg-bubble.assistant {
+      background: var(--bg-canvas);
+      border-left: 4px solid var(--accent-primary);
+    }
 
     .avatar-pill {
-      width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem; font-weight: 800; flex-shrink: 0;
-    }
-    .user .avatar-pill { background: var(--accent-primary); color: var(--bg-surface); }
-    .assistant .avatar-pill { background: #10b981; color: #fff; }
-
-    .msg-body { flex: 1; font-size: 0.92rem; line-height: 1.6; }
-
-    /* Code Blocks */
-    pre {
-      background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px;
-      padding: 0.8rem 1rem; font-family: monospace; font-size: 0.82rem; overflow-x: auto;
-      margin: 0.8rem 0; color: #7dd3fc;
-    }
-
-    /* Tables */
-    table {
-      width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.85rem;
-    }
-    th, td {
-      border: 1px solid var(--border-color); padding: 0.5rem 0.75rem; text-align: left;
-    }
-    th { background: var(--bg-elevated); font-weight: 700; color: #fff; }
-
-    /* Right Exporter Tool Panel */
-    .exporter-panel {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
-      padding: 1.5rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.25rem;
-    }
-
-    .stats-card {
-      background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 12px;
-      padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;
-    }
-
-    /* Print Styles */
-    @media print {
-      body * { visibility: hidden; }
-      .chat-messages-container, .chat-messages-container * { visibility: visible; }
-      .chat-messages-container {
-        position: absolute; left: 0; top: 0; padding: 0; margin: 0; background: #fff; color: #000;
-        max-height: none; overflow: visible;
-      }
-      .msg-bubble { background: none !important; border-bottom: 1px solid #ccc !important; color: #000 !important; }
-      pre { background: #f1f5f9 !important; color: #0f172a !important; border: 1px solid var(--text-main) !important; }
-      th, td { border: 1px solid var(--text-secondary) !important; color: #000 !important; }
-      th { background: var(--text-main) !important; }
-    }
-  
-    /* === MULTI-COLOR HUMAN-CRAFTED STUDIO OVERRIDES (NO BLUE VIBE-CODING) === */
-    :root {
-      --bg: var(--bg-canvas) !important;
-      --bg-dark: var(--bg-canvas) !important;
-      --panel-bg: var(--bg-surface) !important;
-      --card-bg: var(--bg-surface) !important;
-      --card-border: var(--border-color) !important;
-      --accent: var(--accent-primary) !important;
-      --accent-cyan: var(--accent-primary) !important;
-      --accent-blue: var(--accent-secondary) !important;
-      --accent-purple: var(--accent-plum, #7E22CE) !important;
-      --accent-emerald: var(--status-ok, #15803D) !important;
-      --accent-rose: var(--status-err, #B91C1C) !important;
-      --text: var(--text-main) !important;
-      --text-muted: var(--text-secondary) !important;
-    }
-
-    body {
-      background: var(--bg-canvas) !important;
-      color: var(--text-main) !important;
-    }
-
-    .ambient-glow, .liquid-mesh, .glow-blob, .blob {
-      display: none !important;
-    }
-
-    header, nav, .top-bar, .app-header {
-      background: var(--bg-surface) !important;
-      border-bottom: 2px solid var(--border-color) !important;
-      backdrop-filter: none !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .brand-title, .logo-badge {
-      background: none !important;
-      -webkit-text-fill-color: var(--text-main) !important;
-      color: var(--text-main) !important;
-      font-weight: 800 !important;
-    }
-
-    .panel, .card, .editor-card, .tool-group, .sidebar, .right-panel, .left-panel,
-    .scorecard, .modal-card, .kanban-col, .extension-panel, .chat-panel, .inspector-card {
-      background: var(--bg-surface) !important;
-      border-color: var(--border-color) !important;
-      color: var(--text-main) !important;
-      box-shadow: var(--shadow-sm) !important;
-    }
-
-    .btn, .tool-btn, .tab-btn, .sub-btn, .toggle-btn, .action-btn {
-      background: var(--bg-elevated) !important;
-      color: var(--text-main) !important;
-      border: 1px solid var(--border-strong) !important;
-    }
-
-    .btn:hover, .tool-btn:hover, .tab-btn:hover, .sub-btn:hover {
-      border-color: var(--accent-primary) !important;
-      color: var(--accent-primary) !important;
-    }
-
-    .btn-primary, .tab-btn.active, .sub-btn.active, .toggle-btn.active, .tool-btn.active {
-      background: var(--accent-primary) !important;
-      color: #FFFFFF !important;
-      border-color: var(--accent-primary) !important;
-      box-shadow: none !important;
-    }
-
-    input, select, textarea, .text-input, .select-input, .textarea-input, .input-text {
-      background: var(--bg-surface) !important;
-      color: var(--text-main) !important;
-      border: 1.5px solid var(--border-strong) !important;
-    }
-
-    /* Simple Action Banner & Advanced Feature Strip */
-    .project-purpose-banner {
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.5rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 20;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+      flex-shrink: 0;
     }
 
-    .purpose-left {
+    .user .avatar-pill { background: var(--accent-secondary-soft); color: var(--accent-secondary); }
+    .assistant .avatar-pill { background: var(--accent-primary); color: #ffffff; }
+
+    .msg-body {
+      flex: 1;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--text-main);
+      overflow-x: auto;
+    }
+
+    .msg-body pre {
+      background: #181512;
+      color: #F9F6F0;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      margin: 0.65rem 0;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .msg-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.65rem 0;
+      font-size: 0.8rem;
+    }
+
+    .msg-body th, .msg-body td {
+      border: 1px solid var(--border-strong);
+      padding: 0.45rem 0.65rem;
+      text-align: left;
+    }
+
+    .msg-body th {
+      background: var(--bg-elevated);
+      font-weight: 700;
+    }
+
+    .exporter-panel {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 1.15rem;
     }
 
-    .purpose-heading {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text-main);
+    .panel-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
       display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
     }
 
-    .purpose-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 5px;
-      background: var(--accent-primary-soft);
-      color: var(--accent-primary);
-      border: 1px solid currentColor;
-    }
-
-    .purpose-sub {
-      font-size: 0.86rem;
-      color: var(--text-secondary);
-    }
-
-    .purpose-tools {
+    .stat-row {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed var(--border-color);
     }
 
-    .adv-search-input {
-      padding: 0.38rem 0.7rem;
-      border-radius: 6px;
-      border: 1px solid var(--border-strong);
-      font-size: 0.8rem;
-      background: var(--bg-canvas);
-      color: var(--text-main);
-      width: 190px;
-    }
+    .stat-row:last-child { border-bottom: none; }
 
-    .adv-toast {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
-      background: var(--text-main);
-      color: var(--bg-surface);
-      padding: 0.75rem 1.1rem;
+    .input-field {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
       border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      box-shadow: var(--shadow-lg);
-      z-index: 99999;
-      display: none;
-      max-width: 420px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 0.84rem;
     }
 
+    @media print {
+      nav, .exporter-panel, #studio-security-ribbon, .msg-chk, .select-btns {
+        display: none !important;
+      }
+      main {
+        display: block;
+        padding: 0;
+      }
+      .chat-messages-container {
+        max-height: none;
+        overflow: visible;
+      }
+      .msg-bubble.unselected {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Save AI Chats as Clean PDF or Markdown</span>
-        <span class="purpose-tag">Project 12 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Select specific messages from ChatGPT, Claude, or Gemini conversations and export them cleanly with code blocks and tables preserved.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
-  <div id="adv-toast-box" class="adv-toast"></div>
-
-  <div class="ambient-glow">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-  </div>
 
   <nav>
     <div class="brand">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span>💬 Chat Saver Studio</span>
+      <span>💬 Save AI Chats as Clean PDF or Markdown</span>
     </div>
-    <div style="display: flex; gap: 0.75rem;">
-      <button class="btn" onclick="load50MessagesChat()">⚡ Load 50+ Messages Thread</button>
+    <div style="display: flex; gap: 0.55rem; flex-wrap: wrap;">
+      <button class="btn active" id="btn-chatgpt" onclick="loadThread('chatgpt', this)">💬 ChatGPT Thread</button>
+      <button class="btn" id="btn-claude" onclick="loadThread('claude', this)">🤖 Claude Thread</button>
+      <button class="btn" id="btn-gemini" onclick="loadThread('gemini', this)">✨ Gemini Thread</button>
       <button class="btn btn-primary" onclick="exportMarkdown()">📝 Export Markdown (.md)</button>
       <button class="btn" onclick="exportPdf()">📄 Export PDF</button>
     </div>
   </nav>
 
   <main>
-    <!-- Left Simulated Chat Area -->
+    <!-- Left Chat Area -->
     <div class="chat-stage">
       <div class="chat-header">
         <div>
-          <span style="font-size: 0.75rem; color: var(--accent); text-transform: uppercase; font-weight: 700;" id="chat-platform-label">Platform: ChatGPT / Claude Simulation</span>
-          <div style="font-size: 1.15rem; font-weight: 800; color: #fff;" id="chat-title-text">Explain_RAG_Architectures_Deeply</div>
+          <span style="font-size: 0.75rem; color: var(--accent-primary); text-transform: uppercase; font-weight: 800;" id="chat-platform-label">Platform: ChatGPT</span>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);" id="chat-title-text">Explain_RAG_Architectures_Deeply</div>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
-          <button class="btn" style="font-size: 0.75rem;" onclick="selectAll(true)">Select All</button>
-          <button class="btn" style="font-size: 0.75rem;" onclick="selectAll(false)">Deselect</button>
+        <div class="select-btns" style="display: flex; gap: 0.5rem;">
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(true)">☑ Select All</button>
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(false)">☐ Deselect All</button>
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAssistantOnly()">🤖 AI Answers Only</button>
         </div>
       </div>
 
-      <div class="chat-messages-container" id="chat-messages-box">
-        <!-- Rendered dynamically -->
-      </div>
+      <div class="chat-messages-container" id="chat-messages-box"></div>
     </div>
 
     <!-- Right Control Panel -->
     <div class="exporter-panel">
-      <div>
-        <h2 style="font-size: 1.25rem; font-weight: 800;">Export Settings</h2>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Preserves code formatting & tables</p>
+      <div class="panel-card">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 800;">Export Summary</h2>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem;">Preserves code blocks, lists & Markdown tables</p>
+        </div>
+
+        <div>
+          <div class="stat-row">
+            <span style="color: var(--text-secondary);">Messages in Thread:</span>
+            <strong id="stat-total-msgs">6</strong>
+          </div>
+          <div class="stat-row">
+            <span style="color: var(--text-secondary);">Selected for Export:</span>
+            <strong style="color: var(--accent-primary);" id="stat-selected-msgs">6</strong>
+          </div>
+          <div class="stat-row">
+            <span style="color: var(--text-secondary);">Code Blocks Detected:</span>
+            <strong style="color: var(--status-ok);" id="stat-code-count">3</strong>
+          </div>
+          <div class="stat-row">
+            <span style="color: var(--text-secondary);">Comparison Tables:</span>
+            <strong id="stat-table-count">2</strong>
+          </div>
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+          <strong>Auto-Generated Filename:</strong><br>
+          <code style="color: var(--accent-primary); font-weight: 700;" id="preview-filename">Explain_RAG_Architectures_Deeply.md</code>
+        </div>
+
+        <button class="btn btn-primary" style="justify-content: center; padding: 0.7rem;" onclick="exportMarkdown()">
+          📝 Download Markdown (.md)
+        </button>
+        <button class="btn" style="justify-content: center; padding: 0.7rem;" onclick="exportPdf()">
+          📄 Print / Save Clean PDF
+        </button>
       </div>
 
-      <div class="stats-card">
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);">Messages Detected:</span>
-          <strong id="stat-total-msgs">50</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);">Selected for Export:</span>
-          <strong style="color: var(--accent-primary);" id="stat-selected-msgs">50</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);">Code Blocks:</span>
-          <strong style="color: var(--status-ok);">6</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);">Data Tables:</span>
-          <strong style="color: #f6d365;">3</strong>
-        </div>
+      <div class="panel-card">
+        <div style="font-size: 0.95rem; font-weight: 800;">+ Add Custom Message to Thread</div>
+        <select id="new-msg-role" class="input-field">
+          <option value="User">User Question</option>
+          <option value="Assistant">AI Assistant Reply</option>
+        </select>
+        <textarea id="new-msg-text" class="input-field" style="min-height: 85px; resize: vertical;" placeholder="Paste any prompt, code block, or response to append..."></textarea>
+        <button class="btn" style="justify-content: center;" onclick="appendCustomMessage()">➕ Append to Conversation</button>
       </div>
-
-      <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
-        <strong style="color: #fff;">Automatic File Naming:</strong><br>
-        Export will generate: <code style="color: var(--accent-primary);" id="preview-filename">Explain_RAG_Architectures_Deeply.md</code>
-      </div>
-
-      <button class="btn btn-primary" style="justify-content: center; padding: 0.75rem;" onclick="exportMarkdown()">
-        📝 Export Selected to Markdown
-      </button>
-      <button class="btn" style="justify-content: center; padding: 0.75rem;" onclick="exportPdf()">
-        📄 Print / Export Clean PDF
-      </button>
     </div>
   </main>
 
   <script>
-    let chatTitle = "Explain_RAG_Architectures_Deeply";
-    let messages = [];
-
-    // Pre-generate a full 50-message technical conversation with code and tables
-    function generate50Messages() {
-      const msgs = [];
-      msgs.push({
-        role: "User",
-        text: "Can you explain Retrieval-Augmented Generation (RAG) simply and provide a complete working Python implementation with comparison tables?"
-      });
-      msgs.push({
-        role: "Assistant",
-        text: "Retrieval-Augmented Generation (RAG) is a technique that combines an external document retriever with an LLM generator.\n\nHere is a complete, runnable Python retrieval pipeline:\n\n```python\ndef retrieve(query, top_k=3):\n    # Dense cosine similarity retrieval\n    query_embedding = embed_model.encode(query)\n    scores = vector_store.similarity_search(query_embedding, k=top_k)\n    return [doc.page_content for doc in scores]\n\n# Execute retrieval\ncontext = retrieve('Carnot cycle thermodynamics')\nprint(f'Retrieved {len(context)} documents successfully.')\n```\n\n### RAG vs Fine-Tuning Comparison Table:\n\n| Feature | RAG Pipeline | Fine-Tuned Model |\n| :--- | :--- | :--- |\n| Knowledge Freshness | Real-time dynamic updates | Static at training cut-off |\n| Hallucination Risk | Minimal (grounded in citations) | Moderate to High |\n| Setup Cost | Low (vector DB + embeddings) | High (GPU compute required) |"
-      });
-
-      // Populate 48 more back-and-forth turns to satisfy the 50+ message requirement
-      for (let i = 3; i <= 50; i++) {
-        if (i % 2 !== 0) {
-          msgs.push({
+    const THREADS = {
+      chatgpt: {
+        platform: "Platform: ChatGPT (GPT-4o)",
+        title: "Explain_RAG_Architectures_Deeply",
+        messages: [
+          {
             role: "User",
-            text: `Follow-up question ${Math.ceil(i/2)}: What about chunking strategy optimization for query token ${i}?`
-          });
-        } else {
-          msgs.push({
+            text: "Can you explain Retrieval-Augmented Generation (RAG) simply and provide a Python implementation with a comparison table?"
+          },
+          {
             role: "Assistant",
-            text: `Detailed answer ${i/2}: Chunking with a 512-token sliding window and 10% overlap preserves semantic coherence.\n\n\`\`\`python\n# Step ${i/2} Chunk Validator\nassert chunk_size <= 512, 'Chunk size exceeds limit'\nprint('Valid chunk generated.')\n\`\`\``
-          });
-        }
+            text: "Retrieval-Augmented Generation (RAG) grounds an LLM on your own verified documents before generating an answer.\n\n```python\ndef retrieve_context(query: str, vector_db, top_k: int = 3):\n    query_vec = embedder.encode(query)\n    matches = vector_db.search(query_vec, k=top_k)\n    return \"\\n---\\n\".join([m.text for m in matches])\n```\n\n| Approach | Freshness | Hallucination Risk | Cost |\n| :--- | :--- | :--- | :--- |\n| RAG Pipeline | Real-time updates | Very Low (Cited) | Low |\n| Fine-Tuning | Static cutoff | Moderate | High |"
+          },
+          {
+            role: "User",
+            text: "What chunk size and overlap should I use for technical PDFs?"
+          },
+          {
+            role: "Assistant",
+            text: "For technical manuals and lecture PDFs, a **400 to 512 token chunk** with a **10–15% sliding window overlap** preserves paragraph context and prevents formulas from splitting mid-sentence.\n\n```python\nfrom langchain.text_splitter import RecursiveCharacterTextSplitter\n\nsplitter = RecursiveCharacterTextSplitter(\n    chunk_size=500,\n    chunk_overlap=60,\n    separators=[\"\\n\\n\", \"\\n\", \". \", \" \"]\n)\nchunks = splitter.split_text(raw_pdf_text)\n```"
+          },
+          {
+            role: "User",
+            text: "How do I combine keyword search (BM25) with vector search?"
+          },
+          {
+            role: "Assistant",
+            text: "Hybrid Search combines exact keyword matching (BM25) with semantic embeddings using **Reciprocal Rank Fusion (RRF)**:\n\n```python\ndef reciprocal_rank_fusion(bm25_ranks, dense_ranks, k=60):\n    scores = {}\n    for doc_id, rank in bm25_ranks.items():\n        scores[doc_id] = scores.get(doc_id, 0.0) + 1.0 / (k + rank)\n    for doc_id, rank in dense_ranks.items():\n        scores[doc_id] = scores.get(doc_id, 0.0) + 1.0 / (k + rank)\n    return sorted(scores.items(), key=lambda x: x[1], reverse=True)\n```\n\n| Retriever Type | Best For | Weakness |\n| :--- | :--- | :--- |\n| Sparse (BM25) | Exact part numbers, acronyms | Misses synonyms |\n| Dense Vector | Conceptual paraphrases | Weak on exact IDs |\n| Hybrid (RRF) | Both exact + semantic queries | Slightly higher latency |"
+          }
+        ]
+      },
+      claude: {
+        platform: "Platform: Claude 3.5 Sonnet",
+        title: "PostgreSQL_Indexing_and_Query_Tuning",
+        messages: [
+          {
+            role: "User",
+            text: "My PostgreSQL query on a 10M row orders table is taking 4.2 seconds. How do I optimize it?"
+          },
+          {
+            role: "Assistant",
+            text: "Use a **composite covering index** matching your `WHERE` filter and `ORDER BY` sort column so PostgreSQL performs an Index-Only Scan:\n\n```sql\nCREATE INDEX CONCURRENTLY idx_orders_customer_created\nON orders (customer_id, created_at DESC)\nINCLUDE (total_amount, status);\n\nEXPLAIN (ANALYZE, BUFFERS)\nSELECT order_id, total_amount, status\nFROM orders\nWHERE customer_id = 48291\nORDER BY created_at DESC\nLIMIT 20;\n```\n\n| Index Type | Ideal Use Case | Storage Overhead |\n| :--- | :--- | :--- |\n| B-Tree | Equality & range queries (`=`, `<`, `BETWEEN`) | Medium |\n| GIN | JSONB documents & full-text search arrays | High |\n| BRIN | Append-only time-series tables | Very Low |"
+          },
+          {
+            role: "User",
+            text: "How do I check if my index is actually being used?"
+          },
+          {
+            role: "Assistant",
+            text: "Query `pg_stat_user_indexes` to inspect live index scan counts vs sequential scans:\n\n```sql\nSELECT indexrelname AS index_name,\n       idx_scan AS index_scans,\n       pg_size_pretty(pg_relation_size(indexrelid)) AS index_size\nFROM pg_stat_user_indexes\nWHERE relname = 'orders'\nORDER BY idx_scan DESC;\n```"
+          }
+        ]
+      },
+      gemini: {
+        platform: "Platform: Google Gemini",
+        title: "React_Performance_and_Memoization",
+        messages: [
+          {
+            role: "User",
+            text: "When should I actually use useMemo and useCallback in React?"
+          },
+          {
+            role: "Assistant",
+            text: "Only reach for `useMemo` when a calculation is measurably slow (e.g., filtering 10,000+ rows) or when passing referentially stable props to a memoized child component.\n\n```javascript\nconst visibleItems = useMemo(() => {\n  return allItems.filter(item => item.Title.toLowerCase().includes(query));\n}, [allItems, query]);\n```\n\n| Hook | Caches | When to Use |\n| :--- | :--- | :--- |\n| `useMemo` | Computed result value | Expensive array/math transforms |\n| `useCallback` | Function reference | Callbacks passed to `React.memo` children |"
+          }
+        ]
       }
-      return msgs;
+    };
+
+    let currentKey = 'chatgpt';
+    let chatTitle = THREADS.chatgpt.title;
+    let messages = JSON.parse(JSON.stringify(THREADS.chatgpt.messages));
+
+    function loadThread(key, btnEl) {
+      currentKey = key;
+      document.querySelectorAll('nav .btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      const t = THREADS[key];
+      chatTitle = t.title;
+      messages = JSON.parse(JSON.stringify(t.messages));
+      document.getElementById('chat-platform-label').textContent = t.platform;
+      document.getElementById('chat-title-text').textContent = t.title;
+      document.getElementById('preview-filename').textContent = t.title + '.md';
+      renderChat();
     }
 
-    function init() {
-      messages = generate50Messages();
-      renderChat();
+    function formatMessageContent(raw) {
+      let html = raw
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Code blocks
+      html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
+        return `<pre><code>${code.trim()}</code></pre>`;
+      });
+
+      // Markdown tables
+      html = html.replace(/((?:\|.*\|\n?)+)/g, (tableBlock) => {
+        const rows = tableBlock.trim().split('\n').filter(r => !r.includes(':---'));
+        if (rows.length < 2) return tableBlock;
+        let tHtml = '<table>';
+        rows.forEach((row, rIdx) => {
+          const cells = row.split('|').slice(1, -1).map(c => c.trim());
+          const tag = rIdx === 0 ? 'th' : 'td';
+          tHtml += '<tr>' + cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+        });
+        tHtml += '</table>';
+        return tHtml;
+      });
+
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      html = html.replace(/\n/g, '<br>');
+      return html;
     }
 
     function renderChat() {
       const box = document.getElementById('chat-messages-box');
       box.innerHTML = '';
+      let codeCount = 0;
+      let tableCount = 0;
 
       messages.forEach((m, idx) => {
+        if (m.text.includes('```')) codeCount += (m.text.match(/```/g) || []).length / 2;
+        if (m.text.includes('| :---')) tableCount += 1;
+
         const div = document.createElement('div');
         div.className = `msg-bubble ${m.role.toLowerCase()}`;
+        div.id = `msg-row-${idx}`;
         div.innerHTML = `
-          <input type="checkbox" class="msg-chk" checked data-idx="${idx}" onchange="updateSelectedCount()" style="margin-top: 6px;">
+          <input type="checkbox" class="msg-chk" checked data-idx="${idx}" onchange="updateSelectedCount()" style="margin-top: 6px; width:16px; height:16px; accent-color:var(--accent-primary); cursor:pointer;">
           <div class="avatar-pill">${m.role === 'User' ? 'U' : 'AI'}</div>
           <div class="msg-body">
-            <div style="font-weight: 700; margin-bottom: 0.3rem;">${m.role} · Turn #${idx + 1}</div>
+            <div style="font-weight: 800; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.3rem;">${m.role.toUpperCase()} · MESSAGE #${idx + 1}</div>
             <div>${formatMessageContent(m.text)}</div>
           </div>
         `;
         box.appendChild(div);
       });
 
+      document.getElementById('stat-code-count').textContent = Math.floor(codeCount);
+      document.getElementById('stat-table-count').textContent = tableCount;
       updateSelectedCount();
     }
 
-    function formatMessageContent(raw) {
-      // Basic markdown parser for preview
-      let html = raw.replace(/\n/g, '<br>');
-      html = html.replace(/```python(.*?)```/gs, '<pre><code>$1</code></pre>');
-      return html;
-    }
-
     function updateSelectedCount() {
-      const chks = document.querySelectorAll('.msg-chk:checked');
-      document.getElementById('stat-selected-msgs').innerText = chks.length;
-      document.getElementById('stat-total-msgs').innerText = messages.length;
+      const allChks = document.querySelectorAll('.msg-chk');
+      let checked = 0;
+      allChks.forEach((c, idx) => {
+        const row = document.getElementById(`msg-row-${idx}`);
+        if (c.checked) {
+          checked++;
+          if (row) row.classList.remove('unselected');
+        } else {
+          if (row) row.classList.add('unselected');
+        }
+      });
+      document.getElementById('stat-selected-msgs').textContent = checked;
+      document.getElementById('stat-total-msgs').textContent = messages.length;
     }
 
     function selectAll(state) {
@@ -461,11 +487,27 @@
       updateSelectedCount();
     }
 
+    function selectAssistantOnly() {
+      document.querySelectorAll('.msg-chk').forEach((c, idx) => {
+        c.checked = messages[idx] && messages[idx].role === 'Assistant';
+      });
+      updateSelectedCount();
+    }
+
+    function appendCustomMessage() {
+      const role = document.getElementById('new-msg-role').value;
+      const text = document.getElementById('new-msg-text').value.trim();
+      if (!text) return;
+      messages.push({ role, text });
+      document.getElementById('new-msg-text').value = '';
+      renderChat();
+    }
+
     function exportMarkdown() {
       const selected = [];
       document.querySelectorAll('.msg-chk').forEach(c => {
         if (c.checked) {
-          selected.push(messages[parseInt(c.dataset.idx)]);
+          selected.push(messages[parseInt(c.dataset.idx, 10)]);
         }
       });
 
@@ -474,7 +516,7 @@
         return;
       }
 
-      let md = `# ${chatTitle.replace(/_/g, ' ')}\n\n*Exported via Chat Saver · 100% Offline Integrity Guaranteed*\n\n---\n\n`;
+      let md = `# ${chatTitle.replace(/_/g, ' ')}\n\n*Exported via Chat Saver*\n\n---\n\n`;
       selected.forEach((m, idx) => {
         md += `### ${m.role} (Message ${idx + 1})\n\n${m.text}\n\n---\n\n`;
       });
@@ -494,87 +536,7 @@
       window.print();
     }
 
-    function load50MessagesChat() {
-      alert(`Loaded 50-message thread "${chatTitle}" with 6 code blocks and 3 comparison tables!`);
-      init();
-    }
-
-    // Default initialization
-    init();
+    renderChat();
   </script>
-
-  <script>
-    (function() {
-      function showAdvToast(msg) {
-        const box = document.getElementById('adv-toast-box');
-        if (!box) return;
-        box.textContent = msg;
-        box.style.display = 'block';
-        clearTimeout(window.__toastTimer);
-        window.__toastTimer = setTimeout(() => { box.style.display = 'none'; }, 4000);
-      }
-
-      window.__filterProjectControls = function(query) {
-        const q = (query || '').toLowerCase().trim();
-        const els = document.querySelectorAll('button, .tool-btn, .card, .kanban-card, .cut-item, tr');
-        els.forEach(el => {
-          if (el.closest('#studio-security-ribbon') || el.closest('.project-purpose-banner') || el.closest('#studio-sec-modal')) return;
-          if (!q) {
-            el.style.outline = '';
-            el.style.opacity = '';
-          } else if (el.innerText.toLowerCase().includes(q)) {
-            el.style.outline = '2px solid var(--accent-primary)';
-            el.style.opacity = '1';
-          } else {
-            el.style.outline = '';
-          }
-        });
-      };
-
-      window.__verifyProjectHash = async function() {
-        const payload = document.title + '|' + document.body.innerText.slice(0, 500) + '|' + Object.keys(localStorage).join(',');
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'verified-sha256-offline';
-        if (window.StudioSecurity) {
-          window.StudioSecurity.logAuditEvent('SHA-256 Integrity Verified', 'Hash: ' + hash.slice(0, 16) + '...');
-        }
-        showAdvToast('✓ SHA-256 Integrity Verified: ' + hash.slice(0, 24) + '...');
-      };
-
-      window.__exportAuditReport = async function() {
-        const payload = document.body.innerText.slice(0, 1000);
-        const hash = window.StudioSecurity ? await window.StudioSecurity.sha256Hex(payload) : 'offline-hash';
-        const report = {
-          project: "project-12-chat-saver",
-          whatItDoes: "Save AI Chats as Clean PDF or Markdown",
-          verifiedAt: new Date().toISOString(),
-          palette: document.documentElement.getAttribute('data-palette'),
-          sha256Integrity: hash,
-          securityChecks: {
-            cspActive: true,
-            xssSanitizerActive: true,
-            pinAuthReady: true,
-            offlineCapable: true
-          }
-        };
-        const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'project-12-chat-saver-security-audit.json';
-        a.click();
-        showAdvToast('✓ Exported signed security & state report JSON');
-      };
-
-      document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key.toLowerCase() === 'h') {
-          e.preventDefault();
-          window.__verifyProjectHash();
-        } else if (e.altKey && e.key.toLowerCase() === 's' && window.StudioSecurity) {
-          e.preventDefault();
-          window.StudioSecurity.openSecurityAuditModal();
-        }
-      });
-    })();
-  </script>
-
 </body>
 </html>

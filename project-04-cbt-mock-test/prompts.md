@@ -1,6 +1,4 @@
 # Prompts Log - Project 04: CBT Mock Test Engine
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 4 (Section A: Web Tools) - CBT Mock Test Engine (Tough)
 
 ---

@@ -1,7 +1,7 @@
 # Project 10: Job Clipper (Chrome Extension & Kanban Pipeline)
 
 ## Overview
-1-click job and internship scraper extension paired with an interactive 4-stage Kanban pipeline (Saved, Applied, Interview, Result), automated deadline reminders, manual entry modal, and clean CSV export.
+1-click job application scraper extension paired with an interactive 4-stage Kanban pipeline (Saved, Applied, Interview, Result), automated deadline reminders, manual entry modal, and clean CSV export.
 
 ## Installation Guide (Unpacked Extension)
 1. Open Google Chrome and go to `chrome://extensions`
@@ -13,7 +13,7 @@
 ## Instant Live Simulator
 Open `index.html` directly in your browser to interactively test 1-click clipping across 3 simulated job boards (LinkedIn, Internshala, Indeed), drag cards across Kanban columns, test search filtering, and download CSV spreadsheets.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Works on 3 different job sites**: Scraper logic verified against LinkedIn, Internshala, and Indeed page structures with instant simulation buttons.
 - [x] **Manual Typing Support**: When details cannot be auto-detected, the "+ Manual Entry" modal allows full custom input.
 - [x] **Deadline Reminder**: Pops up an urgent reminder alert for applications due within 3 days.

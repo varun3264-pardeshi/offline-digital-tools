@@ -13,7 +13,7 @@ The agent will parse the syllabus notes and ask 5 questions one by one.
 ## Instant Live Terminal Simulator
 Open `index.html` directly in your browser to run the interactive viva terminal across 3 different subjects (Thermodynamics, Data Structures, and Machine Learning) and inspect the Without Skill vs With Skill comparison matrix.
 
-## Done When Verification Checklist
+## Key Features & Capabilities
 - [x] **Starts Correctly in a Fresh Session**: Triggerable via zero-shot prompt `/viva <file>`.
 - [x] **Works on 3 Different Inputs**: Verified on:
   1. Thermodynamics (`sample-thermo-notes.txt`)

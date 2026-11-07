@@ -1,6 +1,4 @@
 # Prompts Log - Project 05: Scribbly Notes
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 5 (Section A: Web Tools) - Scribbly Notes (Medium)
 
 ---
@@ -14,7 +12,7 @@
 > 2. Apply minute rotational variance (-1.2deg to +1.2deg) across words.
 > 3. Inject subtle letter-spacing fluctuations and stroke-weight variance."
 
-### Prompt 3: Strict Multi-Page Line-Break Logic (Done When Requirement)
+### Prompt 3: Strict Multi-Page Line-Break Logic (Core Feature)
 > "Implement an intelligent page-breaker algorithm. Calculate the line height relative to notebook ruling. When content exceeds the page height, push full lines to Page 2, Page 3, etc., ensuring that no single line of text is ever sliced or cut in half across a page boundary."
 
 ### Prompt 4: Offline Guarantee & Multi-format Export

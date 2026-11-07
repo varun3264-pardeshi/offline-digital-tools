@@ -1,6 +1,4 @@
 # Prompts Log - Project 12: Chat Saver
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 12 (Section C: Chrome Extensions) - Chat Saver (Medium)
 
 ---
@@ -16,7 +14,7 @@
 > 1. Clean Markdown (`.md`): Formats turns with headings, fenced code blocks, and markdown pipe tables.
 > 2. Clean PDF: Uses print-optimized styling that isolates chat bubbles, preserves table borders, and maintains code indentation."
 
-### Prompt 4: 50+ Message Stress Test & Offline Guarantee
+### Prompt 4: Multi-Turn Thread Export & Offline Guarantee
 > "Verify with a 50-message conversational thread containing runnable Python scripts and multi-column comparison tables. Ensure all exported code can be directly copy-pasted into terminal/Python and executed with zero syntax errors, with zero external server communication."
 
 

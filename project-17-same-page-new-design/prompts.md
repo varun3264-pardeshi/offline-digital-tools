@@ -1,6 +1,4 @@
 # Prompts Log - Project 17: Same Page, New Design
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 17 (Section D: Video, Skills and Design) - Same Page, New Design (Medium)
 
 ---

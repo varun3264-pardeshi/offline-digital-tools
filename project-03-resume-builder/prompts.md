@@ -1,6 +1,4 @@
 # Prompts Log - Project 03: Resume Builder
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 3 (Section A: Web Tools) - Resume Builder (Medium)
 
 ---

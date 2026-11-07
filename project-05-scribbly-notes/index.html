@@ -489,20 +489,6 @@
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Convert Typed Text into Handwritten Pages</span>
-        <span class="purpose-tag">Project 05 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Type or paste your study notes on the left to generate realistic handwritten notebook pages with 3 handwriting styles and 4 paper types.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
   <div id="adv-toast-box" class="adv-toast"></div>
 
   <div class="ambient-glow">
@@ -512,12 +498,11 @@
 
   <nav>
     <div class="nav-left">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span class="brand-title">✍️ Scribbly Notes</span>
+      <span class="brand-title">✍️ Convert Typed Text into Handwritten Pages</span>
       <span class="badge">● 100% Offline Multi-Page Notebook</span>
     </div>
     <div style="display: flex; gap: 0.75rem;">
-      <button class="btn" onclick="loadSampleNotes()">⚡ Load 3-Page Sample Notes</button>
+      <button class="btn" onclick="loadSampleNotes()">📄 Load Sample Notes</button>
       <button class="btn btn-primary" onclick="window.print()">🖨️ Export PDF / Print</button>
     </div>
   </nav>
@@ -599,7 +584,7 @@
         document.getElementById('typed-notes-input').value = text;
         renderHandwrittenPages();
       } catch (e) {
-        document.getElementById('typed-notes-input').value = `Bharat Space Education Research Centre - Semester 4 Complete Revision Notes
+        document.getElementById('typed-notes-input').value = `Physics & Orbital Mechanics — Complete Study Notes
 Chapter 1: Orbital Mechanics & Spacecraft Dynamics
 
 1. Kepler's Laws of Planetary Motion

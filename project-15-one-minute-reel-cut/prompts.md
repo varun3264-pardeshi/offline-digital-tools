@@ -1,6 +1,4 @@
 # Prompts Log - Project 15: One-Minute Reel Cut
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 15 (Section D: Video, Skills and Design) - One-Minute Reel Cut (Tough)
 
 ---

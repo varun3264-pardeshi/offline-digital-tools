@@ -286,20 +286,6 @@
   </style>
 </head>
 <body>
-  <section class="project-purpose-banner" aria-label="What this project does">
-    <div class="purpose-left">
-      <h1 class="purpose-heading">
-        <span>Inspect Colors & Fonts on Any Webpage</span>
-        <span class="purpose-tag">Project 13 · Verified Offline</span>
-      </h1>
-      <p class="purpose-sub">Scan any webpage to rank its most-used colors by screen area, inspect heading and body fonts, and copy a ready-to-use CSS variables kit.</p>
-    </div>
-    <div class="purpose-tools">
-      <input type="search" class="adv-search-input" placeholder="Quick filter controls..." oninput="window.__filterProjectControls && window.__filterProjectControls(this.value)" aria-label="Filter controls" />
-      <button type="button" class="sec-btn" onclick="window.__verifyProjectHash && window.__verifyProjectHash()">🔐 Verify SHA-256 Hash</button>
-      <button type="button" class="sec-btn" onclick="window.__exportAuditReport && window.__exportAuditReport()">📥 Export Audit JSON</button>
-    </div>
-  </section>
   <div id="adv-toast-box" class="adv-toast"></div>
 
   <div class="ambient-glow">
@@ -309,8 +295,7 @@
 
   <nav>
     <div class="brand">
-      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
-      <span>🎨 Style Spy</span>
+      <span>🎨 Inspect Colors & Fonts on Any Webpage</span>
     </div>
     <div style="display: flex; gap: 0.75rem;">
       <button class="btn btn-gold" onclick="copyCssVars()">📋 Copy as CSS Variables</button>
@@ -328,7 +313,6 @@
         </p>
       </div>
 
-      <!-- 5 Verified Site Presets (Fulfills Done When requirement) -->
       <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">Inspect Real Site Presets:</div>
       <div class="preset-bar">
         <button class="site-pill active" onclick="loadSite('stripe', this)">1. Stripe.com</button>
@@ -359,7 +343,6 @@
       </div>
     </div>
 
-    <!-- Right Live Plain Page Transformer (Fulfills Done When: Paste kit into plain page and it picks up style) -->
     <div class="kit-panel">
       <div>
         <h2 style="font-size: 1.2rem; font-weight: 800;">Generated CSS Variables Kit</h2>

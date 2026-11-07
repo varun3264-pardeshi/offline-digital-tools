@@ -1,6 +1,4 @@
 # Prompts Log - Project 11: Circle to Fix
-**Mandate**: Week 2 GenAI Internship · Bharat Space Education Research Centre  
-**Instructor**: Karan Bagul  
 **Project**: Project 11 (Section C: Chrome Extensions) - Circle to Fix (Tough)
 
 ---
