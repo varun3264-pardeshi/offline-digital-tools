@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TECHNOVA 2026 (After Design Skill)</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00f2fe;
+      --accent-purple: #9b51e0;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+      padding: 2rem 1rem;
+    }
+
+    /* Ambient Liquid Mesh Glow */
+    .liquid-mesh {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;
+    }
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35;
+      animation: float 20s infinite alternate ease-in-out;
+    }
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #9b51e0, #4facfe); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #00f2fe, #00f5a0); bottom: -15%; right: 10%; }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    .container {
+      position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%;
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+
+    /* Hero Section */
+    .hero-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 24px;
+      padding: 3rem 2rem; text-align: center; backdrop-filter: blur(25px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent);
+    }
+
+    h1 {
+      font-size: 3.5rem; font-weight: 900; letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #00f2fe 70%, #9b51e0 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem; line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem; color: #cbd5e1; font-weight: 500; margin-bottom: 1.5rem;
+    }
+
+    .btn-register {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.85rem 2.2rem; border-radius: 12px; font-size: 1rem; font-weight: 800;
+      text-decoration: none; color: #070913;
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+      box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+      transition: all 0.25s ease;
+    }
+    .btn-register:hover {
+      transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 28px rgba(0, 242, 254, 0.6);
+    }
+
+    .pill-track {
+      display: inline-flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.75rem;
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border);
+      padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.88rem; font-weight: 600; color: #94a3b8;
+    }
+
+    /* Content Cards */
+    .content-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 2rem; backdrop-filter: blur(20px); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    h2 {
+      font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      border-bottom: 1px solid var(--card-border); padding-bottom: 0.6rem;
+    }
+
+    ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    li {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1rem 1.25rem; font-size: 0.95rem; line-height: 1.5;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    li::before {
+      content: '⚡'; font-size: 1rem; color: var(--accent-cyan);
+    }
+
+    .speaker-item {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+      font-size: 0.95rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .speaker-item::before {
+      content: '🎙️'; font-size: 1.1rem;
+    }
+
+    .venue-item {
+      font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 0.6rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Liquid Mesh Glow -->
+  <div class="liquid-mesh">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <div class="container">
+    <!-- Hero Header (Exact matching text) -->
+    <header class="hero-card">
+      <h1>TECHNOVA 2026</h1>
+      <p class="hero-subtitle">Three days of robotics, code and music.</p>
+      <a href="#" class="btn-register">Register now</a>
+      <div>
+        <p class="pill-track">Robotics · Hackathon · Music night</p>
+      </div>
+    </header>
+
+    <!-- Schedule Card (Exact matching text) -->
+    <section class="content-card">
+      <h2>Event Schedule</h2>
+      <ul>
+        <li>Day 1: Autonomous Rover Racing and RoboWars Championship</li>
+        <li>Day 2: 24-Hour AI Agent Hackathon with Industry Mentors</li>
+        <li>Day 3: EDM Music Night and Grand Awards Ceremony</li>
+      </ul>
+    </section>
+
+    <!-- Keynote Speakers (Exact matching text) -->
+    <section class="content-card">
+      <h2>Featured Keynote Speakers</h2>
+      <p class="speaker-item">Dr. Arvind Swaminathan · Lead Scientist at Bharat Space Centre</p>
+      <p class="speaker-item">Priya Deshmukh · Principal AI Architect at Nova Systems</p>
+    </section>
+
+    <!-- Venue & Registration (Exact matching text) -->
+    <section class="content-card">
+      <h2>Venue & Registration</h2>
+      <p class="venue-item">Main University Auditorium, Knowledge Park Campus. Open to all engineering and science students across India.</p>
+      <p class="venue-item">Registration deadline: November 15, 2026. Free accommodation for outstation teams.</p>
+    </section>
+  </div>
+
+</body>
+</html>
