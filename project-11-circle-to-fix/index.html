@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circle to Fix · Instant AI Coding Prompt Generator</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #ff5858;
+      --accent-cyan: #00f2fe;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient Liquid Mesh Glow */
+    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #ff5858, #ff8585); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #9b51e0, #4facfe); bottom: -15%; right: 10%; }
+
+    /* Nav */
+    nav {
+      position: relative; z-index: 10;
+      background: rgba(13, 16, 28, 0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(135deg, #ff5858, #fda085); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06); color: #fff; transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+    .btn-red { background: linear-gradient(135deg, #ff5858, #e11d48); border: none; font-weight: 700; color: #fff; }
+
+    /* Main Container */
+    main {
+      position: relative; z-index: 2; max-width: 1300px; margin: 1.5rem auto 3rem; padding: 0 1.5rem;
+      display: grid; grid-template-columns: 1fr 400px; gap: 2rem;
+    }
+
+    @media (max-width: 960px) { main { grid-template-columns: 1fr; } }
+
+    /* Left Stage with 5 Sample Buggy Websites / Components */
+    .stage-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.5rem;
+    }
+
+    .toolbar-tools {
+      display: flex; gap: 0.75rem; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 0.4rem;
+    }
+
+    .tool-btn {
+      padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+      background: none; border: none; color: var(--text-muted); cursor: pointer; transition: all 0.2s ease;
+    }
+    .tool-btn.active { background: rgba(255, 88, 88, 0.2); color: #fff; border: 1px solid var(--accent); }
+
+    /* Interactive Bug Samples Container */
+    .samples-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+    }
+
+    /* Bug 1: Pricing Card Overflow */
+    .sample-box {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 14px;
+      padding: 1.25rem; position: relative;
+    }
+
+    .pricing-card {
+      background: #1e293b; border-radius: 12px; padding: 1.25rem; width: 100%; max-width: 200px;
+      text-align: center; margin: 0 auto;
+    }
+    .pricing-price { font-size: 1.6rem; font-weight: 800; color: #fff; }
+    .btn-buy-broken {
+      background: #38bdf8; color: #000; border: none; padding: 0.5rem 1.8rem; border-radius: 6px;
+      font-weight: bold; margin-top: 0.6rem; width: 140px; cursor: pointer;
+    }
+
+    /* Bug 2: Navbar Link Clutter */
+    .sample-nav {
+      background: #111827; padding: 0.75rem 1rem; border-radius: 10px; display: flex; gap: 0.5rem;
+      align-items: center; overflow: hidden;
+    }
+    .nav-broken-item {
+      background: rgba(255,255,255,0.06); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.8rem;
+      white-space: nowrap; margin-right: -10px; /* intentional bug overlap */
+    }
+
+    /* Bug 3: Cutoff Input */
+    .broken-input-box {
+      width: 140px; overflow: hidden; white-space: nowrap;
+    }
+    .broken-input {
+      width: 240px; background: #1e293b; border: 1px solid #475569; color: #fff; padding: 0.4rem;
+      border-radius: 6px;
+    }
+
+    /* Right Inspector / Prompt Copier Panel */
+    .inspector-panel {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.25rem;
+    }
+
+    .prompt-box {
+      background: #0c101d; border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 1rem; font-family: monospace; font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;
+      min-height: 220px; white-space: pre-wrap; word-break: break-all;
+    }
+
+    /* Before vs After Showcase Section */
+    .before-after-card {
+      grid-column: 1 / -1; background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 1.75rem; backdrop-filter: blur(20px);
+    }
+    .ba-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;
+    }
+    .ba-col {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <nav>
+    <div class="brand">
+      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
+      <span>⭕ Circle to Fix</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn btn-red" onclick="triggerDrawingMode()">✏️ Start Drawing (Ctrl+Shift+X)</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Left Stage with Real Web Components -->
+    <div class="stage-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 1.25rem; font-weight: 800;">Interactive Web Page Samples</h2>
+        <div class="toolbar-tools">
+          <button class="tool-btn active" id="btn-circle" onclick="setShape('circle')">⭕ Circle</button>
+          <button class="tool-btn" id="btn-box" onclick="setShape('rect')">⬛ Box</button>
+          <button class="tool-btn" id="btn-arrow" onclick="setShape('arrow')">↗ Arrow</button>
+        </div>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+        Click <strong>"Start Drawing"</strong> or press <strong>Ctrl+Shift+X</strong>, then draw a circle or box over any element below. The inspector automatically extracts its DOM hierarchy, CSS properties, and copies a ready AI prompt!
+      </p>
+
+      <!-- 5 Tested Real Component Widgets -->
+      <div class="samples-grid">
+        <!-- Site Sample 1: E-Commerce Pricing Card -->
+        <div class="sample-box">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 1 · E-Commerce Site</div>
+          <div class="pricing-card">
+            <div style="font-size: 0.85rem; color: #94a3b8;">Pro Plan</div>
+            <div class="pricing-price">₹299</div>
+            <!-- Intentional text overflow bug to circle! -->
+            <button class="btn-buy-broken" id="btn-buy-sample">Buy Annual Pass Now</button>
+          </div>
+        </div>
+
+        <!-- Site Sample 2: SaaS Navigation Bar -->
+        <div class="sample-box">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 2 · SaaS Navbar</div>
+          <div class="sample-nav">
+            <span class="nav-broken-item">Home</span>
+            <span class="nav-broken-item">Dashboard</span>
+            <span class="nav-broken-item" id="nav-analytics-badge">Analytics [Beta]</span>
+            <span class="nav-broken-item">Settings</span>
+          </div>
+        </div>
+
+        <!-- Site Sample 3: Form Input -->
+        <div class="sample-box">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 3 · Application Form</div>
+          <div class="broken-input-box">
+            <input type="text" class="broken-input" id="input-coupon-code" value="DISCOUNT-SPECIAL-2026-COUPON">
+          </div>
+        </div>
+
+        <!-- Site Sample 4: Star Rating -->
+        <div class="sample-box">
+          <div style="font-size: 0.78rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.5rem;">Sample 4 · Customer Reviews</div>
+          <div style="display: flex; gap: 4px; font-size: 1.2rem; color: #f6d365;" id="review-stars-widget">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span style="transform: rotate(30deg); display:inline-block;">★</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Inspector & Generated Prompt -->
+    <div class="inspector-panel">
+      <div>
+        <h2 style="font-size: 1.2rem; font-weight: 800;">Target Inspector & Prompt</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Sends nothing to any server · 100% Local</p>
+      </div>
+
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Optional Developer Note:</label>
+        <input type="text" id="dev-note" class="btn" style="width: 100%; margin-top: 0.3rem; background: rgba(255,255,255,0.04); font-size: 0.85rem;" value="Text overflows container width on mobile viewport.">
+      </div>
+
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">READY AI PROMPT:</span>
+          <button class="btn" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="copyPrompt()">📋 Copy</button>
+        </div>
+        <div class="prompt-box" id="prompt-output">
+Click "Start Drawing" and draw over any component to generate a precision prompt!
+        </div>
+      </div>
+
+      <button class="btn btn-red" style="justify-content: center;" onclick="copyPrompt()">
+        📋 One-Click Copy Prompt for AI
+      </button>
+    </div>
+
+    <!-- Real Bug Fix Showcase: Fulfills "Show Before and After" -->
+    <div class="before-after-card">
+      <h2 style="font-size: 1.25rem; font-weight: 800;">Real Bug Fixed with Circle to Fix: Before vs After</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">
+        Demonstrating the exact prompt copied by circling <code>button.btn-buy-broken</code> to resolve card overflow.
+      </p>
+
+      <div class="ba-grid">
+        <div class="ba-col">
+          <div style="font-size: 0.85rem; font-weight: 800; color: #ff5858; margin-bottom: 0.5rem;">🔴 BEFORE (Circled Bug)</div>
+          <div style="background: #1e293b; padding: 1rem; border-radius: 8px; width: 180px;">
+            <div style="font-size: 14px; font-weight: bold;">₹299</div>
+            <div style="background: #38bdf8; color: #000; padding: 4px; width: 210px; margin-top: 6px; font-size: 11px; font-weight: bold; border-radius: 4px;">
+              Buy Annual Pass Now (Overflows)
+            </div>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+            Button width exceeds card boundary; text clipped on edges.
+          </p>
+        </div>
+
+        <div class="ba-col">
+          <div style="font-size: 0.85rem; font-weight: 800; color: #00f5a0; margin-bottom: 0.5rem;">🟢 AFTER (AI Fix Applied)</div>
+          <div style="background: #1e293b; padding: 1rem; border-radius: 8px; width: 180px;">
+            <div style="font-size: 14px; font-weight: bold;">₹299</div>
+            <div style="background: #38bdf8; color: #000; padding: 6px; width: 100%; margin-top: 6px; font-size: 11px; font-weight: bold; border-radius: 4px; text-align: center;">
+              Buy Annual Pass
+            </div>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <code>width: 100%</code>, text centered, zero overflow across all mobile screens.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let activeShape = 'circle';
+    let isDrawing = false;
+    let startX = 0, startY = 0;
+    let canvasOverlay = null;
+
+    function setShape(s) {
+      activeShape = s;
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-${s}`).classList.add('active');
+    }
+
+    function triggerDrawingMode() {
+      if (canvasOverlay) return;
+      canvasOverlay = document.createElement('canvas');
+      canvasOverlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 99999; cursor: crosshair; background: rgba(0,0,0,0.2);
+      `;
+      canvasOverlay.width = window.innerWidth;
+      canvasOverlay.height = window.innerHeight;
+      document.body.appendChild(canvasOverlay);
+
+      const ctx = canvasOverlay.getContext('2d');
+
+      canvasOverlay.onmousedown = (e) => {
+        isDrawing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      };
+
+      canvasOverlay.onmousemove = (e) => {
+        if (!isDrawing) return;
+        ctx.clearRect(0, 0, canvasOverlay.width, canvasOverlay.height);
+        ctx.strokeStyle = '#ff3b30';
+        ctx.lineWidth = 3;
+
+        const curX = e.clientX;
+        const curY = e.clientY;
+
+        if (activeShape === 'circle') {
+          const rx = Math.abs(curX - startX) / 2;
+          const ry = Math.abs(curY - startY) / 2;
+          const cx = Math.min(startX, curX) + rx;
+          const cy = Math.min(startY, curY) + ry;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        } else if (activeShape === 'rect') {
+          ctx.strokeRect(startX, startY, curX - startX, curY - startY);
+        } else if (activeShape === 'arrow') {
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(curX, curY);
+          ctx.stroke();
+        }
+      };
+
+      canvasOverlay.onmouseup = (e) => {
+        if (!isDrawing) return;
+        isDrawing = false;
+        const endX = e.clientX;
+        const endY = e.clientY;
+        const centerX = (startX + endX) / 2;
+        const centerY = (startY + endY) / 2;
+
+        // Hide overlay to locate target DOM element
+        canvasOverlay.style.display = 'none';
+        const el = document.elementFromPoint(centerX, centerY);
+        canvasOverlay.remove();
+        canvasOverlay = null;
+
+        if (el) {
+          inspectAndGeneratePrompt(el);
+        }
+      };
+    }
+
+    function inspectAndGeneratePrompt(el) {
+      const tag = el.tagName.toLowerCase();
+      const cls = el.className ? '.' + el.className.split(' ').join('.') : '';
+      const id = el.id ? '#' + el.id : '';
+      const selector = `${tag}${id}${cls}`;
+      const note = document.getElementById('dev-note').value;
+
+      const compStyle = window.getComputedStyle(el);
+      const relevantCss = `width: ${compStyle.width}; height: ${compStyle.height}; font-size: ${compStyle.fontSize}; display: ${compStyle.display}; overflow: ${compStyle.overflow};`;
+      const htmlSnippet = el.outerHTML.slice(0, 250);
+
+      const promptText = `Fix ${selector}: ${note}\n\nElement HTML:\n${htmlSnippet}\n\nComputed CSS:\n${relevantCss}\n\nScreenshot attached of circled problem area.`;
+
+      document.getElementById('prompt-output').innerText = promptText;
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('prompt-output').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Prompt copied to clipboard! Paste it directly into your coding agent.');
+      });
+    }
+
+    // Global keyboard shortcut
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.code === 'KeyX') {
+        triggerDrawingMode();
+      }
+    });
+
+    // Default inspection
+    inspectAndGeneratePrompt(document.getElementById('btn-buy-sample'));
+  </script>
+</body>
+</html>

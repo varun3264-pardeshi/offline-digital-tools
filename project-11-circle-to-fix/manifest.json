@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Circle to Fix",
+  "version": "1.0.0",
+  "description": "Circle any problem on a web page to extract underlying HTML/CSS and generate instant AI prompts.",
+  "permissions": ["activeTab", "scripting", "clipboardWrite"],
+  "commands": {
+    "toggle-drawing": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Toggle Circle to Fix Drawing Overlay"
+    }
+  },
+  "action": {
+    "default_title": "Activate Circle to Fix (Ctrl+Shift+X)"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
