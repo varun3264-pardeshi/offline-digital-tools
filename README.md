@@ -2,6 +2,9 @@
 
 A complete collection of **17 practical, self-contained tools** for documents, exam photos, resumes, mock tests, billing, browser productivity, video editing, and web design. Every tool runs **100% locally in the browser** with zero cloud dependencies.
 
+- 🌐 **Live Website (Master Toolkit Hub)**: https://varun3264-pardeshi.github.io/offline-digital-tools/
+- 📦 **GitHub Repository**: https://github.com/varun3264-pardeshi/offline-digital-tools
+
 ---
 
 ## 🚀 Quick Start
