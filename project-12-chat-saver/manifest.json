@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Chat Saver",
+  "version": "1.0.0",
+  "description": "One-click clean exporter for ChatGPT, Claude, and Gemini chats to Markdown and PDF with code blocks & tables preserved.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "*://chatgpt.com/*",
+    "*://chat.openai.com/*",
+    "*://claude.ai/*",
+    "*://gemini.google.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Save AI Chat"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://chatgpt.com/*",
+        "*://chat.openai.com/*",
+        "*://claude.ai/*",
+        "*://gemini.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
