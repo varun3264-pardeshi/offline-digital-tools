@@ -21,3 +21,13 @@
 > "Provide two persistence options:
 > 1. Direct JSON Save & Load: Download the entire resume as a `.json` file and restore it with one click.
 > 2. Selectable PDF Export: Trigger `window.print()` configured specifically for A4 format, ensuring all text remains selectable, searchable, and crisp."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-03-resume-builder to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "mulberry" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Build & Print Your A4 Resume — Fill your details on the left and preview your formatted A4 resume live on the right. Switch between 3 layouts and export PDF.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

@@ -19,3 +19,13 @@
 
 ### Prompt 4: 30-Tab Stress Test & Session Save/Restore
 > "Stress-test the system smoothly handling 30 open tabs. Implement 1-click Session Save and Restore persisting all tab URLs and sleep states across browser restarts in LocalStorage."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-14-tab-goblin to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "amber" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Put Unused Browser Tabs to Sleep — Check how much memory open tabs are using, protect important tabs on your Keep List, put idle tabs to sleep, and save tab groups.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

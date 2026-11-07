@@ -5,10 +5,10 @@
   <title>Style Spy</title>
   <style>
     :root {
-      --bg: #070913;
+      --bg: #FAF7F2;
       --card-border: rgba(255, 255, 255, 0.1);
       --accent: #f6d365;
-      --text: #f0f4fc;
+      --text: #18181B;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { width: 320px; background: var(--bg); color: var(--text); padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
@@ -17,32 +17,32 @@
     .swatches-grid { display: flex; flex-wrap: wrap; gap: 6px; }
     .swatch { width: 32px; height: 32px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; }
     .btn { padding: 0.55rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
-    .btn-css { background: linear-gradient(135deg, #f6d365, #fda085); color: #070913; }
+    .btn-css { background: linear-gradient(135deg, #f6d365, #fda085); color: #FAF7F2; }
   </style>
 </head>
 <body>
   <div class="header">🎨 Style Spy</div>
   <div class="section-label">Ranked Colors:</div>
   <div class="swatches-grid" id="p-colors">
-    <div class="swatch" style="background:#070913;" title="#070913"></div>
-    <div class="swatch" style="background:#00f2fe;" title="#00f2fe"></div>
-    <div class="swatch" style="background:#4facfe;" title="#4facfe"></div>
+    <div class="swatch" style="background:#FAF7F2;" title="#FAF7F2"></div>
+    <div class="swatch" style="background:#C2410C;" title="#C2410C"></div>
+    <div class="swatch" style="background:#C2410C;" title="#C2410C"></div>
     <div class="swatch" style="background:#9b51e0;" title="#9b51e0"></div>
-    <div class="swatch" style="background:#ffffff;" title="#ffffff"></div>
+    <div class="swatch" style="background:#18181B;" title="#18181B"></div>
   </div>
 
   <div class="section-label">Extracted Fonts:</div>
-  <div style="font-size: 0.8rem; color: #cbd5e1; display:flex; flex-direction:column; gap:4px;">
+  <div style="font-size: 0.8rem; color: #18181B; display:flex; flex-direction:column; gap:4px;">
     <div>• Inter · 700 heading</div>
     <div>• Lora · 400 body</div>
   </div>
 
   <button class="btn btn-css" onclick="copyCssVars()">📋 Copy as CSS Variables</button>
-  <button class="btn" style="background: rgba(255,255,255,0.06); color:#fff;" onclick="window.open('index.html')">Open Style Spy Studio →</button>
+  <button class="btn" style="background: rgba(255,255,255,0.06); color:#18181B;" onclick="window.open('index.html')">Open Style Spy Studio →</button>
 
   <script>
     function copyCssVars() {
-      const css = `:root {\n  --color-primary: #00f2fe;\n  --color-secondary: #4facfe;\n  --color-accent: #9b51e0;\n  --color-bg: #070913;\n  --font-heading: 'Inter', sans-serif;\n  --font-body: 'Lora', serif;\n}`;
+      const css = `:root {\n  --color-primary: #C2410C;\n  --color-secondary: #C2410C;\n  --color-accent: #9b51e0;\n  --color-bg: #FAF7F2;\n  --font-heading: 'Inter', sans-serif;\n  --font-body: 'Lora', serif;\n}`;
       navigator.clipboard.writeText(css).then(() => alert('CSS variables copied to clipboard!'));
     }
   </script>

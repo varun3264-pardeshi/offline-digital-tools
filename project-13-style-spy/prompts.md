@@ -16,3 +16,13 @@
 
 ### Prompt 4: Live Plain Page Demonstration (Done When Requirement)
 > "Build a test bench showing how a plain, unstyled HTML page instantly picks up the exact colors, typography, and button styling when applying the extracted kit. Verify across 5 distinct websites (Stripe, Linear, Medium, Spotify, Notion)."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-13-style-spy to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "mulberry" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Inspect Colors & Fonts on Any Webpage — Scan any webpage to rank its most-used colors by screen area, inspect heading and body fonts, and copy a ready-to-use CSS variables kit.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

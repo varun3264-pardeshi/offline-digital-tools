@@ -21,3 +21,13 @@
 
 ### Prompt 4: Verification & Offline Guarantee
 > "Verify with Wi-Fi off on high-resolution camera images. Ensure the downloaded file byte size matches OS filesystem inspection, face proportions match the oval guide, and the app functions 100% locally."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-02-form-photo-fixer to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "emerald" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Resize Photo & Signature for Exam Forms — Choose UPSC, SSC, IBPS, or NTA preset, align your face inside the oval guide, add Name/Date strip, and compress under 20–50 KB.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

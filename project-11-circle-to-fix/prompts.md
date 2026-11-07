@@ -16,3 +16,13 @@
 
 ### Prompt 4: Real Bug Fix Demonstration (Before vs After)
 > "Document a real bug fix resolved using this tool (fixing an overflowing buy button inside a pricing card on mobile viewport) with side-by-side Before and After evidence. Ensure zero external network calls."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-11-circle-to-fix to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "coral" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Circle Any Website Bug to Generate a Fix — Draw a red circle around any broken element on the preview webpage to extract its HTML, CSS, coordinates, and a ready-to-paste fix prompt.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

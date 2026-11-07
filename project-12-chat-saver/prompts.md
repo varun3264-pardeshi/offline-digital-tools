@@ -18,3 +18,13 @@
 
 ### Prompt 4: 50+ Message Stress Test & Offline Guarantee
 > "Verify with a 50-message conversational thread containing runnable Python scripts and multi-column comparison tables. Ensure all exported code can be directly copy-pasted into terminal/Python and executed with zero syntax errors, with zero external server communication."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-12-chat-saver to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "emerald" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Save AI Chats as Clean PDF or Markdown — Select specific messages from ChatGPT, Claude, or Gemini conversations and export them cleanly with code blocks and tables preserved.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

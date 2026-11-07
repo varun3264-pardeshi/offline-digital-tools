@@ -5,25 +5,25 @@
   <title>Chat Saver</title>
   <style>
     :root {
-      --bg: #070913;
+      --bg: #FAF7F2;
       --card-border: rgba(255, 255, 255, 0.1);
-      --accent: #00f2fe;
-      --text: #f0f4fc;
+      --accent: #C2410C;
+      --text: #18181B;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { width: 300px; background: var(--bg); color: var(--text); padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-    .title { font-size: 1.1rem; font-weight: 800; color: #00f2fe; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem; }
+    .title { font-size: 1.1rem; font-weight: 800; color: #C2410C; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem; }
     .stats-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; }
     .btn { padding: 0.6rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
-    .btn-md { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid var(--card-border); }
-    .btn-pdf { background: linear-gradient(135deg, #00f2fe, #0088ff); color: #070913; }
+    .btn-md { background: rgba(255, 255, 255, 0.08); color: #18181B; border: 1px solid var(--card-border); }
+    .btn-pdf { background: linear-gradient(135deg, #C2410C, #0088ff); color: #FAF7F2; }
   </style>
 </head>
 <body>
   <div class="title">💬 Save This Chat</div>
   <div class="stats-row">
     <span>Messages Detected:</span>
-    <strong style="color: #fff;" id="p-msg-count">24</strong>
+    <strong style="color: #18181B;" id="p-msg-count">24</strong>
   </div>
   <div class="stats-row">
     <span>Code Blocks:</span>

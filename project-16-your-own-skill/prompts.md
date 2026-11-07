@@ -19,3 +19,13 @@
 
 ### Prompt 4: Before vs After Demonstration (Without Skill vs With Skill)
 > "Document the concrete improvements gained by using the `/viva` skill compared to an untuned base prompt (preventing 10-question dumps, enforcing interactive pacing, and providing diagnostic revision advice)."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-16-your-own-skill to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "mulberry" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Practice Viva Questions from Your Study Notes — Pick a subject or paste your own lecture notes, answer 5 progressively harder viva questions, and receive a 0–10 rubric grade.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

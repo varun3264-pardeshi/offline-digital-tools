@@ -1,929 +1,867 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-palette="terracotta">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GenAI Project Suite · 17-in-1 Liquid Hub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; img-src 'self' data: blob:; connect-src 'self' data: blob:;" />
+  <title>All 17 Practical Tools & Apps — Offline Workspace Directory</title>
+  <link rel="stylesheet" href="assets/studio-ui.css" />
+  <script src="assets/security-auth.js" defer></script>
   <style>
-    :root {
-      --bg-dark: #070913;
-      --card-bg: rgba(22, 27, 46, 0.65);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent-cyan: #00f2fe;
-      --accent-violet: #4facfe;
-      --accent-purple: #9b51e0;
-      --accent-emerald: #00f5a0;
-      --accent-amber: #f6d365;
-      --accent-rose: #ff5858;
-      --text-main: #f0f4fc;
-      --text-muted: #8e9bb5;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg-canvas);
       color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.55;
       min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    /* Ambient Liquid Canvas Background */
-    .liquid-mesh {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.45;
-      animation: float-blob 18s infinite alternate ease-in-out;
-    }
-
-    .blob-1 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, #667eea 0%, #764ba2 70%);
-      top: -10%;
-      left: -5%;
-    }
-
-    .blob-2 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, #00f2fe 0%, #4facfe 70%);
-      bottom: -15%;
-      right: -10%;
-      animation-duration: 22s;
-      animation-delay: -5s;
-    }
-
-    .blob-3 {
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, #f093fb 0%, #f5576c 70%);
-      top: 40%;
-      left: 35%;
-      animation-duration: 26s;
-      animation-delay: -9s;
-    }
-
-    @keyframes float-blob {
-      0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-      50% { transform: translate(60px, 40px) scale(1.15) rotate(90deg); }
-      100% { transform: translate(-40px, 80px) scale(0.9) rotate(180deg); }
-    }
-
-    /* Header & Branding */
-    header {
-      padding: 3rem 2rem 1.5rem;
-      max-width: 1400px;
+    /* Top Hero Section - Clean Editorial Layout */
+    .hub-header {
+      max-width: 1320px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      padding: 2.5rem 1.5rem 1.75rem;
+      border-bottom: 2px solid var(--border-color);
     }
 
-    .badge-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      border-radius: 9999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-    }
-
-    .pill-green {
-      color: #00f5a0;
-      border-color: rgba(0, 245, 160, 0.3);
-      box-shadow: 0 0 15px rgba(0, 245, 160, 0.15);
-    }
-
-    .pill-cyan {
-      color: var(--accent-cyan);
-      border-color: rgba(0, 242, 254, 0.3);
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
-    }
-
-    .pill-purple {
-      color: #d8b4fe;
-      border-color: rgba(168, 85, 247, 0.3);
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.15);
-    }
-
-    .hero-title {
-      font-size: 3rem;
-      font-weight: 800;
-      line-height: 1.15;
-      background: linear-gradient(135deg, #ffffff 20%, #a5b4fc 60%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.02em;
-    }
-
-    .hero-sub {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 800px;
-      line-height: 1.6;
-    }
-
-    /* Stats Grid */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1rem;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.25rem 1.5rem;
-      backdrop-filter: blur(16px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .stat-num {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #00f2fe, #4facfe);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Section Filters */
-    .filter-section {
-      max-width: 1400px;
-      margin: 1.5rem auto 0;
-      padding: 0 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    .filter-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 0.6rem 1.4rem;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .filter-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .filter-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(79, 172, 254, 0.25));
-      border-color: var(--accent-cyan);
-      color: #fff;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
-    }
-
-    /* Projects Grid */
-    .projects-container {
-      max-width: 1400px;
-      margin: 2rem auto 4rem;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 1.6rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 1.25rem;
-      backdrop-filter: blur(20px);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent-cyan)), transparent);
-      opacity: 0.7;
-    }
-
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-    }
-
-    .card-top {
+    .hub-header-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-    }
-
-    .p-num {
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.7rem;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-muted);
-    }
-
-    .difficulty-badge {
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-    }
-
-    .diff-tough {
-      background: rgba(255, 88, 88, 0.15);
-      color: #ff6b6b;
-      border: 1px solid rgba(255, 88, 88, 0.3);
-    }
-
-    .diff-medium {
-      background: rgba(246, 211, 101, 0.15);
-      color: #fbd38d;
-      border: 1px solid rgba(246, 211, 101, 0.3);
-    }
-
-    .project-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-top: 0.5rem;
-      line-height: 1.3;
-    }
-
-    .project-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .feature-tags {
-      display: flex;
+      gap: 2rem;
       flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.5rem;
     }
 
-    .tag {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.04);
-      color: #cbd5e1;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .status-indicator {
+    .eyebrow-row {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.82rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .eyebrow-tag {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .tag-terracotta { background: #FFEDD5; color: #9A3412; border: 1px solid #FDBA74; }
+    .tag-emerald { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
+    .tag-amber { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+    .tag-berry { background: #FCE7F3; color: #9D174D; border: 1px solid #F9A8D4; }
+    .tag-plum { background: #F3E8FF; color: #6B21A8; border: 1px solid #D8B4FE; }
+    .tag-olive { background: #ECFCCB; color: #3F6212; border: 1px solid #BEF264; }
+
+    .hub-title {
+      font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+
+    .hub-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+    }
+
+    /* Summary Cards */
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1.75rem;
+    }
+
+    .sum-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--box-color, var(--accent-primary));
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1.1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sum-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .sum-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
       font-weight: 600;
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+    /* Controls Bar: Search + Category Filter */
+    .controls-bar {
+      max-width: 1320px;
+      margin: 1.5rem auto 1rem;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    .dot-ready {
-      background: #00f5a0;
-      box-shadow: 0 0 10px #00f5a0;
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      max-width: 420px;
+      position: relative;
     }
 
-    .dot-building {
-      background: #f6d365;
-      box-shadow: 0 0 10px #f6d365;
-      animation: pulse 1.5s infinite;
+    .search-input {
+      width: 100%;
+      padding: 0.7rem 1rem 0.7rem 2.4rem;
+      font-size: 0.92rem;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease;
     }
 
-    .dot-queued {
-      background: #64748b;
+    .search-input:focus {
+      border-color: var(--accent-primary);
     }
 
-    @keyframes pulse {
-      0% { opacity: 0.4; }
-      50% { opacity: 1; }
-      100% { opacity: 0.4; }
+    .search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.95rem;
     }
 
-    .launch-btn {
+    .filter-tabs {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-tab:hover {
+      border-color: var(--accent-primary);
+      color: var(--text-main);
+    }
+
+    .filter-tab.active {
+      background: var(--accent-primary);
+      color: #FFFFFF;
+      border-color: var(--accent-primary);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(365px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tool-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-tone, var(--accent-primary));
+    }
+
+    .card-color-bar {
+      height: 6px;
+      width: 100%;
+      background: var(--card-tone, var(--accent-primary));
+    }
+
+    .card-body {
+      padding: 1.35rem 1.4rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-code {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.55rem;
+      border-radius: 5px;
+      background: var(--card-soft, #FFEDD5);
+      color: var(--card-tone, #9A3412);
+    }
+
+    .project-cat-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Simple, Clear Functional Heading */
+    .what-it-does-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .what-it-does-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .checklist-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+
+    .check-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 5px;
+      background: var(--bg-canvas);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+
+    .card-actions {
+      padding: 0.9rem 1.4rem;
+      background: var(--bg-canvas);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .security-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--status-ok);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .open-tool-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.55rem 1.1rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
+      gap: 0.35rem;
+      padding: 0.5rem 1.05rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
       font-weight: 700;
       text-decoration: none;
-      color: #fff;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+      color: #FFFFFF;
+      background: var(--card-tone, var(--accent-primary));
+      transition: opacity 0.15s ease, transform 0.15s ease;
     }
 
-    .launch-btn:hover {
-      transform: scale(1.04);
-      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-    }
-
-    .launch-btn.secondary {
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: none;
-      color: #e2e8f0;
-      border: 1px solid var(--card-border);
-    }
-
-    .launch-btn.secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .open-tool-btn:hover {
+      opacity: 0.92;
+      transform: translateX(2px);
     }
 
     footer {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      padding: 2rem 1.5rem;
       text-align: center;
-      padding: 2.5rem;
       color: var(--text-muted);
       font-size: 0.85rem;
-      border-top: 1px solid var(--card-border);
     }
   </style>
 </head>
 <body>
 
-  <!-- Liquid Ambient Background -->
-  <div class="liquid-mesh">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-  </div>
-
-  <!-- Header -->
-  <header>
-    <div class="badge-bar">
-      <span class="pill pill-green">● 100% Offline-First Enabled</span>
-      <span class="pill pill-cyan">Bharat Space Education Research Centre</span>
-      <span class="pill pill-purple">GenAI Internship · Week 2</span>
-      <span class="pill">prompts.md Synced</span>
+  <header class="hub-header">
+    <div class="hub-header-top">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow-tag tag-terracotta">Bharat Space Education Research Centre</span>
+          <span class="eyebrow-tag tag-emerald">Works 100% Offline (Wi-Fi Off)</span>
+          <span class="eyebrow-tag tag-amber">SHA-256 PIN Auth & XSS Protected</span>
+          <span class="eyebrow-tag tag-plum">17 Individual Project Folders</span>
+        </div>
+        <h1 class="hub-title">17 Practical Everyday Tools & Apps</h1>
+        <p class="hub-subtitle">
+          Every tool below solves a real problem right inside your browser — from fixing exam form photos and editing PDFs to making shop bills, blocking YouTube distractions, and cutting 60-second video reels.
+        </p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:flex-end;">
+        <button class="sec-btn" onclick="window.StudioSecurity.openSecurityAuditModal()" style="padding:0.6rem 1.1rem; font-size:0.86rem; background:var(--accent-primary); color:#fff; border-color:var(--accent-primary);">
+          🛡️ Run Security & Auth Diagnostics
+        </button>
+        <span style="font-size:0.76rem; color:var(--text-muted);">Click color dots at top-right to change theme</span>
+      </div>
     </div>
 
-    <div>
-      <h1 class="hero-title">17-in-1 Liquid GenAI Suite</h1>
-      <p class="hero-sub">
-        Complete multi-project engineering portfolio featuring ultra-responsive liquid design, zero-cloud offline persistence, and rigorous test coverage.
-      </p>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-num" id="stat-total">17 / 17</div>
-        <div class="stat-label">Projects Completed</div>
+    <div class="summary-strip">
+      <div class="sum-box" style="--box-color: #C2410C;">
+        <div class="sum-value">5 Web Tools</div>
+        <div class="sum-label">PDFs, Exam Photos, Resume, Mock Test, Notes</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num" id="stat-sections">4 / 4</div>
-        <div class="stat-label">Sections 100% Built</div>
+      <div class="sum-box" style="--box-color: #047857;">
+        <div class="sum-value">3 Phone Apps</div>
+        <div class="sum-label">Reel Habit Tracker, Shop Bill QR, Auto Game</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num" id="stat-offline">100%</div>
-        <div class="stat-label">Wi-Fi Off Offline Ready</div>
+      <div class="sum-box" style="--box-color: #B45309;">
+        <div class="sum-value">6 Browser Tools</div>
+        <div class="sum-label">YouTube Focus, Job Tracker, Bug Fix, Chat Save</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-num" id="stat-status" style="color: #00f5a0;">Verified</div>
-        <div class="stat-label">Engineering Execution</div>
+      <div class="sum-box" style="--box-color: #7E22CE;">
+        <div class="sum-value">3 Studio Workflows</div>
+        <div class="sum-label">60s Video Cutter, Viva Examiner, Redesign</div>
+      </div>
+      <div class="sum-box" style="--box-color: #15803D;">
+        <div class="sum-value">100% Verified</div>
+        <div class="sum-label">PIN Auth, XSS Sanitizer & Offline Tested</div>
       </div>
     </div>
   </header>
 
-  <!-- Filter Buttons -->
-  <div class="filter-section">
-    <button class="filter-btn active" onclick="filterProjects('all', this)">All 17 Projects</button>
-    <button class="filter-btn" onclick="filterProjects('sec-a', this)">Section A: Web Tools (5)</button>
-    <button class="filter-btn" onclick="filterProjects('sec-b', this)">Section B: Phone Apps & Games (3)</button>
-    <button class="filter-btn" onclick="filterProjects('sec-c', this)">Section C: Chrome Extensions (6)</button>
-    <button class="filter-btn" onclick="filterProjects('sec-d', this)">Section D: Video, Skills & Design (3)</button>
-  </div>
-
-  <!-- Grid of 17 Projects -->
-  <main class="projects-container" id="projects-grid">
-
-    <!-- PROJECT 1 -->
-    <div class="project-card" data-section="sec-a" style="--card-accent: #00f2fe;">
-      <div>
-        <div class="card-top">
-          <span class="p-num">Project 01 · Sec A</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">PDF Studio</h2>
-        <p class="project-desc">29-tool full offline PDF suite: Organise, Edit, Stamp, Convert, and Finish with local rendering.</p>
-        <div class="feature-tags">
-          <span class="tag">29 Tools</span>
-          <span class="tag">Zero Uploads</span>
-          <span class="tag">PDF-Lib Pure Offline</span>
-          <span class="tag">Redaction</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-01-pdf-studio/index.html" class="launch-btn">Launch Tool →</a>
-      </div>
+  <!-- Search and Filter Controls -->
+  <section class="controls-bar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        id="tool-search"
+        class="search-input"
+        placeholder="Search by what you want to do (e.g. resize photo, merge pdf, bill, exam)..."
+        oninput="filterCards()"
+      />
     </div>
 
-    <!-- PROJECT 2 -->
-    <div class="project-card" data-section="sec-a" style="--card-accent: #4facfe;">
-      <div>
-        <div class="card-top">
-          <span class="p-num">Project 02 · Sec A</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Form Photo Fixer</h2>
-        <p class="project-desc">Get photos and signatures verified for official exam portals with face guide & precise KB squeeze.</p>
-        <div class="feature-tags">
-          <span class="tag">Face Guide</span>
-          <span class="tag">Exact KB Limit</span>
-          <span class="tag">3 Exam Presets</span>
-          <span class="tag">Signature Invert</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-02-form-photo-fixer/index.html" class="launch-btn">Launch Tool →</a>
-      </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="setSectionFilter('all', this)">All 17 Tools</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-a', this)">Section A: Web Tools (5)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-b', this)">Section B: Phone Apps (3)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-c', this)">Section C: Browser Extensions (6)</button>
+      <button class="filter-tab" onclick="setSectionFilter('sec-d', this)">Section D: Video, Viva & Design (3)</button>
     </div>
+  </section>
 
-    <!-- PROJECT 3 -->
-    <div class="project-card" data-section="sec-a" style="--card-accent: #38bdf8;">
-      <div>
-        <div class="card-top">
-          <span class="p-num">Project 03 · Sec A</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Resume Builder</h2>
-        <p class="project-desc">Live A4 resume preview with 3 distinct themes, drag-and-drop order, and clean 2-page print layout.</p>
-        <div class="feature-tags">
-          <span class="tag">Live A4</span>
-          <span class="tag">3 Distinct Themes</span>
-          <span class="tag">JSON Save/Load</span>
-          <span class="tag">Selectable PDF</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-03-resume-builder/index.html" class="launch-btn">Launch Tool →</a>
-      </div>
-    </div>
+  <!-- 17 Project Cards with Distinct Multi-Color Palettes & Simple Action Headings -->
+  <main class="projects-grid" id="tools-grid">
 
-    <!-- PROJECT 4 -->
-    <div class="project-card" data-section="sec-a" style="--card-accent: #00f5a0;">
+    <!-- PROJECT 01 -->
+    <article class="tool-card" data-section="sec-a" style="--card-tone: #C2410C; --card-soft: #FFEDD5;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 04 · Sec A</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">CBT Mock Test Engine</h2>
-        <p class="project-desc">Full NTA/JEE style exam portal with question palette, countdown timer, marking rules, and instant scorecard.</p>
-        <div class="feature-tags">
-          <span class="tag">State Persistence</span>
-          <span class="tag">Question Palette</span>
-          <span class="tag">Negative Marking</span>
-          <span class="tag">Analytics Breakdown</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 01 · PDF Studio</span>
+            <span class="project-cat-label">Section A · Web Tool</span>
+          </div>
+          <h2 class="what-it-does-title">Edit, Merge & Convert PDF Files</h2>
+          <p class="what-it-does-desc">
+            Merge multiple PDFs, split pages, rotate, reorder, compress size, draw signatures, black-out private text, add watermarks, and export — all 29 tools in one place.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">29 Working Tools</span>
+            <span class="check-pill">50-Page Sample Included</span>
+            <span class="check-pill">SHA-256 File Checksum</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-04-cbt-mock-test/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Offline & XSS Safe</span>
+        <a href="project-01-pdf-studio/index.html" class="open-tool-btn">Open PDF Tool →</a>
       </div>
-    </div>
+    </article>
 
-    <!-- PROJECT 5 -->
-    <div class="project-card" data-section="sec-a" style="--card-accent: #f6d365;">
+    <!-- PROJECT 02 -->
+    <article class="tool-card" data-section="sec-a" style="--card-tone: #047857; --card-soft: #D1FAE5;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 05 · Sec A</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Scribbly Notes</h2>
-        <p class="project-desc">Transforms typed plain notes into realistic hand-drawn notebook pages with natural variations.</p>
-        <div class="feature-tags">
-          <span class="tag">3 Handwriting Styles</span>
-          <span class="tag">Natural Jitter</span>
-          <span class="tag">Multi-page Flow</span>
-          <span class="tag">PDF/Image Export</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 02 · Form Photo Fixer</span>
+            <span class="project-cat-label">Section A · Web Tool</span>
+          </div>
+          <h2 class="what-it-does-title">Resize Photo & Signature for Exam Forms</h2>
+          <p class="what-it-does-desc">
+            Fix passport photos and signatures to exact UPSC, SSC, IBPS, or NTA pixel dimensions, add Name & Date strip, and compress under the exact KB limit (20–50 KB).
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">UPSC / SSC / IBPS Presets</span>
+            <span class="check-pill">Face Alignment Guide</span>
+            <span class="check-pill">Exact KB Compressor</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-05-scribbly-notes/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Zero Photo Upload</span>
+        <a href="project-02-form-photo-fixer/index.html" class="open-tool-btn">Open Photo Resizer →</a>
       </div>
-    </div>
+    </article>
 
-    <!-- PROJECT 6 -->
-    <div class="project-card" data-section="sec-b" style="--card-accent: #ff5858;">
+    <!-- PROJECT 03 -->
+    <article class="tool-card" data-section="sec-a" style="--card-tone: #7E22CE; --card-soft: #F3E8FF;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 06 · Sec B</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">Reel Monster</h2>
-        <p class="project-desc">Animated floating companion that tallies short-form videos with hilarious sassy remarks & stats.</p>
-        <div class="feature-tags">
-          <span class="tag">Floating Bubble</span>
-          <span class="tag">Growth Stages</span>
-          <span class="tag">7-Day Graph</span>
-          <span class="tag">Offline Tamagotchi</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 03 · Resume Builder</span>
+            <span class="project-cat-label">Section A · Web Tool</span>
+          </div>
+          <h2 class="what-it-does-title">Build & Print Your A4 Resume</h2>
+          <p class="what-it-does-desc">
+            Type your education, work experience, projects, and skills on the left and watch your A4 resume update live on the right. Switch between 3 distinct layouts and export to PDF.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">3 Distinct Layouts</span>
+            <span class="check-pill">Reorder Sections</span>
+            <span class="check-pill">Save / Load JSON</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-06-reel-monster/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Input Sanitized</span>
+        <a href="project-03-resume-builder/index.html" class="open-tool-btn">Open Resume Builder →</a>
       </div>
-    </div>
+    </article>
 
-    <!-- PROJECT 7 -->
-    <div class="project-card" data-section="sec-b" style="--card-accent: #00f5a0;">
+    <!-- PROJECT 04 -->
+    <article class="tool-card" data-section="sec-a" style="--card-tone: #B45309; --card-soft: #FEF3C7;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 07 · Sec B</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Bill Book</h2>
-        <p class="project-desc">Fast offline merchant billing app with dynamic UPI QR code generator and WhatsApp image receipt share.</p>
-        <div class="feature-tags">
-          <span class="tag">Dynamic UPI QR</span>
-          <span class="tag">Receipt Image Gen</span>
-          <span class="tag">Flight Mode Safe</span>
-          <span class="tag">Daily Sales History</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 04 · CBT Mock Test</span>
+            <span class="project-cat-label">Section A · Web Tool</span>
+          </div>
+          <h2 class="what-it-does-title">Take Practice Mock Tests with Timer</h2>
+          <p class="what-it-does-desc">
+            Practice JEE/NTA-style multiple choice exams with a color-coded question palette, countdown timer that survives page refresh, +4/-1 negative marking, and full answer key review.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Survives Refresh</span>
+            <span class="check-pill">2 Question Banks</span>
+            <span class="check-pill">Instant Scorecard</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-07-bill-book/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Anti-Tamper Timer</span>
+        <a href="project-04-cbt-mock-test/index.html" class="open-tool-btn">Start Mock Exam →</a>
       </div>
-    </div>
+    </article>
 
-    <!-- PROJECT 8 -->
-    <div class="project-card" data-section="sec-b" style="--card-accent: #f6d365;">
+    <!-- PROJECT 05 -->
+    <article class="tool-card" data-section="sec-a" style="--card-tone: #BE185D; --card-soft: #FCE7F3;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 08 · Sec B</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">Auto Rally</h2>
-        <p class="project-desc">Addictive 2.5D auto-rickshaw arcade racer with steering physics, coin collect, turbo power-ups and lap timer.</p>
-        <div class="feature-tags">
-          <span class="tag">HTML5 Canvas 60FPS</span>
-          <span class="tag">Touch + Keys</span>
-          <span class="tag">Audio Synth Engine</span>
-          <span class="tag">Lap Record Stash</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 05 · Scribbly Notes</span>
+            <span class="project-cat-label">Section A · Web Tool</span>
+          </div>
+          <h2 class="what-it-does-title">Convert Typed Text into Handwritten Pages</h2>
+          <p class="what-it-does-desc">
+            Paste typed study notes and convert them into realistic handwritten notebook pages with 3 handwriting styles, natural word slant/spacing variation, and 4 paper backgrounds.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">3 Handwriting Fonts</span>
+            <span class="check-pill">4 Paper Styles</span>
+            <span class="check-pill">Multi-Page Auto Split</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-08-auto-rally/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Offline Print & PNG</span>
+        <a href="project-05-scribbly-notes/index.html" class="open-tool-btn">Convert Notes →</a>
       </div>
-    </div>
+    </article>
 
-    <!-- PROJECT 9 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #ff5858;">
+    <!-- PROJECT 06 -->
+    <article class="tool-card" data-section="sec-b" style="--card-tone: #E11D48; --card-soft: #FFE4E6;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 09 · Sec C</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">YouTube Focus Board</h2>
-        <p class="project-desc">Eliminates Shorts & clickbait traps; unlocks video viewing only with deliberate intention gates.</p>
-        <div class="feature-tags">
-          <span class="tag">Shorts Blocker</span>
-          <span class="tag">Timestamped Notes</span>
-          <span class="tag">60m Intent Gate</span>
-          <span class="tag">Manifest V3</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 06 · Reel Monster</span>
+            <span class="project-cat-label">Section B · Phone App</span>
+          </div>
+          <h2 class="what-it-does-title">Track & Control Daily Short-Video Watching</h2>
+          <p class="what-it-does-desc">
+            A floating counter companion that tallies every Reel or Short you watch, evolves through 4 monster stages as you binge, roasts your screen time, and graphs your 7-day habit.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">4 Evolution Stages</span>
+            <span class="check-pill">Draggable Floating Pill</span>
+            <span class="check-pill">7-Day Bar Chart</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-09-youtube-focus-board/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Local Habit Storage</span>
+        <a href="project-06-reel-monster/index.html" class="open-tool-btn">Open Habit Tracker →</a>
       </div>
-    </div>
+    </article>
+
+    <!-- PROJECT 07 -->
+    <article class="tool-card" data-section="sec-b" style="--card-tone: #15803D; --card-soft: #DCFCE7;">
+      <div>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 07 · Bill Book</span>
+            <span class="project-cat-label">Section B · Phone App</span>
+          </div>
+          <h2 class="what-it-does-title">Make Shop Bills & Instant UPI QR Codes</h2>
+          <p class="what-it-does-desc">
+            Tap shop items to build a customer bill in seconds, calculate discounts & GST, generate a real scannable UPI QR code for the exact total, and download a receipt image for WhatsApp.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Live UPI QR Generator</span>
+            <span class="check-pill">WhatsApp Receipt PNG</span>
+            <span class="check-pill">Daily Sales Ledger</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-actions">
+        <span class="security-tag">✓ Flight-Mode Ready</span>
+        <a href="project-07-bill-book/index.html" class="open-tool-btn">Open Bill Book →</a>
+      </div>
+    </article>
+
+    <!-- PROJECT 08 -->
+    <article class="tool-card" data-section="sec-b" style="--card-tone: #D97706; --card-soft: #FEF3C7;">
+      <div>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 08 · Auto Rally</span>
+            <span class="project-cat-label">Section B · Arcade Game</span>
+          </div>
+          <h2 class="what-it-does-title">Drive an Auto-Rickshaw Through City Traffic</h2>
+          <p class="what-it-does-desc">
+            Steer a yellow-green Indian auto-rickshaw across 3 laps of busy city roads, dodge potholes and barricades, grab hot chai turbo boosts, collect coins, and set a new lap record.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">60fps Canvas Racer</span>
+            <span class="check-pill">Touch & Keyboard Controls</span>
+            <span class="check-pill">Horn & Engine Audio</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-actions">
+        <span class="security-tag">✓ Offline High-Score</span>
+        <a href="project-08-auto-rally/index.html" class="open-tool-btn">Play Auto Rally →</a>
+      </div>
+    </article>
+
+    <!-- PROJECT 09 -->
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #9A3412; --card-soft: #FFEDD5;">
+      <div>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 09 · YouTube Focus Board</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Watch YouTube Lectures Without Distractions</h2>
+          <p class="what-it-does-desc">
+            Blocks YouTube Shorts, home-feed clickbait, and comments. Requires you to type what you came to study before unlocking a 60-minute timer, with timestamped note-taking on the side.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Shorts & Feed Blocker</span>
+            <span class="check-pill">60-Min Study Gate</span>
+            <span class="check-pill">Timestamped Notes</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-actions">
+        <span class="security-tag">✓ Manifest V3 Verified</span>
+        <a href="project-09-youtube-focus-board/index.html" class="open-tool-btn">Open Focus Board →</a>
+      </div>
+    </article>
 
     <!-- PROJECT 10 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #38bdf8;">
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #3F6212; --card-soft: #ECFCCB;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 10 · Sec C</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Job Clipper</h2>
-        <p class="project-desc">1-click browser clipper for internships and jobs with interactive Kanban workflow and deadline alarms.</p>
-        <div class="feature-tags">
-          <span class="tag">Kanban Drag & Drop</span>
-          <span class="tag">1-Click Scraping</span>
-          <span class="tag">CSV Export</span>
-          <span class="tag">Deadline Alerts</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 10 · Job Clipper</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Save & Track Your Job Applications</h2>
+          <p class="what-it-does-desc">
+            Clip job listings from LinkedIn, Internshala, Naukri, Wellfound, or Unstop in 1 click. Organize applications across a 4-column board (Saved, Applied, Interview, Offer) and export CSV.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">5 Job Portals Tested</span>
+            <span class="check-pill">Drag & Drop Board</span>
+            <span class="check-pill">Deadline Alerts & CSV</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-10-job-clipper/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Sanitized Clipper</span>
+        <a href="project-10-job-clipper/index.html" class="open-tool-btn">Open Job Tracker →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 11 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #9b51e0;">
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #BE123C; --card-soft: #FFE4E6;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 11 · Sec C</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">Circle to Fix</h2>
-        <p class="project-desc">Circle any broken element on a website to extract underlying DOM/CSS code + screenshot into AI prompts.</p>
-        <div class="feature-tags">
-          <span class="tag">Canvas Screen Draw</span>
-          <span class="tag">DOM Target Locator</span>
-          <span class="tag">AI Prompt Copier</span>
-          <span class="tag">Zero Server Leak</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 11 · Circle to Fix</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Circle Any Website Bug to Generate a Fix</h2>
+          <p class="what-it-does-desc">
+            Draw a red circle around any broken button, overlapping text, or misaligned card on a webpage. Automatically grabs the element's HTML, CSS, bounding box, and a ready-to-paste fix prompt.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Freehand Canvas Lasso</span>
+            <span class="check-pill">DOM & CSS Inspector</span>
+            <span class="check-pill">1-Click Prompt Copy</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-11-circle-to-fix/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Local DOM Inspector</span>
+        <a href="project-11-circle-to-fix/index.html" class="open-tool-btn">Open Bug Circler →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 12 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #00f2fe;">
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #065F46; --card-soft: #D1FAE5;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 12 · Sec C</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Chat Saver</h2>
-        <p class="project-desc">One-click clean exporter for ChatGPT, Claude and Gemini conversations with pristine tables & code blocks.</p>
-        <div class="feature-tags">
-          <span class="tag">Markdown & PDF</span>
-          <span class="tag">Code Highlighting</span>
-          <span class="tag">Selective Export</span>
-          <span class="tag">Table Integrity</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 12 · Chat Saver</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Save AI Chats as Clean PDF or Markdown</h2>
+          <p class="what-it-does-desc">
+            Pick specific replies from ChatGPT, Claude, or Gemini conversations and export them as a clean Markdown file or formatted PDF — keeping code blocks and tables intact without UI clutter.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">ChatGPT / Claude / Gemini</span>
+            <span class="check-pill">Select Specific Turns</span>
+            <span class="check-pill">Code & Table Preserved</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-12-chat-saver/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Zero Cloud Sync</span>
+        <a href="project-12-chat-saver/index.html" class="open-tool-btn">Open Chat Exporter →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 13 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #f6d365;">
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #6B21A8; --card-soft: #F3E8FF;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 13 · Sec C</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Style Spy</h2>
-        <p class="project-desc">Inspector that scans any site's computed DOM styles, ranks used color palettes, and builds copyable CSS kits.</p>
-        <div class="feature-tags">
-          <span class="tag">Color Frequency Rank</span>
-          <span class="tag">Font Weight Detective</span>
-          <span class="tag">CSS Variables Export</span>
-          <span class="tag">Kit Stash</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 13 · Style Spy</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Inspect Colors & Fonts on Any Webpage</h2>
+          <p class="what-it-does-desc">
+            Scan any webpage to rank its most-used background, text, and accent colors by area coverage, inspect heading/body font families and weights, and copy a ready-to-use `:root` CSS kit.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Color Coverage Rank</span>
+            <span class="check-pill">Hover Element Inspector</span>
+            <span class="check-pill">Copy CSS Variables</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-13-style-spy/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Read-Only Scanner</span>
+        <a href="project-13-style-spy/index.html" class="open-tool-btn">Open Style Inspector →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 14 -->
-    <div class="project-card" data-section="sec-c" style="--card-accent: #00f5a0;">
+    <article class="tool-card" data-section="sec-c" style="--card-tone: #92400E; --card-soft: #FEF3C7;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 14 · Sec C</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Tab Goblin</h2>
-        <p class="project-desc">Charming goblin that puts idle tabs to sleep using Chrome's native memory discard, saving RAM effortlessly.</p>
-        <div class="feature-tags">
-          <span class="tag">Tab Discard API</span>
-          <span class="tag">Whitelisted Keep List</span>
-          <span class="tag">Session Stash</span>
-          <span class="tag">Memory Saver</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 14 · Tab Goblin</span>
+            <span class="project-cat-label">Section C · Browser Extension</span>
+          </div>
+          <h2 class="what-it-does-title">Put Unused Browser Tabs to Sleep</h2>
+          <p class="what-it-does-desc">
+            See how much RAM your open browser tabs are using, protect important tabs on your Keep List, put idle tabs to sleep using native tab discard, and save whole tab sessions for later.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">RAM Saver Dashboard</span>
+            <span class="check-pill">Protected Keep List</span>
+            <span class="check-pill">1-Click Session Stash</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-14-tab-goblin/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Safe Tab Discard</span>
+        <a href="project-14-tab-goblin/index.html" class="open-tool-btn">Open Tab Manager →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 15 -->
-    <div class="project-card" data-section="sec-d" style="--card-accent: #ff5858;">
+    <article class="tool-card" data-section="sec-d" style="--card-tone: #C2410C; --card-soft: #FFEDD5;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 15 · Sec D</span>
-          <span class="difficulty-badge diff-tough">Tough</span>
-        </div>
-        <h2 class="project-title">One-Minute Reel Cut</h2>
-        <p class="project-desc">Video editing workflow suite: auto-removes speech pauses, crops 9:16 portrait focus, and generates burnt-in titles.</p>
-        <div class="feature-tags">
-          <span class="tag">Timeline Edit Plan</span>
-          <span class="tag">Silence Snip</span>
-          <span class="tag">9:16 Portrait Canvas</span>
-          <span class="tag">Animated Captions</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 15 · One-Minute Reel Cut</span>
+            <span class="project-cat-label">Section D · Video Workflow</span>
+          </div>
+          <h2 class="what-it-does-title">Cut Long Videos into 60-Second Vertical Reels</h2>
+          <p class="what-it-does-desc">
+            Drop a raw talking-head video or transcript to automatically strip silent pauses and filler words ("umm, uhh"), crop to 9:16 portrait around the speaker, and burn in highlighted captions.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">Silence & Filler Cutter</span>
+            <span class="check-pill">9:16 Portrait Cropper</span>
+            <span class="check-pill">20-Line Verified Transcript</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-15-one-minute-reel-cut/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Local FFmpeg Script</span>
+        <a href="project-15-one-minute-reel-cut/index.html" class="open-tool-btn">Open Video Cutter →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 16 -->
-    <div class="project-card" data-section="sec-d" style="--card-accent: #9b51e0;">
+    <article class="tool-card" data-section="sec-d" style="--card-tone: #7E22CE; --card-soft: #F3E8FF;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 16 · Sec D</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Your Own Skill (/viva)</h2>
-        <p class="project-desc">Standardized Antigravity & Agent skill specification and interactive runner for viva examination & syllabus review.</p>
-        <div class="feature-tags">
-          <span class="tag">SKILL.md Spec</span>
-          <span class="tag">Interactive Simulator</span>
-          <span class="tag">Evaluation Rubric</span>
-          <span class="tag">Zero-shot Fresh Session</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 16 · Your Own Skill (/viva)</span>
+            <span class="project-cat-label">Section D · Agent Skill</span>
+          </div>
+          <h2 class="what-it-does-title">Practice Viva Questions from Your Study Notes</h2>
+          <p class="what-it-does-desc">
+            Paste your lecture notes or pick from 3 subjects (Thermodynamics, Data Structures, Machine Learning). Answer 5 progressively harder viva questions and get a 0–10 rubric scorecard.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">SKILL.md Included</span>
+            <span class="check-pill">3 Subject Note Packs</span>
+            <span class="check-pill">Rubric Grader & Revision Plan</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-16-your-own-skill/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Verified Skill Spec</span>
+        <a href="project-16-your-own-skill/index.html" class="open-tool-btn">Start Viva Practice →</a>
       </div>
-    </div>
+    </article>
 
     <!-- PROJECT 17 -->
-    <div class="project-card" data-section="sec-d" style="--card-accent: #00f2fe;">
+    <article class="tool-card" data-section="sec-d" style="--card-tone: #3F6212; --card-soft: #ECFCCB;">
       <div>
-        <div class="card-top">
-          <span class="p-num">Project 17 · Sec D</span>
-          <span class="difficulty-badge diff-medium">Medium</span>
-        </div>
-        <h2 class="project-title">Same Page, New Design</h2>
-        <p class="project-desc">Direct side-by-side study: before.html vs after.html with identical copy, demonstrating design system transformation.</p>
-        <div class="feature-tags">
-          <span class="tag">Before vs After</span>
-          <span class="tag">Identical Copy</span>
-          <span class="tag">Liquid Glass Upgrade</span>
-          <span class="tag">UX Breakdown</span>
+        <div class="card-color-bar"></div>
+        <div class="card-body">
+          <div class="card-meta-row">
+            <span class="project-code">Project 17 · Same Page, New Design</span>
+            <span class="project-cat-label">Section D · UI/UX Redesign</span>
+          </div>
+          <h2 class="what-it-does-title">Compare Old vs Redesigned Webpage Side-by-Side</h2>
+          <p class="what-it-does-desc">
+            Drag the comparison slider to inspect `before.html` (cluttered 2009 portal) vs `after.html` (clean editorial redesign) built with the exact same text copy, links, and form fields.
+          </p>
+          <div class="checklist-pills">
+            <span class="check-pill">100% Identical Text Copy</span>
+            <span class="check-pill">Interactive Split Slider</span>
+            <span class="check-pill">Typography & Contrast Audit</span>
+          </div>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="status-indicator">
-          <span class="dot dot-ready"></span>
-          <span style="color: #00f5a0;">Ready · 100% Verified</span>
-        </div>
-        <a href="project-17-same-page-new-design/index.html" class="launch-btn">Launch Tool →</a>
+      <div class="card-actions">
+        <span class="security-tag">✓ Word-for-Word Match</span>
+        <a href="project-17-same-page-new-design/index.html" class="open-tool-btn">Compare Designs →</a>
       </div>
-    </div>
+    </article>
 
   </main>
 
   <footer>
-    <p>Bharat Space Education Research Centre · GenAI Internship Week 2 · Built with Complete Offline Guarantee</p>
+    <p><strong>Bharat Space Education Research Centre · GenAI Internship Week 2</strong> · All 17 Individual Project Folders Verified Offline, Protected with SHA-256 PIN Auth & XSS Sanitization.</p>
   </footer>
 
   <script>
-    function filterProjects(section, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    let currentSection = 'all';
 
-      const cards = document.querySelectorAll('.project-card');
+    function setSectionFilter(sec, btn) {
+      currentSection = sec;
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterCards();
+    }
+
+    function filterCards() {
+      const q = (document.getElementById('tool-search').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('.tool-card');
       cards.forEach(card => {
-        if (section === 'all' || card.dataset.section === section) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+        const matchSec = currentSection === 'all' || card.dataset.section === currentSection;
+        const matchText = !q || card.innerText.toLowerCase().includes(q);
+        card.style.display = (matchSec && matchText) ? 'flex' : 'none';
       });
     }
   </script>

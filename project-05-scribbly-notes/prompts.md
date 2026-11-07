@@ -19,3 +19,13 @@
 
 ### Prompt 4: Offline Guarantee & Multi-format Export
 > "Ensure all font definitions and styling operate 100% offline with Wi-Fi disabled. Provide instant exports to high-res PNG images per page and print-to-PDF."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-05-scribbly-notes to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "coral" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Convert Typed Text into Handwritten Pages — Type or paste your study notes on the left to generate realistic handwritten notebook pages with 3 handwriting styles and 4 paper types.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

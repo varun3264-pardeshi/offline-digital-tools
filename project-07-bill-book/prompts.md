@@ -16,3 +16,13 @@
 
 ### Prompt 4: Receipt Image Generator & WhatsApp Sharing
 > "Render the finalized invoice onto an offscreen HTML5 canvas, styling it like a crisp thermal paper receipt with shop header, item table, tax summary, total in INR, and payment QR code. Provide a direct 'Share on WhatsApp' button using the Web Share API with image attachment and fallback download."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-07-bill-book to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "emerald" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Make Shop Bills & Instant UPI QR Codes — Tap items to add them to a customer bill, apply discount or GST, generate a real UPI QR code, and save a WhatsApp receipt image.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

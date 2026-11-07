@@ -16,3 +16,13 @@
 
 ### Prompt 4: 3 Design Changes Rationale & Verification
 > "Document the 3 core design improvements (Typographic Hierarchy, CTA Affordance, and Spatial Chunking) and explain why each one helps user comprehension and conversion."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-17-same-page-new-design to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "terracotta" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Compare Old vs Redesigned Webpage Side-by-Side — Drag the split slider to compare the old cluttered 2009 page (before.html) with the clean editorial redesign (after.html) using identical text.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

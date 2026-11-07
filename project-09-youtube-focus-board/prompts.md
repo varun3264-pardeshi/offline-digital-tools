@@ -16,3 +16,13 @@
 
 ### Prompt 4: 60-Minute Intention Gate
 > "Before allowing recreational or open browsing, present an unskippable 'Why are you here?' intention gate. The user must type their specific study goal (e.g., 'Revising Thermodynamics') to unlock access for 60 minutes."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-09-youtube-focus-board to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "terracotta" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Watch YouTube Lectures Without Distractions — Hides YouTube Shorts, recommendations, and comments. Type your study goal to unlock a 60-minute session and take timestamped notes.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

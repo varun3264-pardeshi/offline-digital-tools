@@ -16,3 +16,13 @@
 
 ### Prompt 4: Scorecard, Accuracy & Hand-Calculation Audit
 > "Upon manual submission or timer expiration, display a detailed scorecard modal showing: Total Score, Accuracy Percentage, Breakdown of Correct/Incorrect/Unattempted, and time spent per question. Include an audit breakdown matching manual hand calculations."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-04-cbt-mock-test to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "amber" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Take Practice Mock Tests with Timer — Answer subject-wise multiple choice questions with a live countdown timer, question status palette, and instant +4/-1 scorecard.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

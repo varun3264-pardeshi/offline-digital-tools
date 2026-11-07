@@ -1,0 +1,322 @@
+/* ==========================================================================
+   STUDIO MULTI-COLOR DESIGN SYSTEM (ZERO BLUE/VIBE-CODING CLICHÉS)
+   Warm Paper, Terracotta, Emerald, Amber, Mulberry, Coral & Olive Palettes
+   ========================================================================== */
+
+:root,
+[data-palette="terracotta"] {
+  --bg-canvas: #FAF7F2;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F3EFE6;
+  --bg-muted: #EAE4D7;
+  --text-main: #18181B;
+  --text-secondary: #52525B;
+  --text-muted: #71717A;
+  --border-color: #E2DDD2;
+  --border-strong: #C8C1B2;
+  --accent-primary: #C2410C;      /* Warm Terracotta */
+  --accent-primary-hover: #9A3412;
+  --accent-primary-soft: #FFEDD5;
+  --accent-secondary: #059669;    /* Botanical Emerald */
+  --accent-secondary-soft: #D1FAE5;
+  --accent-tertiary: #D97706;     /* Marigold Amber */
+  --accent-tertiary-soft: #FEF3C7;
+  --accent-berry: #BE185D;        /* Crimson Berry */
+  --accent-berry-soft: #FCE7F3;
+  --accent-plum: #7E22CE;         /* Royal Mulberry */
+  --accent-plum-soft: #F3E8FF;
+  --status-ok: #15803D;
+  --status-ok-bg: #DCFCE7;
+  --status-warn: #B45309;
+  --status-warn-bg: #FEF3C7;
+  --status-err: #B91C1C;
+  --status-err-bg: #FEE2E2;
+  --shadow-sm: 0 1px 3px rgba(24, 24, 27, 0.06);
+  --shadow-md: 0 4px 14px rgba(24, 24, 27, 0.07);
+  --shadow-lg: 0 12px 32px rgba(24, 24, 27, 0.10);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+[data-palette="emerald"] {
+  --bg-canvas: #F4F9F5;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #E6F2E9;
+  --bg-muted: #D5E8DA;
+  --text-main: #111C15;
+  --text-secondary: #374B3E;
+  --text-muted: #5B7062;
+  --border-color: #CDE0D2;
+  --border-strong: #ADC9B4;
+  --accent-primary: #047857;
+  --accent-primary-hover: #065F46;
+  --accent-primary-soft: #D1FAE5;
+  --accent-secondary: #C2410C;
+  --accent-secondary-soft: #FFEDD5;
+  --accent-tertiary: #B45309;
+  --accent-tertiary-soft: #FEF3C7;
+}
+
+[data-palette="coral"] {
+  --bg-canvas: #FFF8F5;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #FDECE6;
+  --bg-muted: #FADCD2;
+  --text-main: #221410;
+  --text-secondary: #5C3D34;
+  --text-muted: #7D5B50;
+  --border-color: #F2D5CC;
+  --border-strong: #E2B8AB;
+  --accent-primary: #E11D48;
+  --accent-primary-hover: #BE123C;
+  --accent-primary-soft: #FFE4E6;
+  --accent-secondary: #D97706;
+  --accent-secondary-soft: #FEF3C7;
+  --accent-tertiary: #059669;
+  --accent-tertiary-soft: #D1FAE5;
+}
+
+[data-palette="amber"] {
+  --bg-canvas: #FEFBF3;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F9F1DC;
+  --bg-muted: #EFE3C3;
+  --text-main: #1F1A10;
+  --text-secondary: #54472E;
+  --text-muted: #786747;
+  --border-color: #E6D8B5;
+  --border-strong: #D1BE8F;
+  --accent-primary: #B45309;
+  --accent-primary-hover: #92400E;
+  --accent-primary-soft: #FEF3C7;
+  --accent-secondary: #047857;
+  --accent-secondary-soft: #D1FAE5;
+  --accent-tertiary: #BE185D;
+  --accent-tertiary-soft: #FCE7F3;
+}
+
+[data-palette="mulberry"] {
+  --bg-canvas: #FBF7FC;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F3E8F7;
+  --bg-muted: #E6D4ED;
+  --text-main: #1E1324;
+  --text-secondary: #513B5C;
+  --text-muted: #725880;
+  --border-color: #E2CEE9;
+  --border-strong: #CCAED6;
+  --accent-primary: #7E22CE;
+  --accent-primary-hover: #6B21A8;
+  --accent-primary-soft: #F3E8FF;
+  --accent-secondary: #C2410C;
+  --accent-secondary-soft: #FFEDD5;
+  --accent-tertiary: #059669;
+  --accent-tertiary-soft: #D1FAE5;
+}
+
+[data-palette="espresso"] {
+  --bg-canvas: #181512;
+  --bg-surface: #231F1B;
+  --bg-elevated: #2E2823;
+  --bg-muted: #3A322C;
+  --text-main: #F7F3EE;
+  --text-secondary: #D0C7BC;
+  --text-muted: #9E9386;
+  --border-color: #38312B;
+  --border-strong: #4F453D;
+  --accent-primary: #F59E0B;
+  --accent-primary-hover: #D97706;
+  --accent-primary-soft: rgba(245, 158, 11, 0.18);
+  --accent-secondary: #10B981;
+  --accent-secondary-soft: rgba(16, 185, 129, 0.18);
+  --accent-tertiary: #F43F5E;
+  --accent-tertiary-soft: rgba(244, 63, 94, 0.18);
+  --status-ok: #34D399;
+  --status-ok-bg: rgba(16, 185, 129, 0.2);
+  --status-warn: #FBBF24;
+  --status-warn-bg: rgba(245, 158, 11, 0.2);
+  --status-err: #F87171;
+  --status-err-bg: rgba(239, 68, 68, 0.2);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Global Security & Theme Top Ribbon */
+.studio-security-bar {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.45rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  z-index: 999;
+  position: relative;
+}
+
+.sec-bar-left,
+.sec-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: var(--status-ok-bg);
+  color: var(--status-ok);
+  border: 1px solid currentColor;
+  border-opacity: 0.2;
+}
+
+.sec-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sec-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.sec-select {
+  padding: 0.22rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.palette-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-surface);
+  padding: 0.2rem 0.45rem;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+}
+
+.palette-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.15s ease;
+}
+
+.palette-dot:hover {
+  transform: scale(1.2);
+}
+
+.palette-dot.active {
+  border-color: var(--text-main);
+  transform: scale(1.15);
+}
+
+/* Security & Auth Modal Overlay */
+.sec-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 24, 27, 0.65);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.sec-modal-backdrop.open {
+  display: flex;
+}
+
+.sec-modal-card {
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 560px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.sec-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sec-test-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.sec-test-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+}
+
+.sec-pin-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  text-align: center;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-weight: 700;
+  margin: 0.75rem 0;
+}
+
+@media print {
+  .studio-security-bar,
+  .sec-modal-backdrop {
+    display: none !important;
+  }
+}

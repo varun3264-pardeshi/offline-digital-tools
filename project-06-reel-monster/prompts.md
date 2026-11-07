@@ -22,3 +22,13 @@
 
 ### Prompt 4: 7-Day Analytics & Persistence Across Phone Restarts
 > "Store historical reel tallies in LocalStorage indexed by date (YYYY-MM-DD). Build an in-app dashboard showing: Today's tally, estimated time lost (minutes/hours), and an animated 7-day SVG bar chart."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-06-reel-monster to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "coral" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Track & Control Daily Short-Video Watching — Tap +1 whenever you watch a Reel or Short. Watch your companion react to your screen habit and check your 7-day bar chart.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

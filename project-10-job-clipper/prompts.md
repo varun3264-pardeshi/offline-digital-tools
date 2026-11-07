@@ -16,3 +16,13 @@
 
 ### Prompt 4: Deadline Reminder & CSV Export
 > "Calculate days remaining until each application deadline and display urgent badges and pop-up alerts for impending due dates. Enable 1-click CSV file export formatted cleanly for Excel and Google Sheets."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-10-job-clipper to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "emerald" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Save & Track Your Job Applications — Clip job openings from LinkedIn, Internshala, Naukri, Wellfound, or Unstop in 1 click and move cards across Saved, Applied, Interview, and Offer.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

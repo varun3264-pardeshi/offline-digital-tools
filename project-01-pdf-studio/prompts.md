@@ -25,3 +25,13 @@
 
 ### Prompt 7: Verification & Done When Testing
 > "Verify with Wi-Fi off using the generated 50-page sample PDF. Ensure exported PDFs open cleanly in Chrome/Acrobat, redacted text is unsearchable, and compress displays accurate before and after sizes."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-01-pdf-studio to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "terracotta" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Edit, Merge & Convert PDF Files — Open any PDF to merge, split, rotate, compress, sign, black-out private text, or add watermarks (29 offline tools).".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```

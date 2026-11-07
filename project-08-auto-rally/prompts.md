@@ -19,3 +19,13 @@
 
 ### Prompt 4: 3-Lap Race, Timer & Web Audio Synthesizer
 > "Implement 3 continuous laps with real-time lap timer (Lap 1/3, 2/3, 3/3). Store all-time best lap and race records in LocalStorage. Use the pure Web Audio API oscillator to synthesize engine hum, coin pickup chimes, turbo whooshes, and crash sounds with an interactive Mute toggle."
+
+
+---
+
+## Prompt — Phase 5: Multi-Color UI/UX Overhaul, Simple Headings & Security/Auth Assurance
+```text
+Upgrade project-08-auto-rally to remove all dark-blue/cyan vibe-coding aesthetics and replace with the "amber" warm multi-color studio palette.
+Change the main heading to state clearly what the project does in simple language: "Drive an Auto-Rickshaw Through City Traffic — Steer your yellow-green auto-rickshaw across 3 laps, dodge road barriers, collect coins and chai turbo boosts, and beat your best lap time.".
+Integrate strict Content-Security-Policy (CSP), SHA-256 PIN Authentication & Session Lock, Role Switcher, XSS Input Sanitizer, Live SHA-256 Integrity Checksum Verifier, and Signed Audit JSON Export.
+```
