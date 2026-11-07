@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Clipper & Kanban Pipeline · 100% Offline</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #38bdf8;
+      --accent-cyan: #00f2fe;
+      --accent-emerald: #00f5a0;
+      --accent-rose: #ff5858;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Liquid Glow */
+    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #38bdf8, #818cf8); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #00f5a0, #00b4db); bottom: -15%; right: 10%; }
+
+    /* Top Nav */
+    nav {
+      position: relative; z-index: 10;
+      background: rgba(13, 16, 28, 0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06); color: #fff; transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(135deg, #38bdf8, #2563eb); border: none; font-weight: 700; color: #fff; }
+
+    /* Controls Bar: Search & 1-Click Simulation */
+    .controls-bar {
+      position: relative; z-index: 2; max-width: 1350px; margin: 1.5rem auto 0; padding: 0 1.5rem;
+      width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
+    }
+
+    .search-input {
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 10px;
+      padding: 0.6rem 1rem; color: #fff; font-size: 0.9rem; outline: none; width: 280px;
+    }
+
+    /* Kanban Board Layout */
+    .kanban-board {
+      position: relative; z-index: 2; flex: 1; max-width: 1350px; margin: 1.5rem auto 3rem; padding: 0 1.5rem;
+      width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      .kanban-board { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .kanban-board { grid-template-columns: 1fr; }
+    }
+
+    .kanban-col {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px;
+      padding: 1.25rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1rem;
+      min-height: 480px;
+    }
+
+    .col-header {
+      display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.6rem;
+    }
+
+    .col-title { font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+    .col-count { font-size: 0.75rem; background: rgba(255, 255, 255, 0.08); padding: 0.2rem 0.55rem; border-radius: 9999px; }
+
+    .cards-container {
+      flex: 1; display: flex; flex-direction: column; gap: 0.8rem; min-height: 150px;
+    }
+
+    /* Kanban Card (Draggable) */
+    .job-card {
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 1rem; cursor: grab; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
+    }
+    .job-card:active { cursor: grabbing; }
+    .job-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+
+    .card-role { font-size: 1rem; font-weight: 700; color: #fff; }
+    .card-comp { font-size: 0.82rem; color: var(--accent); margin-top: 0.2rem; }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; font-size: 0.75rem; color: var(--text-muted); }
+
+    .deadline-pill {
+      background: rgba(246, 211, 101, 0.15); color: #f6d365; border: 1px solid rgba(246, 211, 101, 0.3);
+      padding: 0.15rem 0.5rem; border-radius: 6px; font-weight: 600;
+    }
+    .deadline-pill.urgent {
+      background: rgba(255, 88, 88, 0.2); color: #ff5858; border-color: rgba(255, 88, 88, 0.4); animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+    /* Modal for Manual Job Entry */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #111524; border: 1px solid var(--card-border); border-radius: 20px; padding: 2rem;
+      width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .input-field {
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 8px;
+      padding: 0.6rem 0.8rem; color: #fff; font-size: 0.9rem; outline: none; width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <nav>
+    <div class="brand">
+      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
+      <span>💼 Job Clipper & Pipeline</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn" onclick="openManualModal()">+ Manual Entry</button>
+      <button class="btn btn-primary" onclick="exportCsv()">📊 Export CSV</button>
+    </div>
+  </nav>
+
+  <!-- Controls Bar: Search + 1-Click Multi-Site Clipper Simulators -->
+  <div class="controls-bar">
+    <input type="text" id="search-box" class="search-input" placeholder="🔍 Search roles or companies..." oninput="renderBoard()">
+
+    <div style="display: flex; gap: 0.6rem; align-items: center;">
+      <span style="font-size: 0.8rem; color: var(--text-muted);">1-Click Clip from:</span>
+      <button class="btn" style="border-color: #0077b5;" onclick="simulateClip('LinkedIn', 'Data Analyst Intern', 'Nova Labs', '2026-11-12')">
+        Clip from LinkedIn
+      </button>
+      <button class="btn" style="border-color: #008bdc;" onclick="simulateClip('Internshala', 'AI Research Fellow', 'Zentra Systems', '2026-11-18')">
+        Clip from Internshala
+      </button>
+      <button class="btn" style="border-color: #2164f3;" onclick="simulateClip('Indeed', 'Frontend Engineer', 'Bluebird Tech', '2026-11-25')">
+        Clip from Indeed
+      </button>
+    </div>
+  </div>
+
+  <!-- 4-Stage Kanban Board -->
+  <main class="kanban-board">
+    <!-- 1. Saved -->
+    <div class="kanban-col" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'saved')">
+      <div class="col-header">
+        <span class="col-title">📥 1. Saved</span>
+        <span class="col-count" id="count-saved">0</span>
+      </div>
+      <div class="cards-container" id="col-saved"></div>
+    </div>
+
+    <!-- 2. Applied -->
+    <div class="kanban-col" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'applied')">
+      <div class="col-header">
+        <span class="col-title">📤 2. Applied</span>
+        <span class="col-count" id="count-applied">0</span>
+      </div>
+      <div class="cards-container" id="col-applied"></div>
+    </div>
+
+    <!-- 3. Interview -->
+    <div class="kanban-col" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'interview')">
+      <div class="col-header">
+        <span class="col-title" style="color: #f6d365;">💬 3. Interview</span>
+        <span class="col-count" id="count-interview">0</span>
+      </div>
+      <div class="cards-container" id="col-interview"></div>
+    </div>
+
+    <!-- 4. Result -->
+    <div class="kanban-col" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'result')">
+      <div class="col-header">
+        <span class="col-title" style="color: #00f5a0;">🎉 4. Result</span>
+        <span class="col-count" id="count-result">0</span>
+      </div>
+      <div class="cards-container" id="col-result"></div>
+    </div>
+  </main>
+
+  <!-- Manual Entry Modal -->
+  <div class="modal-overlay" id="manual-modal">
+    <div class="modal-box">
+      <div style="font-size: 1.2rem; font-weight: 800;">Add Job by Hand</div>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted);">Role Title:</label>
+        <input type="text" id="m-role" class="input-field" placeholder="e.g. Python Backend Intern">
+      </div>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted);">Company Name:</label>
+        <input type="text" id="m-comp" class="input-field" placeholder="e.g. Acme Corp">
+      </div>
+      <div>
+        <label style="font-size: 0.75rem; color: var(--text-muted);">Application Deadline:</label>
+        <input type="date" id="m-date" class="input-field">
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+        <button class="btn" onclick="closeManualModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitManualJob()">Save Card</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State model with default seed jobs
+    let jobs = [
+      { id: 1, role: "Data Analyst Intern", company: "Nova Labs", deadline: "2026-11-12", stage: "saved", site: "LinkedIn" },
+      { id: 2, role: "Backend Developer", company: "Zentra Systems", deadline: "2026-11-18", stage: "applied", site: "Internshala" },
+      { id: 3, role: "Full Stack Engineer", company: "Bluebird Tech", deadline: "2026-11-10", stage: "interview", site: "Indeed" },
+      { id: 4, role: "AI Research Fellow", company: "Acme Aerospace", deadline: "2026-11-05", stage: "result", site: "Direct Portal" }
+    ];
+
+    const STORAGE_KEY = 'job_clipper_pipeline_data';
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try { jobs = JSON.parse(saved); } catch(e) {}
+      }
+      renderBoard();
+      checkDeadlineAlerts();
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs));
+      renderBoard();
+    }
+
+    function renderBoard() {
+      const search = document.getElementById('search-box').value.toLowerCase();
+      const cols = { saved: [], applied: [], interview: [], result: [] };
+
+      jobs.forEach(job => {
+        if (search && !job.role.toLowerCase().includes(search) && !job.company.toLowerCase().includes(search)) {
+          return;
+        }
+        if (cols[job.stage]) cols[job.stage].push(job);
+      });
+
+      ['saved', 'applied', 'interview', 'result'].forEach(stage => {
+        const container = document.getElementById(`col-${stage}`);
+        container.innerHTML = '';
+        document.getElementById(`count-${stage}`).innerText = cols[stage].length;
+
+        cols[stage].forEach(j => {
+          const card = document.createElement('div');
+          card.className = 'job-card';
+          card.draggable = true;
+          card.ondragstart = (e) => e.dataTransfer.setData('text/plain', j.id);
+
+          const daysLeft = Math.ceil((new Date(j.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+          const isUrgent = daysLeft >= 0 && daysLeft <= 3;
+
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div class="card-role">${j.role}</div>
+              <button style="background:none; border:none; color:#ff6b6b; cursor:pointer;" onclick="deleteJob(${j.id})">✕</button>
+            </div>
+            <div class="card-comp">🏢 ${j.company} · <span style="font-size:11px; color:#94a3b8;">${j.site || 'Web'}</span></div>
+            <div class="card-meta">
+              <span class="deadline-pill ${isUrgent ? 'urgent' : ''}">
+                ⏳ ${j.deadline} ${daysLeft >= 0 ? `(${daysLeft}d left)` : '(Passed)'}
+              </span>
+              <button class="btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="editJob(${j.id})">Edit</button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      });
+    }
+
+    // Drag and Drop
+    function allowDrop(e) { e.preventDefault(); }
+    function handleDrop(e, targetStage) {
+      e.preventDefault();
+      const id = parseInt(e.dataTransfer.getData('text/plain'));
+      const job = jobs.find(j => j.id === id);
+      if (job) {
+        job.stage = targetStage;
+        saveState();
+      }
+    }
+
+    // 1-Click Scraper Simulation for 3 Sites
+    function simulateClip(site, role, company, deadline) {
+      jobs.push({ id: Date.now(), role, company, deadline, stage: 'saved', site });
+      saveState();
+      alert(`[1-Click Job Clipper]: Successfully detected and clipped "${role}" at "${company}" from ${site} into the "Saved" column!`);
+    }
+
+    // Manual Entry
+    function openManualModal() {
+      document.getElementById('m-role').value = '';
+      document.getElementById('m-comp').value = '';
+      document.getElementById('m-date').value = '2026-11-20';
+      document.getElementById('manual-modal').classList.add('open');
+    }
+    function closeManualModal() {
+      document.getElementById('manual-modal').classList.remove('open');
+    }
+    function submitManualJob() {
+      const role = document.getElementById('m-role').value.trim() || 'Software Engineer';
+      const company = document.getElementById('m-comp').value.trim() || 'Tech Start';
+      const deadline = document.getElementById('m-date').value || '2026-11-25';
+      jobs.push({ id: Date.now(), role, company, deadline, stage: 'saved', site: 'Manual Entry' });
+      saveState();
+      closeManualModal();
+    }
+
+    function editJob(id) {
+      const j = jobs.find(x => x.id === id);
+      if (!j) return;
+      const newRole = prompt("Edit Job Role:", j.role);
+      if (newRole) j.role = newRole;
+      const newComp = prompt("Edit Company:", j.company);
+      if (newComp) j.company = newComp;
+      const newDeadline = prompt("Edit Deadline (YYYY-MM-DD):", j.deadline);
+      if (newDeadline) j.deadline = newDeadline;
+      saveState();
+    }
+
+    function deleteJob(id) {
+      if (confirm('Delete this card from board?')) {
+        jobs = jobs.filter(j => j.id !== id);
+        saveState();
+      }
+    }
+
+    // Deadline Reminder Notification Alert
+    function checkDeadlineAlerts() {
+      const now = new Date();
+      const upcoming = jobs.filter(j => {
+        const diff = Math.ceil((new Date(j.deadline) - now) / (1000 * 60 * 60 * 24));
+        return diff >= 0 && diff <= 3 && j.stage !== 'result';
+      });
+      if (upcoming.length > 0) {
+        setTimeout(() => {
+          alert(`🚨 DEADLINE REMINDER:\nYou have ${upcoming.length} application(s) due within 3 days:\n` + upcoming.map(u => `• ${u.role} at ${u.company} (${u.deadline})`).join('\n'));
+        }, 600);
+      }
+    }
+
+    // CSV Export
+    function exportCsv() {
+      const headers = ["ID", "Role", "Company", "Stage", "Deadline", "Source"];
+      const rows = jobs.map(j => [j.id, `"${j.role}"`, `"${j.company}"`, j.stage, j.deadline, `"${j.site || 'Web'}"`]);
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `job_applications_pipeline_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    // Initialize
+    loadState();
+  </script>
+</body>
+</html>

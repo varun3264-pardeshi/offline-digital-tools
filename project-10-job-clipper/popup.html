@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clip This Job</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.9);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #38bdf8;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { width: 320px; background: var(--bg); color: var(--text); padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .header { font-size: 1.1rem; font-weight: 800; color: #38bdf8; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem; }
+    .field { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.8rem; }
+    .input { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 6px; padding: 0.5rem; color: #fff; font-size: 0.85rem; outline: none; }
+    .btn { padding: 0.6rem; border-radius: 8px; border: none; background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; font-weight: 700; cursor: pointer; margin-top: 0.4rem; }
+  </style>
+</head>
+<body>
+  <div class="header">💼 Clip This Job</div>
+  <div class="field">
+    <label>Job / Internship Role:</label>
+    <input type="text" id="inp-role" class="input" placeholder="e.g. Data Analyst Intern">
+  </div>
+  <div class="field">
+    <label>Company Name:</label>
+    <input type="text" id="inp-comp" class="input" placeholder="e.g. Nova Labs">
+  </div>
+  <div class="field">
+    <label>Application Deadline:</label>
+    <input type="date" id="inp-deadline" class="input">
+  </div>
+  <button class="btn" onclick="saveJobToBoard()">+ Add to Kanban Board</button>
+  <button class="btn" style="background: rgba(255,255,255,0.08);" onclick="window.open('index.html')">Open Full Board →</button>
+
+  <script>
+    // Autofill from active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'scrapeJob' }, (res) => {
+          if (res) {
+            if (res.role) document.getElementById('inp-role').value = res.role;
+            if (res.company) document.getElementById('inp-comp').value = res.company;
+          }
+        });
+      }
+    });
+
+    function saveJobToBoard() {
+      const role = document.getElementById('inp-role').value || 'Software Intern';
+      const company = document.getElementById('inp-comp').value || 'Tech Corp';
+      const deadline = document.getElementById('inp-deadline').value || '2026-11-20';
+      
+      chrome.storage.local.get(['savedJobs'], (data) => {
+        const jobs = data.savedJobs || [];
+        jobs.push({ id: Date.now(), role, company, deadline, stage: 'saved' });
+        chrome.storage.local.set({ savedJobs: jobs }, () => {
+          alert('Job saved to Kanban Board!');
+          window.close();
+        });
+      });
+    }
+  </script>
+</body>
+</html>

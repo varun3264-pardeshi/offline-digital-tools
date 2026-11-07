@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Job Clipper & Kanban Tracker",
+  "version": "1.0.0",
+  "description": "1-click job and internship clipper with drag-and-drop Kanban pipeline, deadline alerts, and CSV export.",
+  "permissions": ["storage", "activeTab", "notifications"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Clip Job to Board"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
