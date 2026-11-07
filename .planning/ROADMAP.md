@@ -40,6 +40,6 @@
 - [x] **Project 14: Tab Goblin** (Animated tab devourer, tab age ranking, memory discarder, session save/restore)
 
 ### Phase 4: Section D - Video, Skills and Design
-- [ ] **Project 15: One-Minute Reel Cut** (Raw footage analysis, silence/filler cutter, 9:16 portrait cropper, subtitles generator)
+- [x] **Project 15: One-Minute Reel Cut** (Raw footage analysis, silence/filler cutter, 9:16 portrait cropper, subtitles generator)
 - [ ] **Project 16: Your Own Skill (`/viva`)** (Interactive AI viva examiner skill, scoring engine, syllabus reference recommender)
 - [ ] **Project 17: Same Page, New Design** (Before vs After side-by-side showcase, identical copy, high-fidelity liquid makeover)

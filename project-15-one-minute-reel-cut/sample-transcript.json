@@ -1,0 +1,27 @@
+{
+  "rawVideo": "raw-video-talking-head.mp4",
+  "rawDuration": "5:12",
+  "targetDuration": "0:58",
+  "verifiedLines": [
+    { "line": 1, "start": "0:02", "end": "0:05", "text": "Welcome everyone! Today I want to show you something crazy.", "status": "Keep" },
+    { "line": 2, "start": "0:05", "end": "0:08", "text": "We are building an autonomous AI agent workflow from scratch.", "status": "Keep" },
+    { "line": 3, "start": "0:08", "end": "0:14", "text": "Umm... so basically... wait, let me start that part over.", "status": "Cut (Filler & Retake)" },
+    { "line": 4, "start": "0:14", "end": "0:17", "text": "Most developers spend hours editing videos by hand.", "status": "Keep" },
+    { "line": 5, "start": "0:17", "end": "0:25", "text": "[Long 8-second awkward silence while looking at notes]", "status": "Cut (Silence)" },
+    { "line": 6, "start": "0:25", "end": "0:29", "text": "Instead of manual editing, what if your AI agent directs it like an editor?", "status": "Keep" },
+    { "line": 7, "start": "0:29", "end": "0:32", "text": "Step one is trimming the silence and filler words.", "status": "Keep" },
+    { "line": 8, "start": "0:32", "end": "0:35", "text": "Uhh, like, you know, all the unnecessary pauses.", "status": "Cut (Filler)" },
+    { "line": 9, "start": "0:35", "end": "0:38", "text": "Step two is cropping your video into a vertical nine by sixteen frame.", "status": "Keep" },
+    { "line": 10, "start": "0:38", "end": "0:41", "text": "Your face stays centered automatically on screen.", "status": "Keep" },
+    { "line": 11, "start": "0:41", "end": "0:44", "text": "Then comes the magic: burning in animated captions.", "status": "Keep" },
+    { "line": 12, "start": "0:44", "end": "0:47", "text": "Highlighted words pop up as you speak them.", "status": "Keep" },
+    { "line": 13, "start": "0:47", "end": "0:50", "text": "Add a crisp title card at the start with smooth audio fades.", "status": "Keep" },
+    { "line": 14, "start": "0:50", "end": "0:53", "text": "No sentence gets cut off in the middle.", "status": "Keep" },
+    { "line": 15, "start": "0:53", "end": "0:56", "text": "Everything fits under sixty seconds for Instagram and Shorts.", "status": "Keep" },
+    { "line": 16, "start": "0:56", "end": "0:58", "text": "Drop a comment below if you want the full template!", "status": "Keep" },
+    { "line": 17, "start": "0:58", "end": "1:15", "text": "[Repeated sentence and outro mistakes]", "status": "Cut (Retake)" },
+    { "line": 18, "start": "1:15", "end": "1:30", "text": "[Dead air while reaching for camera stop button]", "status": "Cut (Silence)" },
+    { "line": 19, "start": "1:30", "end": "3:00", "text": "[Second take of intro]", "status": "Cut (Duplicate Take)" },
+    { "line": 20, "start": "3:00", "end": "5:12", "text": "[Uncut rambling]", "status": "Cut" }
+  ]
+}

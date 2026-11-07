@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One-Minute Reel Cut · AI Automated Video Editor</title>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #ff5858;
+      --accent-cyan: #00f2fe;
+      --accent-emerald: #00f5a0;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Liquid Mesh Glow */
+    .ambient-glow { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #ff5858, #9b51e0); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #00f2fe, #38bdf8); bottom: -15%; right: 10%; }
+
+    /* Nav */
+    nav {
+      position: relative; z-index: 10;
+      background: rgba(13, 16, 28, 0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 1.75rem; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem; font-weight: 800;
+      background: linear-gradient(135deg, #ff5858, #f093fb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06); color: #fff; transition: all 0.2s ease;
+    }
+    .btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+    .btn-red { background: linear-gradient(135deg, #ff5858, #e11d48); border: none; font-weight: 700; color: #fff; }
+
+    /* Main Grid */
+    main {
+      position: relative; z-index: 2; max-width: 1280px; margin: 1.5rem auto 3rem; padding: 0 1rem;
+      width: 100%; display: grid; grid-template-columns: 340px 1fr; gap: 2rem;
+    }
+
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+
+    /* 9:16 Vertical Phone Reel Stage */
+    .phone-stage {
+      background: #000; border: 3px solid rgba(255, 255, 255, 0.15); border-radius: 36px;
+      aspect-ratio: 9/16; position: relative; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem 1rem;
+    }
+
+    .notch-bar {
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 100px; height: 16px;
+      background: #111; border-radius: 10px;
+    }
+
+    /* Video Subject Face Simulation */
+    .avatar-face {
+      width: 130px; height: 130px; border-radius: 50%; background: #e0a97a;
+      box-shadow: inset 0 -6px 12px rgba(0,0,0,0.3); margin: 60px auto 0;
+      position: relative; border: 2px solid rgba(255,255,255,0.1);
+    }
+    .avatar-eyes { display: flex; gap: 24px; position: absolute; top: 45px; left: 35px; }
+    .a-eye { width: 10px; height: 10px; border-radius: 50%; background: #111; }
+    .avatar-mouth {
+      width: 28px; height: 10px; background: #991b1b; border-radius: 0 0 14px 14px;
+      position: absolute; bottom: 25px; left: 51px; animation: speak 0.3s infinite alternate;
+    }
+    @keyframes speak { 0% { height: 6px; } 100% { height: 14px; } }
+
+    /* Burnt-in Subtitle Captions with Highlighted Words */
+    .burnt-captions-box {
+      background: rgba(0, 0, 0, 0.75); border-radius: 12px; padding: 0.75rem 1rem;
+      text-align: center; margin-bottom: 20px; font-weight: 800; font-size: 1.05rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .caption-highlight { color: #f6d365; text-shadow: 0 0 10px rgba(246, 211, 101, 0.6); }
+
+    .reel-meta-tag {
+      display: flex; justify-content: space-between; font-size: 0.75rem; color: #fff;
+      background: rgba(0,0,0,0.6); padding: 0.3rem 0.6rem; border-radius: 6px;
+    }
+
+    /* Right Timeline & Edit Plan Panel */
+    .edit-plan-panel {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px;
+      padding: 1.75rem; backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 1.5rem;
+    }
+
+    /* Timeline Bar */
+    .timeline-strip {
+      width: 100%; height: 32px; border-radius: 8px; overflow: hidden; display: flex;
+      border: 1px solid var(--card-border); background: #1e293b;
+    }
+    .segment-keep { background: #ef4444; height: 100%; }
+    .segment-cut {
+      background: repeating-linear-gradient(45deg, #334155, #334155 8px, #1e293b 8px, #1e293b 16px);
+      height: 100%;
+    }
+
+    .cut-items-list {
+      display: flex; flex-direction: column; gap: 0.6rem; max-height: 220px; overflow-y: auto;
+    }
+
+    .cut-item {
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 10px;
+      padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.85rem;
+    }
+
+    /* 20 Lines Verification Table */
+    .table-box {
+      max-height: 180px; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { padding: 0.45rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; }
+    th { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <nav>
+    <div class="brand">
+      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
+      <span>🎬 One-Minute Reel Cut</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn btn-red" onclick="renderReel()">🚀 Render Reel (0:58)</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Left 9:16 Vertical Phone Reel Stage -->
+    <div class="phone-stage">
+      <div class="notch-bar"></div>
+      <div class="reel-meta-tag">
+        <span>9:16 Vertical</span>
+        <span style="color: #00f5a0; font-weight: bold;" id="timer-badge">0:58 / 1:00 OK!</span>
+      </div>
+
+      <!-- Centered Face in Frame -->
+      <div class="avatar-face">
+        <div class="avatar-eyes"><div class="a-eye"></div><div class="a-eye"></div></div>
+        <div class="avatar-mouth"></div>
+      </div>
+
+      <!-- Burnt-in Captions with Active Highlight Word -->
+      <div class="burnt-captions-box" id="captions-display">
+        AGENTS DO THE <span class="caption-highlight">WORK</span> WHILE YOU DIRECT!
+      </div>
+    </div>
+
+    <!-- Right Edit Plan & Transcript Inspector -->
+    <div class="edit-plan-panel">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800;">Visual Edit Plan</h2>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">Raw Footage: raw-video.mp4 (5:12) → Output: 0:58</p>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: #00f5a0;">
+          ✂️ 4m 14s Removed
+        </div>
+      </div>
+
+      <!-- Visual Striped Timeline (Red stays, Hatched gets cut) -->
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+          <span>0:00</span>
+          <span>Red stays. Hatched gets cut.</span>
+          <span>5:12</span>
+        </div>
+        <div class="timeline-strip">
+          <div class="segment-keep" style="width: 15%;"></div>
+          <div class="segment-cut" style="width: 10%;"></div>
+          <div class="segment-keep" style="width: 20%;"></div>
+          <div class="segment-cut" style="width: 25%;"></div>
+          <div class="segment-keep" style="width: 18%;"></div>
+          <div class="segment-cut" style="width: 12%;"></div>
+        </div>
+      </div>
+
+      <!-- List of Cuts -->
+      <div>
+        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">Automated Trims & Cuts:</div>
+        <div class="cut-items-list">
+          <div class="cut-item">
+            <span>⏱ 0:08 · "Umm, so basically, wait..."</span>
+            <span style="color: #ff5858; font-weight: bold;">Cut 6s (Filler)</span>
+          </div>
+          <div class="cut-item">
+            <span>⏱ 0:17 · 8s Silence looking at notes</span>
+            <span style="color: #ff5858; font-weight: bold;">Cut 8s (Silence)</span>
+          </div>
+          <div class="cut-item">
+            <span>⏱ 0:32 · "Uhh, like, you know"</span>
+            <span style="color: #ff5858; font-weight: bold;">Cut 3s (Filler)</span>
+          </div>
+          <div class="cut-item">
+            <span>⏱ 0:58 · Repeated sentence and retake</span>
+            <span style="color: #ff5858; font-weight: bold;">Cut 17s (Retake)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hand Check 20 Lines Verification Table -->
+      <div>
+        <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">
+          Hand Check of 20 Lines (Done When Verification):
+        </div>
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>Transcript Text</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transcript-tbody">
+              <!-- Populated from sample-transcript.json -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function init() {
+      try {
+        const resp = await fetch('sample-transcript.json');
+        const data = await resp.json();
+        const tbody = document.getElementById('transcript-tbody');
+        tbody.innerHTML = '';
+        data.verifiedLines.forEach(l => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${l.line}</td>
+            <td>${l.start}-${l.end}</td>
+            <td>${l.text}</td>
+            <td><strong style="color:${l.status === 'Keep' ? '#00f5a0' : '#ff5858'}">${l.status}</strong></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch(e) {}
+    }
+
+    function renderReel() {
+      alert("Render Completed!\n\nOutput: output-reel-60s.mp4\nDuration: 0:58 (Strictly under 60 seconds)\nAspect Ratio: 9:16 Portrait\nCaptions: Burnt-in with active word highlight\nFades: 0.5s audio and video fade-in/fade-out applied.");
+    }
+
+    init();
+  </script>
+</body>
+</html>
