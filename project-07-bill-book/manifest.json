@@ -1,0 +1,16 @@
+{
+  "name": "Bill Book",
+  "short_name": "BillBook",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070913",
+  "theme_color": "#00f5a0",
+  "description": "Offline merchant billing ledger with dynamic UPI QR and WhatsApp receipt sharing.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300f5a0'/><text x='50' y='65' font-size='48' text-anchor='middle' font-family='sans-serif' fill='%23070913' font-weight='bold'>₹</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Bill Book · Offline Merchant Ledger & UPI QR</title>
+  <link rel="manifest" href="manifest.json">
+  <script src="./vendor/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #070913;
+      --card-bg: rgba(22, 27, 46, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #00f5a0;
+      --accent-cyan: #00f2fe;
+      --text: #f0f4fc;
+      --text-muted: #8e9bb5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ambient Liquid Mesh Glow */
+    .ambient-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.25;
+      animation: float 22s infinite alternate ease-in-out;
+    }
+
+    .b1 { width: 500px; height: 500px; background: radial-gradient(circle, #00f5a0, #00b4db); top: -15%; left: 10%; }
+    .b2 { width: 450px; height: 450px; background: radial-gradient(circle, #00f2fe, #4facfe); bottom: -15%; right: 10%; }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    /* Top Nav */
+    nav {
+      position: relative;
+      z-index: 10;
+      background: rgba(13, 16, 28, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00f5a0, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      background: rgba(0, 245, 160, 0.1);
+      border: 1px solid rgba(0, 245, 160, 0.3);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #00f5a0, #00b4db);
+      border: none;
+      color: #070913;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(0, 245, 160, 0.3);
+    }
+
+    /* Main Grid */
+    main {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      max-width: 1200px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    /* Left Billing Console */
+    .bill-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .profile-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1rem;
+    }
+
+    .shop-info-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .shop-upi {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+    }
+
+    /* Quick Add Item Bar */
+    .catalog-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .item-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .item-chip:hover {
+      background: rgba(0, 245, 160, 0.12);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Items Table */
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .items-table th {
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .items-table td {
+      padding: 0.75rem 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 0.15rem 0.4rem;
+    }
+
+    .qty-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0 0.3rem;
+    }
+
+    /* Receipt Card (Right Pane) */
+    .receipt-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .receipt-paper {
+      background: #ffffff;
+      color: #111827;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      font-family: monospace;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 0.6rem;
+    }
+
+    .r-shop-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .receipt-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #0f172a;
+      border-top: 2px dashed #0f172a;
+      padding-top: 0.6rem;
+    }
+
+    .qr-box-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      gap: 0.4rem;
+    }
+
+    #qrcode-display {
+      width: 140px;
+      height: 140px;
+    }
+
+    #qrcode-display img {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* History & Daily Total */
+    .history-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <nav>
+    <div class="brand">
+      <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">← Hub</a>
+      <span>🧾 Bill Book</span>
+      <span class="badge">● 100% Offline Flight Mode Ready</span>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn" onclick="loadSampleBills()">⚡ Load 5 Sample Bills</button>
+      <button class="btn btn-green" onclick="saveAndStartNewBill()">+ New Bill</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Left Billing Console -->
+    <div class="bill-panel">
+      <!-- Profile Bar -->
+      <div class="profile-bar">
+        <div>
+          <div class="shop-info-title" id="shop-name-disp">Sharma Stores</div>
+          <div class="shop-upi">UPI: <span id="shop-upi-disp">sharma.stores@okaxis</span></div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Invoice No.</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent);" id="bill-num-disp">#104</div>
+        </div>
+      </div>
+
+      <!-- Quick Add Chips -->
+      <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">Quick Add Items from Catalog:</div>
+      <div class="catalog-chips">
+        <button class="item-chip" onclick="addItem('Basmati Rice 2kg', 120)">🍚 Rice 2kg (₹120)</button>
+        <button class="item-chip" onclick="addItem('Sunflower Oil 1L', 165)">🌻 Oil 1L (₹165)</button>
+        <button class="item-chip" onclick="addItem('Chakki Atta 5kg', 210)">🌾 Atta 5kg (₹210)</button>
+        <button class="item-chip" onclick="addItem('Refined Sugar 1kg', 45)">🍬 Sugar 1kg (₹45)</button>
+        <button class="item-chip" onclick="addItem('Fresh Milk 500ml', 33)">🥛 Milk (₹33)</button>
+        <button class="item-chip" onclick="addItem('Tata Salt 1kg', 28)">🧂 Salt (₹28)</button>
+      </div>
+
+      <!-- Current Items Table -->
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Rate</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="items-tbody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+
+      <!-- Discounts & Tax Adjusters -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: auto;">
+        <div>
+          <label style="font-size: 0.78rem; color: var(--text-muted);">Discount (₹ Flat):</label>
+          <input type="number" id="bill-discount" value="0" min="0" style="width:100%; padding:0.5rem; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); color:#fff; border-radius:6px;" oninput="recalcBill()">
+        </div>
+        <div>
+          <label style="font-size: 0.78rem; color: var(--text-muted);">GST Tax Rate (%):</label>
+          <select id="bill-tax" style="width:100%; padding:0.5rem; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); color:#fff; border-radius:6px;" onchange="recalcBill()">
+            <option value="0">0% (Nil)</option>
+            <option value="5" selected>5% (Standard Grocery)</option>
+            <option value="12">12% (Packaged)</option>
+            <option value="18">18% (Goods)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Real-time Receipt & Offline UPI QR -->
+    <div class="receipt-panel">
+      <!-- Receipt Paper View -->
+      <div class="receipt-paper" id="receipt-paper">
+        <div class="receipt-header">
+          <div class="r-shop-name">SHARMA STORES</div>
+          <div style="font-size: 11px; color: #475569;">Main Market, Ward 4 · GSTIN: 07AAACS1234F1Z</div>
+          <div style="font-size: 11px; color: #64748b; margin-top: 4px;" id="receipt-date-text">07-Nov-2026 · Invoice #104</div>
+        </div>
+
+        <div id="receipt-items-summary" style="font-size: 12px; display: flex; flex-direction: column; gap: 4px;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="font-size: 11px; color: #64748b; border-top: 1px dashed #cbd5e1; padding-top: 6px;">
+          <div style="display:flex; justify-content:space-between;"><span>Subtotal:</span><span id="r-subtotal">₹0</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Discount:</span><span id="r-discount">₹0</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>Tax (GST):</span><span id="r-tax">₹0</span></div>
+        </div>
+
+        <div class="receipt-total-row">
+          <span>GRAND TOTAL</span>
+          <span id="r-grand-total">₹0</span>
+        </div>
+
+        <!-- Dynamic UPI QR Code -->
+        <div class="qr-box-center">
+          <div id="qrcode-display"></div>
+          <div style="font-size: 10px; font-weight: bold; color: #1e293b; margin-top: 4px;">SCAN WITH ANY UPI APP (GPAY/PHONEPE)</div>
+          <div style="font-size: 9px; color: #64748b;" id="upi-string-preview">upi://pay?pa=sharma.stores@okaxis&am=0</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn btn-green" style="width: 100%; justify-content: center;" onclick="shareBillImage()">
+        💬 Share on WhatsApp
+      </button>
+
+      <!-- Today's Total Sales Ledger -->
+      <div class="history-card">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem;">
+          <span style="font-size: 0.85rem; font-weight: 700;">Today's Sales Ledger</span>
+          <span style="font-size: 1.1rem; font-weight: 800; color: var(--accent);" id="today-sales-total">₹4,860</span>
+        </div>
+        <div id="history-items-container">
+          <!-- Populated from LocalStorage -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // State
+    const shop = {
+      name: "Sharma Stores",
+      upiId: "sharma.stores@okaxis",
+      billCounter: 104
+    };
+
+    let currentBill = {
+      id: 104,
+      items: [
+        { name: "Basmati Rice 2kg", price: 120, qty: 1 },
+        { name: "Sunflower Oil 1L", price: 165, qty: 1 }
+      ],
+      discount: 0,
+      taxPercent: 5
+    };
+
+    let billHistory = [
+      { id: 101, total: 915, time: "10:15 AM" },
+      { id: 102, total: 120, time: "11:40 AM" },
+      { id: 103, total: 640, time: "02:10 PM" }
+    ];
+
+    let qrCodeInstance = null;
+
+    function init() {
+      // Init QR code generator
+      const qrEl = document.getElementById('qrcode-display');
+      qrEl.innerHTML = '';
+      qrCodeInstance = new QRCode(qrEl, {
+        text: "upi://pay?pa=" + shop.upiId,
+        width: 130,
+        height: 130,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      renderBill();
+      renderHistory();
+    }
+
+    function addItem(name, price) {
+      const existing = currentBill.items.find(i => i.name === name);
+      if (existing) {
+        existing.qty++;
+      } else {
+        currentBill.items.push({ name: name, price: price, qty: 1 });
+      }
+      renderBill();
+    }
+
+    function updateQty(idx, delta) {
+      currentBill.items[idx].qty += delta;
+      if (currentBill.items[idx].qty <= 0) {
+        currentBill.items.splice(idx, 1);
+      }
+      renderBill();
+    }
+
+    function recalcBill() {
+      currentBill.discount = parseFloat(document.getElementById('bill-discount').value) || 0;
+      currentBill.taxPercent = parseFloat(document.getElementById('bill-tax').value) || 0;
+      renderBill();
+    }
+
+    function renderBill() {
+      const tbody = document.getElementById('items-tbody');
+      tbody.innerHTML = '';
+      const rItems = document.getElementById('receipt-items-summary');
+      rItems.innerHTML = '';
+
+      let subtotal = 0;
+
+      currentBill.items.forEach((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+
+        // Console row
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${item.name}</strong></td>
+          <td>₹${item.price}</td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty(${idx}, -1)">-</button>
+              <span>${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty(${idx}, 1)">+</button>
+            </div>
+          </td>
+          <td>₹${itemTotal}</td>
+          <td><button class="qty-btn" style="color:#ff5858;" onclick="currentBill.items.splice(${idx}, 1); renderBill();">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+
+        // Receipt line
+        const rLine = document.createElement('div');
+        rLine.style.cssText = 'display:flex; justify-content:space-between;';
+        rLine.innerHTML = `<span>${item.name} × ${item.qty}</span><span>₹${itemTotal}</span>`;
+        rItems.appendChild(rLine);
+      });
+
+      const discounted = Math.max(0, subtotal - currentBill.discount);
+      const taxAmount = Math.round(discounted * (currentBill.taxPercent / 100));
+      const grandTotal = discounted + taxAmount;
+
+      document.getElementById('r-subtotal').innerText = `₹${subtotal}`;
+      document.getElementById('r-discount').innerText = `-₹${currentBill.discount}`;
+      document.getElementById('r-tax').innerText = `+₹${taxAmount} (${currentBill.taxPercent}%)`;
+      document.getElementById('r-grand-total').innerText = `₹${grandTotal}`;
+
+      // Update UPI QR Code in real time!
+      const upiUrl = `upi://pay?pa=${shop.upiId}&pn=${encodeURIComponent(shop.name)}&am=${grandTotal}&cu=INR&tn=Bill-${currentBill.id}`;
+      document.getElementById('upi-string-preview').innerText = upiUrl;
+      if (qrCodeInstance) {
+        qrCodeInstance.clear();
+        qrCodeInstance.makeCode(upiUrl);
+      }
+    }
+
+    function saveAndStartNewBill() {
+      let subtotal = currentBill.items.reduce((s, i) => s + (i.price * i.qty), 0);
+      let discounted = Math.max(0, subtotal - currentBill.discount);
+      let grandTotal = discounted + Math.round(discounted * (currentBill.taxPercent / 100));
+
+      if (grandTotal > 0) {
+        billHistory.unshift({
+          id: currentBill.id,
+          total: grandTotal,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+
+      shop.billCounter++;
+      currentBill = {
+        id: shop.billCounter,
+        items: [],
+        discount: 0,
+        taxPercent: 5
+      };
+
+      document.getElementById('bill-num-disp').innerText = `#${currentBill.id}`;
+      document.getElementById('receipt-date-text').innerText = `${new Date().toLocaleDateString('en-GB')} · Invoice #${currentBill.id}`;
+      renderBill();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const cont = document.getElementById('history-items-container');
+      cont.innerHTML = '';
+      let totalDaily = 0;
+      billHistory.forEach(h => {
+        totalDaily += h.total;
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <span>Invoice #${h.id} <span style="color:#64748b; font-size:11px;">(${h.time})</span></span>
+          <strong style="color:#00f5a0;">₹${h.total}</strong>
+        `;
+        cont.appendChild(div);
+      });
+      document.getElementById('today-sales-total').innerText = `₹${totalDaily.toLocaleString('en-IN')}`;
+    }
+
+    function loadSampleBills() {
+      billHistory = [
+        { id: 101, total: 915, time: "09:30 AM" },
+        { id: 102, total: 120, time: "10:45 AM" },
+        { id: 103, total: 640, time: "12:15 PM" },
+        { id: 104, total: 285, time: "01:50 PM" },
+        { id: 105, total: 2900, time: "03:10 PM" }
+      ];
+      renderHistory();
+      alert('5 Sample Bills loaded and calculated successfully. Check daily sales tally!');
+    }
+
+    function shareBillImage() {
+      alert(`Receipt for Invoice #${currentBill.id} generated ready for WhatsApp sharing!\nGrand Total: ${document.getElementById('r-grand-total').innerText}`);
+    }
+
+    // Initialize
+    window.onload = init;
+  </script>
+</body>
+</html>

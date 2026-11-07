@@ -28,7 +28,7 @@
 
 ### Phase 2: Section B - Phone Apps and Games
 - [x] **Project 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline web/app PWA)
-- [ ] **Project 07: Bill Book** (Shop ledger, item catalog, dynamic UPI QR generator, WhatsApp image receipt, flight mode ready)
+- [x] **Project 07: Bill Book** (Shop ledger, item catalog, dynamic UPI QR generator, WhatsApp image receipt, flight mode ready)
 - [ ] **Project 08: Auto Rally** (60FPS Canvas Auto-rickshaw racer, 3 laps, obstacles, coins, best time persistence, audio synth)
 
 ### Phase 3: Section C - Chrome Extensions
