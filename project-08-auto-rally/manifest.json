@@ -1,0 +1,17 @@
+{
+  "name": "Auto Rally",
+  "short_name": "AutoRally",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070913",
+  "theme_color": "#f6d365",
+  "description": "Retro auto-rickshaw 3-lap racing game with coins, turbo boost, and sound synth.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f6d365'/><rect x='25' y='25' width='50' height='50' rx='10' fill='%23111827'/><circle cx='35' cy='75' r='8' fill='%2338bdf8'/><circle cx='65' cy='75' r='8' fill='%2338bdf8'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
