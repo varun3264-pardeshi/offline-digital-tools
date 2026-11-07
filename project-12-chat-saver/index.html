@@ -257,10 +257,11 @@
           <span style="font-size: 0.75rem; color: var(--accent-primary); text-transform: uppercase; font-weight: 800;" id="chat-platform-label">Platform: ChatGPT</span>
           <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-main);" id="chat-title-text">Explain_RAG_Architectures_Deeply</div>
         </div>
-        <div class="select-btns" style="display: flex; gap: 0.5rem;">
-          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(true)">☑ Select All</button>
-          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(false)">☐ Deselect All</button>
-          <button class="btn" style="font-size: 0.76rem;" onclick="selectAssistantOnly()">🤖 AI Answers Only</button>
+        <div class="select-btns" style="display: flex; gap: 0.5rem; align-items:center; flex-wrap:wrap;">
+          <input type="search" id="chat-filter-input" placeholder="🔍 Search in chat..." style="padding:0.3rem 0.65rem; border-radius:8px; border:1px solid var(--border-strong); font-size:0.78rem; background:var(--bg-surface); color:var(--text-main); outline:none;" oninput="filterChatMessages(this.value)">
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(true)">☑ All</button>
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAll(false)">☐ None</button>
+          <button class="btn" style="font-size: 0.76rem;" onclick="selectAssistantOnly()">🤖 AI Only</button>
         </div>
       </div>
 
@@ -301,6 +302,9 @@
 
         <button class="btn btn-primary" style="justify-content: center; padding: 0.7rem;" onclick="exportMarkdown()">
           📝 Download Markdown (.md)
+        </button>
+        <button class="btn" style="justify-content: center; padding: 0.7rem;" onclick="exportJson()">
+          💾 Download JSON (.json)
         </button>
         <button class="btn" style="justify-content: center; padding: 0.7rem;" onclick="exportPdf()">
           📄 Print / Save Clean PDF
@@ -455,7 +459,10 @@
           <input type="checkbox" class="msg-chk" checked data-idx="${idx}" onchange="updateSelectedCount()" style="margin-top: 6px; width:16px; height:16px; accent-color:var(--accent-primary); cursor:pointer;">
           <div class="avatar-pill">${m.role === 'User' ? 'U' : 'AI'}</div>
           <div class="msg-body">
-            <div style="font-weight: 800; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.3rem;">${m.role.toUpperCase()} · MESSAGE #${idx + 1}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.3rem;">
+              <span style="font-weight: 800; font-size: 0.78rem; color: var(--text-muted);">${m.role.toUpperCase()} · MESSAGE #${idx + 1}</span>
+              <button type="button" id="copy-btn-${idx}" onclick="copyMessageTurn(${idx})" style="padding:0.18rem 0.55rem; font-size:0.72rem; border-radius:6px; border:1px solid var(--border-strong); background:var(--bg-elevated); color:var(--text-main); cursor:pointer;">📋 Copy</button>
+            </div>
             <div>${formatMessageContent(m.text)}</div>
           </div>
         `;
@@ -531,6 +538,50 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    }
+
+    
+    function copyMessageTurn(idx) {
+      if (!messages[idx]) return;
+      navigator.clipboard.writeText(messages[idx].text).then(() => {
+        const btn = document.getElementById(`copy-btn-${idx}`);
+        if (btn) {
+          const old = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => { btn.textContent = old; }, 1800);
+        }
+      });
+      if (window.AudioHaptics) window.AudioHaptics.play('click');
+    }
+
+    function exportJson() {
+      const selected = [];
+      document.querySelectorAll('.msg-chk').forEach(c => {
+        if (c.checked) selected.push(messages[parseInt(c.dataset.idx, 10)]);
+      });
+      if (!selected.length) { alert('Please select at least one message.'); return; }
+      const payload = {
+        title: chatTitle,
+        exportedAt: new Date().toISOString(),
+        totalMessages: selected.length,
+        conversation: selected
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${chatTitle}.json`;
+      a.click();
+      if (window.AudioHaptics) window.AudioHaptics.play('pop');
+    }
+
+    function filterChatMessages(query) {
+      const q = (query || '').toLowerCase().trim();
+      messages.forEach((m, idx) => {
+        const row = document.getElementById(`msg-row-${idx}`);
+        if (!row) return;
+        const matches = !q || m.text.toLowerCase().includes(q) || m.role.toLowerCase().includes(q);
+        row.style.display = matches ? 'flex' : 'none';
+      });
     }
 
     function exportPdf() {

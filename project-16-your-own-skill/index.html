@@ -179,6 +179,7 @@
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
       <button class="btn active" id="mode-skill-btn" onclick="setMode(true)">🎓 With /viva Skill (1-by-1 Graded)</button>
       <button class="btn" id="mode-raw-btn" onclick="setMode(false)">💬 Without Skill (Compare)</button>
+      <button class="btn" id="voice-toggle-btn" onclick="toggleSpeech()">🔇 Examiner Voice: OFF</button>
       <button class="btn btn-primary" onclick="restartViva()">🔄 New Session</button>
     </div>
   </nav>
@@ -189,6 +190,7 @@
       <div class="terminal-bar">
         <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
         <span id="session-title-bar">/viva session · 1 question at a time</span>
+        <span id="viva-score-tag" style="color:#6EE7B7; font-weight:700;">Score: 0 / 5</span>
       </div>
 
       <div class="terminal-body" id="term-log"></div>
@@ -319,11 +321,33 @@
       restartViva();
     }
 
+    let speechEnabled = false;
+
+    function toggleSpeech() {
+      speechEnabled = !speechEnabled;
+      const btn = document.getElementById('voice-toggle-btn');
+      if (btn) btn.textContent = speechEnabled ? '🔊 Examiner Voice: ON' : '🔇 Examiner Voice: OFF';
+      if (speechEnabled && currentStep < examBanks[activeBankKey].questions.length) {
+        speakQuestion(examBanks[activeBankKey].questions[currentStep].q);
+      }
+    }
+
+    function speakQuestion(text) {
+      if (!speechEnabled || !window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const clean = text.replace(/Q\d+\.\s*/, '');
+      const utter = new SpeechSynthesisUtterance(clean);
+      utter.rate = 1.0;
+      utter.pitch = 1.0;
+      window.speechSynthesis.speak(utter);
+    }
+
     function restartViva() {
       const log = document.getElementById('term-log');
       log.innerHTML = '';
       currentStep = 0;
       score = 0;
+      document.getElementById('viva-score-tag').textContent = 'Score: 0 / 5';
       const bank = examBanks[activeBankKey];
 
       if (!useSkillMode) {
@@ -336,6 +360,7 @@
       print(`&gt; /viva ${bank.file}`, 't-user');
       print(`Reading notes (${bank.file}). Asking 5 questions, one at a time.`, 't-examiner');
       print(bank.questions[0].q, 't-question');
+      speakQuestion(bank.questions[0].q);
     }
 
     function submitInput() {
@@ -366,13 +391,16 @@
         weakestPage = curQ.weakPage;
       }
 
+      document.getElementById('viva-score-tag').textContent = `Score: ${score} / 5`;
       print(`Examiner: ${curQ.feedback}`, 't-examiner');
       currentStep++;
 
       if (currentStep < bank.questions.length) {
-        print(bank.questions[currentStep].q, 't-question');
+        const nextQ = bank.questions[currentStep].q;
+        print(nextQ, 't-question');
+        speakQuestion(nextQ);
       } else {
-        print(`Score: ${score}/5. Revise page ${weakestPage}.`, 't-score');
+        print(`Final Viva Result: Score ${score}/5 (${(score/5*100).toFixed(0)}%). Recommend revising page ${weakestPage}.`, 't-score');
       }
     }
 

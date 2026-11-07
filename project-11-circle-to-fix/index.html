@@ -242,10 +242,16 @@
       <a href="../index.html" class="btn" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; text-decoration: none;">← All Tools</a>
       <span>Circle Any Website Bug to Generate a Fix</span>
     </div>
-    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items:center;">
       <button class="tool-btn active" id="btn-circle" onclick="setShape('circle')">⭕ Circle</button>
       <button class="tool-btn" id="btn-rect" onclick="setShape('rect')">⬛ Box</button>
       <button class="tool-btn" id="btn-arrow" onclick="setShape('arrow')">↗ Arrow</button>
+      <select id="pen-color-select" style="padding:0.35rem 0.6rem; border-radius:8px; font-size:0.78rem; border:1px solid var(--border-strong); background:var(--bg-surface); color:var(--text-main);" onchange="setPenColor(this.value)">
+        <option value="#E11D48">🔴 Red Ink</option>
+        <option value="#F59E0B">🟡 Amber Ink</option>
+        <option value="#10B981">🟢 Emerald Ink</option>
+        <option value="#8B5CF6">🟣 Obsidian Purple</option>
+      </select>
       <button class="btn btn-primary" onclick="triggerDrawingMode()">✏️ Draw on Page (Ctrl+Shift+X)</button>
       <button class="btn" id="btn-toggle-fix" onclick="toggleLiveFix()">⚡ Apply Fix on Page (Before → After)</button>
     </div>
@@ -382,7 +388,7 @@
       canvasOverlay.onmousemove = (e) => {
         if (!isDrawing) return;
         ctx.clearRect(0, 0, canvasOverlay.width, canvasOverlay.height);
-        ctx.strokeStyle = '#E11D48';
+        ctx.strokeStyle = penColor;
         ctx.lineWidth = 3;
 
         const curX = e.clientX, curY = e.clientY;
@@ -430,7 +436,7 @@
       ctx.font = '11px monospace';
       ctx.fillStyle = '#52525B';
       ctx.fillText((el.innerText || el.value || 'UI Element').trim().slice(0, 34), 16, 48);
-      ctx.strokeStyle = '#E11D48';
+      ctx.strokeStyle = penColor;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.ellipse(140, 36, 120, 26, 0, 0, Math.PI * 2);

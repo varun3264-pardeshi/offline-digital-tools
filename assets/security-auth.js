@@ -123,6 +123,7 @@
           <span class="palette-dot ${savedPalette === 'amber' ? 'active' : ''}" data-p="amber" style="background:#B45309;" title="Marigold Amber"></span>
           <span class="palette-dot ${savedPalette === 'mulberry' ? 'active' : ''}" data-p="mulberry" style="background:#7E22CE;" title="Royal Mulberry"></span>
           <span class="palette-dot ${savedPalette === 'espresso' ? 'active' : ''}" data-p="espresso" style="background:#231F1B; border-color:#F59E0B;" title="Espresso Dark"></span>
+          <span class="palette-dot ${savedPalette === 'obsidian' ? 'active' : ''}" data-p="obsidian" style="background:#8B5CF6;" title="Obsidian Dark"></span>
         </div>
         <button class="sec-btn" id="btn-run-sec-audit" type="button">🛡️ Security</button>
         <button class="sec-btn" id="btn-lock-session" type="button">🔒 Lock</button>
@@ -352,16 +353,186 @@
     };
   }
 
+  // Web Audio Tactile Haptic Synthesizer
+  const AudioHaptics = (function() {
+    let ctx = null;
+    function play(type = 'click') {
+      try {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        const now = ctx.currentTime;
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(850, now);
+          osc.frequency.exponentialRampToValueAtTime(420, now + 0.035);
+          gain.gain.setValueAtTime(0.03, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+          osc.start(now);
+          osc.stop(now + 0.035);
+        } else if (type === 'pop') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(720, now + 0.05);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        }
+      } catch (e) {}
+    }
+    return { play };
+  })();
+
+  const TOOLS_LIST = [
+    { num: "01", name: "Edit, Merge & Convert PDF Files", path: "project-01-pdf-studio/index.html", cat: "Documents" },
+    { num: "02", name: "Resize Photo & Signature for Exam Forms", path: "project-02-form-photo-fixer/index.html", cat: "Documents" },
+    { num: "03", name: "Build & Print Your A4 Resume", path: "project-03-resume-builder/index.html", cat: "Documents" },
+    { num: "04", name: "Take Practice Mock Tests with Timer", path: "project-04-cbt-mock-test/index.html", cat: "Study" },
+    { num: "05", name: "Convert Typed Text into Handwritten Pages", path: "project-05-scribbly-notes/index.html", cat: "Study" },
+    { num: "06", name: "Track & Control Daily Short-Video Watching", path: "project-06-reel-monster/index.html", cat: "Utilities" },
+    { num: "07", name: "Make Shop Bills & Instant UPI QR Codes", path: "project-07-bill-book/index.html", cat: "Utilities" },
+    { num: "08", name: "Drive an Auto-Rickshaw Through City Traffic", path: "project-08-auto-rally/index.html", cat: "Games" },
+    { num: "09", name: "Watch YouTube Lectures Without Distractions", path: "project-09-youtube-focus-board/index.html", cat: "Extensions" },
+    { num: "10", name: "Save & Track Your Job Applications", path: "project-10-job-clipper/index.html", cat: "Extensions" },
+    { num: "11", name: "Circle Any Website Bug to Generate a Fix", path: "project-11-circle-to-fix/index.html", cat: "Extensions" },
+    { num: "12", name: "Save AI Chats as Clean PDF or Markdown", path: "project-12-chat-saver/index.html", cat: "Extensions" },
+    { num: "13", name: "Inspect Colors & Fonts on Any Webpage", path: "project-13-style-spy/index.html", cat: "Extensions" },
+    { num: "14", name: "Put Unused Browser Tabs to Sleep", path: "project-14-tab-goblin/index.html", cat: "Extensions" },
+    { num: "15", name: "Cut Long Videos into 60-Second Vertical Reels", path: "project-15-one-minute-reel-cut/index.html", cat: "Media" },
+    { num: "16", name: "Practice Viva Questions from Your Study Notes", path: "project-16-your-own-skill/index.html", cat: "Study" },
+    { num: "17", name: "Compare Old vs Redesigned Webpage Side-by-Side", path: "project-17-same-page-new-design/index.html", cat: "UI/UX" }
+  ];
+
+  function injectCommandPalette() {
+    if (document.getElementById('cmd-palette-backdrop')) return;
+    const backdrop = document.createElement('div');
+    backdrop.id = 'cmd-palette-backdrop';
+    backdrop.className = 'cmd-palette-backdrop';
+    backdrop.innerHTML = `
+      <div class="cmd-palette-modal">
+        <div class="cmd-search-row">
+          <span style="font-size:1.1rem;">⚡</span>
+          <input type="text" id="cmd-search-input" class="cmd-input" placeholder="Jump to tool, switch palette, or action (e.g. 'pdf', 'obsidian', 'resume')..." autofocus>
+          <span class="cmd-shortcut-badge">ESC</span>
+        </div>
+        <div class="cmd-results-list" id="cmd-results-list"></div>
+        <div class="cmd-footer">
+          <span>Navigate with ↑ ↓ and Press ↵ to Open</span>
+          <span>Obsidian x One UI Command Spotlight</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+
+    const input = document.getElementById('cmd-search-input');
+    const results = document.getElementById('cmd-results-list');
+
+    function renderCmdItems(query = '') {
+      const q = query.toLowerCase().trim();
+      const isSub = window.location.pathname.includes('/project-');
+      const prefix = isSub ? '../' : '';
+
+      let items = [];
+
+      // Add tools
+      TOOLS_LIST.forEach(t => {
+        if (!q || t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q) || t.num.includes(q)) {
+          items.push({
+            icon: "🔧",
+            title: `Tool ${t.num} · ${t.name}`,
+            badge: t.cat,
+            action: () => { window.location.href = prefix + t.path; }
+          });
+        }
+      });
+
+      // Add palettes
+      const palettes = ['obsidian', 'terracotta', 'emerald', 'coral', 'amber', 'mulberry', 'espresso'];
+      palettes.forEach(p => {
+        if (!q || p.includes(q) || 'theme palette'.includes(q)) {
+          items.push({
+            icon: "🎨",
+            title: `Switch Theme to ${p.charAt(0).toUpperCase() + p.slice(1)}`,
+            badge: "Theme",
+            action: () => { applyPalette(p); closeCommandPalette(); }
+          });
+        }
+      });
+
+      results.innerHTML = '';
+      if (!items.length) {
+        results.innerHTML = `<div style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;">No matching tools or actions found.</div>`;
+        return;
+      }
+
+      items.slice(0, 10).forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = `cmd-item ${idx === 0 ? 'selected' : ''}`;
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <span>${item.icon}</span>
+            <span>${sanitizeText(item.title)}</span>
+          </div>
+          <span class="cmd-shortcut-badge">${item.badge}</span>
+        `;
+        div.onclick = () => { AudioHaptics.play('click'); item.action(); };
+        results.appendChild(div);
+      });
+    }
+
+    input.addEventListener('input', (e) => renderCmdItems(e.target.value));
+
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) closeCommandPalette();
+    });
+
+    window.__renderCmdItems = renderCmdItems;
+  }
+
+  function openCommandPalette() {
+    injectCommandPalette();
+    const bd = document.getElementById('cmd-palette-backdrop');
+    if (!bd) return;
+    bd.classList.add('open');
+    const input = document.getElementById('cmd-search-input');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    if (window.__renderCmdItems) window.__renderCmdItems('');
+    AudioHaptics.play('pop');
+  }
+
+  function closeCommandPalette() {
+    const bd = document.getElementById('cmd-palette-backdrop');
+    if (bd) bd.classList.remove('open');
+  }
+
+  window.openCommandPalette = openCommandPalette;
+  window.closeCommandPalette = closeCommandPalette;
+  window.AudioHaptics = AudioHaptics;
+
   window.StudioSecurity = {
     sanitizeText,
     sha256Hex,
     logAuditEvent,
     applyPalette,
-    openSecurityAuditModal
+    openSecurityAuditModal,
+    openCommandPalette,
+    AudioHaptics
   };
 
   document.addEventListener('keydown', (e) => {
-    if (e.altKey && e.key.toLowerCase() === 'a') {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openCommandPalette();
+    } else if (e.key === 'Escape') {
+      closeCommandPalette();
+    } else if (e.altKey && e.key.toLowerCase() === 'a') {
       e.preventDefault();
       const ribbon = document.getElementById('studio-security-ribbon');
       if (ribbon) {

@@ -851,6 +851,22 @@
     // Overlay edits map: pageIndex -> array of drawings/redactions/texts
     let pageEdits = {};
 
+    
+    function filterToolsInStudio(query) {
+      const q = (query || '').toLowerCase().trim();
+      document.querySelectorAll('.tool-pill').forEach(btn => {
+        if (!q) {
+          btn.style.display = '';
+        } else if (btn.textContent.toLowerCase().includes(q)) {
+          btn.style.display = 'inline-flex';
+          btn.style.outline = '2px solid var(--accent-primary)';
+        } else {
+          btn.style.display = 'none';
+          btn.style.outline = '';
+        }
+      });
+    }
+
     function switchCategory(catId, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
