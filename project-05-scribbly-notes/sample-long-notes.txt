@@ -1,0 +1,51 @@
+# CHAPTER 4: THERMODYNAMICS & HEAT TRANSFER
+
+1. Fundamental Concepts
+Thermodynamics is the branch of physics that deals with heat, work, and temperature, and their relation to energy, radiation, and physical properties of matter.
+
+The four laws of thermodynamics govern the behavior of these quantities:
+- Zeroth Law: If two systems are each in thermal equilibrium with a third, they are in thermal equilibrium with each other. This forms the basis for temperature measurement.
+- First Law: Energy can neither be created nor destroyed; it can only change forms. Delta U = Q - W.
+- Second Law: The total entropy of an isolated system always increases over time. Heat cannot spontaneously flow from a colder body to a hotter body.
+- Third Law: As the temperature of a system approaches absolute zero (0 K), the entropy approaches a constant minimum.
+
+2. Heat Engines & Carnot Cycle
+A heat engine absorbs heat Q_H from a hot reservoir at temperature T_H, performs mechanical work W, and expels waste heat Q_C to a cold sink at temperature T_C.
+
+Thermal efficiency is defined as:
+Efficiency (eta) = Work Output / Heat Input = W / Q_H = 1 - (Q_C / Q_H).
+
+The Carnot cycle represents an idealized, reversible thermodynamic cycle consisting of:
+1. Reversible isothermal expansion (absorbing heat at T_H).
+2. Reversible adiabatic expansion (temperature drops from T_H to T_C).
+3. Reversible isothermal compression (expelling heat at T_C).
+4. Reversible adiabatic compression (temperature rises from T_C to T_H).
+
+Carnot efficiency limit:
+eta_Carnot = 1 - (T_C / T_H).
+No actual engine operating between two given reservoirs can be more efficient than a Carnot engine!
+
+3. Entropy and Irreversibility
+Entropy (S) is a measure of the molecular disorder or randomness in a physical system.
+For any infinitesimal reversible process:
+dS = dQ_rev / T.
+
+In all spontaneous irreversible processes:
+Delta S_universe = Delta S_system + Delta S_surroundings > 0.
+This explains the "Arrow of Time" in classical physics: natural processes are unidirectional.
+
+4. Heat Transfer Mechanisms
+Conduction: Transfer of kinetic energy between adjacent molecules without bulk motion of matter.
+Fourier's Law: q = -k * A * (dT / dx).
+
+Convection: Heat transfer driven by macroscopic fluid movement.
+Newton's Law of Cooling: q = h * A * (T_surface - T_fluid).
+
+Radiation: Energy emitted via electromagnetic waves (photons). Requires no medium!
+Stefan-Boltzmann Law: E = epsilon * sigma * A * T^4.
+
+5. Key Takeaways & Exam Summary
+- Remember that Kelvin must ALWAYS be used for temperature calculations in Carnot efficiency equations.
+- In adiabatic processes, Q = 0, so Delta U = -W.
+- In isothermal processes with ideal gases, Delta U = 0, so Q = W.
+- Review Chapter 5 problem set questions 14 through 28 before tomorrow's viva test!

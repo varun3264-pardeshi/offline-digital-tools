@@ -24,7 +24,7 @@
 - [x] **Project 02: Form Photo Fixer** (Photo/Sign resize, 3 form presets, face guide, KB compression)
 - [x] **Project 03: Resume Builder** (Live A4 preview, 3 distinct themes, drag-drop sections, PDF export, JSON save/load)
 - [x] **Project 04: CBT Mock Test Engine** (NTA/JEE style, timer persistence across refresh, question palette, negative marking, results)
-- [ ] **Project 05: Scribbly Notes** (Typed to handwriting, 3 font styles, line natural variation, multi-page split)
+- [x] **Project 05: Scribbly Notes** (Typed to handwriting, 3 font styles, line natural variation, multi-page split)
 
 ### Phase 2: Section B - Phone Apps and Games
 - [ ] **Project 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline web/app PWA)
