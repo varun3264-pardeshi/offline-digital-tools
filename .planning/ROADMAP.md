@@ -20,7 +20,7 @@
 - [x] Create Master Liquid Hub (`index.html`) connecting all 17 projects with live status & liquid animation.
 
 ### Phase 1: Section A - Web Tools
-- [ ] **Project 01: PDF Studio** (29 Tools: Organise, Edit, Stamp, Convert, Finish)
+- [x] **Project 01: PDF Studio** (29 Tools: Organise, Edit, Stamp, Convert, Finish)
 - [ ] **Project 02: Form Photo Fixer** (Photo/Sign resize, 3 form presets, face guide, KB compression)
 - [ ] **Project 03: Resume Builder** (Live A4 preview, 3 distinct themes, drag-drop sections, PDF export, JSON save/load)
 - [ ] **Project 04: CBT Mock Test Engine** (NTA/JEE style, timer persistence across refresh, question palette, negative marking, results)
