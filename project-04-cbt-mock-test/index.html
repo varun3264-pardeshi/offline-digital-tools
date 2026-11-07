@@ -754,13 +754,54 @@
 
     const STORAGE_KEY = 'cbt_mock_test_session_v1';
 
+    const FALLBACK_EXAMS = {
+      'sample-exam-physics.json': {
+        examTitle: "All India National CBT Mock Test · Engineering & Science",
+        totalDurationMinutes: 45,
+        positiveMarks: 4,
+        negativeMarks: 1,
+        subjects: ["Physics", "Chemistry", "Mathematics"],
+        questions: [
+          { id: 1, subject: "Physics", question: "What is the SI unit of electric charge?", options: ["Volt", "Coulomb", "Ohm", "Tesla"], correctIndex: 1 },
+          { id: 2, subject: "Physics", question: "Which thermodynamic engine achieves the maximum theoretical efficiency between two temperatures?", options: ["Otto Engine", "Diesel Engine", "Carnot Engine", "Stirling Engine"], correctIndex: 2 },
+          { id: 3, subject: "Physics", question: "What is the escape velocity from the surface of the Earth approximately?", options: ["9.8 km/s", "11.2 km/s", "15.4 km/s", "25.0 km/s"], correctIndex: 1 },
+          { id: 4, subject: "Physics", question: "The phenomenon of total internal reflection occurs when light travels from:", options: ["Rarer to denser medium at any angle", "Denser to rarer medium at angle greater than critical angle", "Vacuum to air", "Air to water at zero angle"], correctIndex: 1 },
+          { id: 5, subject: "Physics", question: "Dimensions of Planck's constant (h) are identical to the dimensions of:", options: ["Linear momentum", "Angular momentum", "Energy", "Power"], correctIndex: 1 },
+          { id: 6, subject: "Chemistry", question: "Which of the following noble gases is the most abundant in the Earth's atmosphere?", options: ["Helium", "Neon", "Argon", "Krypton"], correctIndex: 2 },
+          { id: 7, subject: "Chemistry", question: "What is the oxidation state of Chromium in Potassium Dichromate (K2Cr2O7)?", options: ["+3", "+4", "+6", "+7"], correctIndex: 2 },
+          { id: 8, subject: "Chemistry", question: "Which catalyst is used in the Haber process for ammonia synthesis?", options: ["Finely divided Iron (Fe)", "Nickel (Ni)", "Platinum (Pt)", "Vanadium Pentoxide (V2O5)"], correctIndex: 0 },
+          { id: 9, subject: "Chemistry", question: "What is the hybridisation of carbon in diamond and graphite respectively?", options: ["sp2 and sp3", "sp3 and sp2", "sp3 and sp", "sp and sp2"], correctIndex: 1 },
+          { id: 10, subject: "Chemistry", question: "Which gas is released when bleaching powder is treated with dilute acid?", options: ["Oxygen", "Chlorine", "Hydrogen", "Carbon dioxide"], correctIndex: 1 },
+          { id: 11, subject: "Mathematics", question: "What is the derivative of sin(2x) with respect to x?", options: ["cos(2x)", "2 cos(2x)", "-2 cos(2x)", "2 sin(x)"], correctIndex: 1 },
+          { id: 12, subject: "Mathematics", question: "If matrix A is orthogonal, what is the value of det(A)?", options: ["0", "+1 or -1", "Any real number", "Infinity"], correctIndex: 1 },
+          { id: 13, subject: "Mathematics", question: "The value of the definite integral of e^x dx from 0 to 1 is:", options: ["e", "e - 1", "e + 1", "1"], correctIndex: 1 },
+          { id: 14, subject: "Mathematics", question: "How many terms are in the expansion of (x + y)^10?", options: ["10", "11", "9", "20"], correctIndex: 1 },
+          { id: 15, subject: "Mathematics", question: "What is the sum of roots for the quadratic equation 2x^2 - 8x + 6 = 0?", options: ["4", "-4", "3", "-3"], correctIndex: 0 }
+        ]
+      },
+      'sample-exam-general.json': {
+        examTitle: "GenAI & Computational Systems Certification Exam",
+        totalDurationMinutes: 30,
+        positiveMarks: 4,
+        negativeMarks: 1,
+        subjects: ["AI Fundamentals", "Data Structures"],
+        questions: [
+          { id: 1, subject: "AI Fundamentals", question: "What does the 'T' in GPT stand for?", options: ["Translator", "Transformer", "Tensor", "Tokenizer"], correctIndex: 1 },
+          { id: 2, subject: "AI Fundamentals", question: "Which mechanism allows LLMs to focus on relevant tokens across long sequences?", options: ["Convolution", "Backpropagation", "Self-Attention", "Dropout"], correctIndex: 2 },
+          { id: 3, subject: "AI Fundamentals", question: "What is the primary objective of temperature parameter in LLM decoding?", options: ["Controls GPU heat", "Adjusts probability distribution randomness", "Sets context window length", "Increases parameter count"], correctIndex: 1 },
+          { id: 4, subject: "Data Structures", question: "What is the worst-case lookup time complexity in a balanced Binary Search Tree (AVL)?", options: ["O(1)", "O(log N)", "O(N)", "O(N log N)"], correctIndex: 1 },
+          { id: 5, subject: "Data Structures", question: "Which data structure follows the Last-In-First-Out (LIFO) order?", options: ["Queue", "Stack", "Binary Heap", "Linked List"], correctIndex: 1 }
+        ]
+      }
+    };
+
     async function initExam(filename = 'sample-exam-physics.json') {
       try {
         const resp = await fetch(filename);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
         examData = await resp.json();
       } catch (err) {
-        alert('Could not load question file: ' + err.message);
-        return;
+        examData = FALLBACK_EXAMS[filename] || FALLBACK_EXAMS['sample-exam-physics.json'];
       }
 
       document.getElementById('exam-title-tag').innerText = examData.examTitle;

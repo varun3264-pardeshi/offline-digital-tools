@@ -251,22 +251,38 @@
 
   <script>
     async function init() {
+      let lines = [];
       try {
         const resp = await fetch('sample-transcript.json');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
-        const tbody = document.getElementById('transcript-tbody');
-        tbody.innerHTML = '';
-        data.verifiedLines.forEach(l => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${l.line}</td>
-            <td>${l.start}-${l.end}</td>
-            <td>${l.text}</td>
-            <td><strong style="color:${l.status === 'Keep' ? '#00f5a0' : '#ff5858'}">${l.status}</strong></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch(e) {}
+        lines = data.verifiedLines;
+      } catch(e) {
+        lines = [
+          { line: 1, start: "0:00", end: "0:04", text: "Stop wasting 4 hours editing a single 60-second reel!", status: "Keep" },
+          { line: 2, start: "0:04", end: "0:08", text: "Here is how AI agents automate the entire cut.", status: "Keep" },
+          { line: 3, start: "0:08", end: "0:14", text: "[Umm, so basically... wait let me check notes]", status: "Cut (Filler)" },
+          { line: 4, start: "0:14", end: "0:17", text: "First, feed your raw MP4 into the silence detector.", status: "Keep" },
+          { line: 5, start: "0:17", end: "0:25", text: "[8 seconds dead air looking at screen]", status: "Cut (Silence)" },
+          { line: 6, start: "0:25", end: "0:32", text: "It strips every pause longer than 400 milliseconds.", status: "Keep" },
+          { line: 7, start: "0:32", end: "0:35", text: "[Uhh, like, you know]", status: "Cut (Filler)" },
+          { line: 8, start: "0:35", end: "0:42", text: "Second, lock the 9:16 portrait crop onto the speaker.", status: "Keep" },
+          { line: 9, start: "0:42", end: "0:50", text: "Third, burn in bold high-contrast word-by-word captions.", status: "Keep" },
+          { line: 10, start: "0:50", end: "0:58", text: "Agents do the work while you direct! Try it offline today.", status: "Keep" }
+        ];
+      }
+      const tbody = document.getElementById('transcript-tbody');
+      tbody.innerHTML = '';
+      lines.forEach(l => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${l.line}</td>
+          <td>${l.start}-${l.end}</td>
+          <td>${l.text}</td>
+          <td><strong style="color:${l.status === 'Keep' ? '#00f5a0' : '#ff5858'}">${l.status}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     function renderReel() {

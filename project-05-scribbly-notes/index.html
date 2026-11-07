@@ -423,11 +423,33 @@
     async function loadSampleNotes() {
       try {
         const resp = await fetch('sample-long-notes.txt');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const text = await resp.text();
         document.getElementById('typed-notes-input').value = text;
         renderHandwrittenPages();
       } catch (e) {
-        alert('Could not load sample notes: ' + e.message);
+        document.getElementById('typed-notes-input').value = `Bharat Space Education Research Centre - Semester 4 Complete Revision Notes
+Chapter 1: Orbital Mechanics & Spacecraft Dynamics
+
+1. Kepler's Laws of Planetary Motion
+First Law (Law of Orbits): Every planet and satellite moves in an elliptical orbit around the central body, with the central mass situated at one of the two foci of the ellipse.
+Second Law (Law of Equal Areas): A radius vector joining any satellite to the central body sweeps out equal areas in equal lengths of time. Consequently, a spacecraft travels fastest at periapsis and slowest at apoapsis.
+Third Law (Law of Periods): The square of the orbital period of a satellite is directly proportional to the cube of the semi-major axis of its elliptical orbit.
+
+2. Vis-Viva Equation and Energy Conservation
+In astrodynamics, the vis-viva equation models the conservation of specific mechanical energy for orbiting bodies. Velocity v squared equals GM multiplied by (2 divided by r minus 1 divided by a).
+When transferring between a Low Earth Orbit (LEO) and a Geostationary Transfer Orbit (GTO), engineers execute a Hohmann Transfer using two impulsive engine burns.
+
+3. Propulsion Systems & Tsiolkovsky Rocket Equation
+Delta-V equals specific impulse multiplied by standard gravity times the natural logarithm of initial total mass divided by final dry mass.
+Multi-stage launch vehicles shed empty propellant tanks during ascent to maximize payload fraction into orbit.
+
+4. Attitude Determination and Control Systems (ADCS)
+Spacecraft orientation is stabilized using reaction wheels, control moment gyroscopes, magnetorquers, and cold-gas thrusters. Star trackers and sun sensors provide high-precision quaternion attitude estimates via an Extended Kalman Filter.
+
+5. Thermal Control in Vacuum
+Without atmospheric convection, spacecraft regulate internal temperatures purely through radiative heat transfer, multi-layer insulation (MLI) blankets, heat pipes, and optical solar reflectors.`;
+        renderHandwrittenPages();
       }
     }
 

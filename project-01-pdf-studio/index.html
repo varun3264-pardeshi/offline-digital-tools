@@ -714,11 +714,27 @@
     async function loadSample50PagePdf() {
       try {
         const resp = await fetch('sample-50pages.pdf');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const buffer = await resp.arrayBuffer();
         originalFileSize = buffer.byteLength;
         await loadPdfBytes(new Uint8Array(buffer), 'notes-sem4.pdf (50 Pages)');
       } catch (err) {
-        alert('Could not load sample PDF: ' + err.message);
+        // Fallback when opened directly via file:// protocol
+        const doc = await PDFLib.PDFDocument.create();
+        const font = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        const bodyFont = await doc.embedFont(PDFLib.StandardFonts.Helvetica);
+        for (let i = 1; i <= 50; i++) {
+          const p = doc.addPage([595, 842]);
+          p.drawRectangle({ x: 35, y: 745, width: 525, height: 60, color: PDFLib.rgb(0.08, 0.14, 0.28) });
+          p.drawText(`BHARAT SPACE EDUCATION RESEARCH CENTRE - PAGE ${i} OF 50`, { x: 50, y: 770, size: 13, font, color: PDFLib.rgb(0, 0.95, 0.99) });
+          p.drawText(`Semester 4 Lecture Notes · Offline PDF Studio Test Document`, { x: 50, y: 700, size: 12, font: bodyFont, color: PDFLib.rgb(0.15, 0.15, 0.15) });
+          p.drawText(`Page ${i}: Contains vector shapes, text streams, and multi-page layout for testing all 29 PDF tools.`, { x: 50, y: 670, size: 10, font: bodyFont, color: PDFLib.rgb(0.3, 0.3, 0.3) });
+          p.drawRectangle({ x: 50, y: 480, width: 495, height: 150, borderColor: PDFLib.rgb(0.2, 0.6, 0.9), borderWidth: 1.5, color: PDFLib.rgb(0.95, 0.98, 1) });
+          p.drawText(`Sample Diagram Box · Page #${i} · Ready for Split, Merge, Stamp, Redact & Export`, { x: 75, y: 550, size: 11, font });
+        }
+        const pdfBytes = await doc.save();
+        originalFileSize = pdfBytes.byteLength;
+        await loadPdfBytes(pdfBytes, 'notes-sem4.pdf (50 Pages)');
       }
     }
 
