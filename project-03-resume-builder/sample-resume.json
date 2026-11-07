@@ -1,0 +1,45 @@
+{
+  "name": "Riya Sharma",
+  "title": "Full-Stack AI Software Engineer",
+  "email": "riya.sharma@example.com",
+  "phone": "+91 98765 43210",
+  "location": "Bengaluru, India",
+  "website": "https://riyasharma.dev",
+  "summary": "Innovative Software Engineer with 3+ years experience building offline-first web applications and integrating multimodal AI models into production workflows. Passionate about high-performance client-side architectures.",
+  "sectionsOrder": ["experience", "projects", "skills", "education"],
+  "experience": [
+    {
+      "role": "Senior Frontend Developer",
+      "company": "Nova Labs",
+      "period": "2023 - Present",
+      "desc": "Architected low-latency web applications with zero cloud dependencies. Reduced memory footprint by 40% using WebAssembly and local canvas rendering."
+    },
+    {
+      "role": "Software Engineering Intern",
+      "company": "Bharat Space Tech",
+      "period": "2022 - 2023",
+      "desc": "Built client-side data pipelines and offline-first documentation utilities for mission critical systems."
+    }
+  ],
+  "projects": [
+    {
+      "title": "PDF Studio 29-in-1",
+      "link": "github.com/riya/pdf-studio",
+      "desc": "Engineered a client-side offline PDF manipulation suite handling multi-gigabyte documents with zero data exfiltration."
+    },
+    {
+      "title": "CBT Mock Test Engine",
+      "link": "github.com/riya/cbt-engine",
+      "desc": "Designed a resilient state-preserving examination platform with live timer recovery across reboots."
+    }
+  ],
+  "skills": ["JavaScript / TypeScript", "Python", "React", "Node.js", "WebAssembly", "Canvas API", "Git", "Docker"],
+  "education": [
+    {
+      "degree": "B.Tech in Computer Science and Engineering",
+      "school": "National Institute of Technology",
+      "year": "2019 - 2023",
+      "grade": "CGPA: 8.9 / 10"
+    }
+  ]
+}
