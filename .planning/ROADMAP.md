@@ -21,7 +21,7 @@
 
 ### Phase 1: Section A - Web Tools
 - [x] **Project 01: PDF Studio** (29 Tools: Organise, Edit, Stamp, Convert, Finish)
-- [ ] **Project 02: Form Photo Fixer** (Photo/Sign resize, 3 form presets, face guide, KB compression)
+- [x] **Project 02: Form Photo Fixer** (Photo/Sign resize, 3 form presets, face guide, KB compression)
 - [ ] **Project 03: Resume Builder** (Live A4 preview, 3 distinct themes, drag-drop sections, PDF export, JSON save/load)
 - [ ] **Project 04: CBT Mock Test Engine** (NTA/JEE style, timer persistence across refresh, question palette, negative marking, results)
 - [ ] **Project 05: Scribbly Notes** (Typed to handwriting, 3 font styles, line natural variation, multi-page split)
