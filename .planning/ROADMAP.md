@@ -27,7 +27,7 @@
 - [x] **Project 05: Scribbly Notes** (Typed to handwriting, 3 font styles, line natural variation, multi-page split)
 
 ### Phase 2: Section B - Phone Apps and Games
-- [ ] **Project 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline web/app PWA)
+- [x] **Project 06: Reel Monster** (Floating monster counter, taunts & moods, 7-day stats, offline web/app PWA)
 - [ ] **Project 07: Bill Book** (Shop ledger, item catalog, dynamic UPI QR generator, WhatsApp image receipt, flight mode ready)
 - [ ] **Project 08: Auto Rally** (60FPS Canvas Auto-rickshaw racer, 3 laps, obstacles, coins, best time persistence, audio synth)
 

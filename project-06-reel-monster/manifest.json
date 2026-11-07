@@ -1,0 +1,16 @@
+{
+  "name": "Reel Monster",
+  "short_name": "ReelMonster",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070913",
+  "theme_color": "#ff5858",
+  "description": "A cute monster that floats on your screen and counts every reel and short you scroll.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ff5858'/><circle cx='35' cy='42' r='8' fill='%23ffffff'/><circle cx='65' cy='42' r='8' fill='%23ffffff'/><circle cx='37' cy='44' r='4' fill='%23111111'/><circle cx='67' cy='44' r='4' fill='%23111111'/><path d='M30 65 Q50 82 70 65' stroke='%23ffffff' stroke-width='6' fill='none' stroke-linecap='round'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
