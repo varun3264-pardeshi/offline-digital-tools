@@ -172,11 +172,13 @@
 <body>
 
   <nav>
-    <div class="brand">Practice Viva Questions from Your Study Notes</div>
+    <div class="brand" style="display:flex; align-items:center; gap:0.6rem;">
+      <a href="../index.html" class="btn" style="text-decoration:none; padding: 0.35rem 0.75rem; font-size: 0.8rem;">← All Tools</a>
+      <span>Practice Viva Questions from Your Study Notes</span>
+    </div>
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
       <button class="btn active" id="mode-skill-btn" onclick="setMode(true)">🎓 With /viva Skill (1-by-1 Graded)</button>
       <button class="btn" id="mode-raw-btn" onclick="setMode(false)">💬 Without Skill (Compare)</button>
-      <a href="SKILL.md" class="btn" target="_blank">📄 View SKILL.md</a>
       <button class="btn btn-primary" onclick="restartViva()">🔄 New Session</button>
     </div>
   </nav>

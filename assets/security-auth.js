@@ -100,6 +100,7 @@
     const ribbon = document.createElement('div');
     ribbon.id = 'studio-security-ribbon';
     ribbon.className = 'studio-security-bar';
+    ribbon.style.display = 'none'; // Hidden by default: only pure user page is visible
     ribbon.innerHTML = `
       <div class="sec-bar-left">
         ${!isRoot ? `<a href="${hubHref}" class="sec-btn" style="text-decoration:none; font-weight:700;">← All 17 Tools</a>` : ''}
@@ -358,6 +359,17 @@
     applyPalette,
     openSecurityAuditModal
   };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey && e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      const ribbon = document.getElementById('studio-security-ribbon');
+      if (ribbon) {
+        const isHidden = window.getComputedStyle(ribbon).display === 'none';
+        ribbon.style.setProperty('display', isHidden ? 'flex' : 'none', 'important');
+      }
+    }
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectSecurityBar);

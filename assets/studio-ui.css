@@ -143,12 +143,12 @@
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Global Security & Theme Top Ribbon */
+/* Global Security & Theme Top Ribbon (Hidden by default so only user page is visible) */
 .studio-security-bar {
+  display: none !important;
   background: var(--bg-elevated);
   border-bottom: 1px solid var(--border-color);
   padding: 0.45rem 1.25rem;
-  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
