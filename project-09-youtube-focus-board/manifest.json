@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Focus Board",
+  "version": "1.0.0",
+  "description": "Distraction-free YouTube study companion with intention gates, Shorts blocker, and timestamped study notes.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["*://*.youtube.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "YouTube Focus Board"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
