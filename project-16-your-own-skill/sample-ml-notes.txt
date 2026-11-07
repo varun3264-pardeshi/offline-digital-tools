@@ -1,0 +1,6 @@
+# Machine Learning & Deep Learning Notes (Page 1 - 30)
+Page 6: Bias-Variance Tradeoff - Underfitting (high bias) vs Overfitting (high variance). Regularization (L1 Lasso, L2 Ridge).
+Page 12: Gradient Descent Optimization - Learning rate schedules, SGD, Momentum, Adam optimizer adaptive moments.
+Page 19: Backpropagation & Activation Functions - Sigmoid vanishing gradient problem, ReLU dying units, GELU.
+Page 25: Transformer Architecture - Scaled Dot-Product Attention: Attention(Q,K,V) = softmax(QK^T / sqrt(d_k)) * V.
+Page 29: Evaluation Metrics - Precision, Recall, F1-Score, ROC-AUC curve for imbalanced classification.

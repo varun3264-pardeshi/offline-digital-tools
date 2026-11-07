@@ -1,0 +1,6 @@
+# Thermodynamics Revision Notes (Page 1 - 20)
+Page 4: Zeroth Law - Thermal Equilibrium and Temperature definition.
+Page 8: First Law - Delta U = Q - W. Conservation of energy in closed systems.
+Page 14: Carnot Engine - eta = 1 - (T_C / T_H). Maximum theoretical efficiency limit. Irreversibility and entropy generation.
+Page 18: Second Law - Clausius and Kelvin-Planck statements. dS = dQ/T for reversible cycles.
+Page 20: Third Law - Absolute zero entropy state of pure crystalline substances.

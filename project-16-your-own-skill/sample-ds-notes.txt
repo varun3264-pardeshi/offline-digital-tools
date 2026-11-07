@@ -1,0 +1,6 @@
+# Data Structures & Algorithms Revision Notes (Page 1 - 25)
+Page 5: Arrays vs Linked Lists - Cache locality, contiguous memory allocation vs pointer overhead.
+Page 11: Binary Search Trees - Left < Root < Right. Worst case degeneration to O(N) in unbalance.
+Page 16: AVL Trees & Rotations - Balance Factor = height(L) - height(R). Single and double rotations maintain O(log N).
+Page 21: Hash Tables & Collisions - Chaining vs Open Addressing (Linear Probing, Quadratic, Double Hashing).
+Page 24: Graph Traversal - BFS (Queue, shortest path unweighted) vs DFS (Stack/Recursion, cycle detection).
